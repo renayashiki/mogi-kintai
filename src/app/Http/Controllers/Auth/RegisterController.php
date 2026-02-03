@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\RegisterRequest;
+use Illuminate\Support\Facades\Auth;
+
 
 class RegisterController extends Controller
 {
@@ -31,6 +32,8 @@ class RegisterController extends Controller
 
         // 3. メール認証用のイベント発行（これを書かないとメールが飛びません）
         event(new Registered($user));
+
+        Auth::login($user);
 
         // 4. 指定されたルート名 'verification.notice' （URL: /verify-email）へリダイレクト
         return redirect()->route('verification.notice');
