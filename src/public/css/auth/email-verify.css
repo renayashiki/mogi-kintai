@@ -32,7 +32,7 @@
 
 .verify-link-button {
     display: inline-block;
-    width: 230px;
+    width: 200px;
     height: 60px;
     line-height: 60px;
     background: rgba(217, 217, 217, 1);
@@ -43,7 +43,7 @@
     font-family: Inter, sans-serif;
     font-weight: 700;
     font-size: 22px;
-    margin-bottom: 50px;
+    margin-bottom: 45px;
     max-width: 90%;
 }
 
@@ -55,7 +55,7 @@
 .resend-link {
     font-family: Inter, sans-serif;
     font-weight: 400;
-    font-size: 18px;
+    font-size: 16px;
     background: transparent;
     color: rgba(0, 115, 204, 1);
     border: none;

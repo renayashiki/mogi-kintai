@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin;
 Route::get('/register', [Auth\RegisterController::class, 'show'])->name('register');
 Route::post('/register', [Auth\RegisterController::class, 'store']);
 Route::get('/login', [Auth\LoginController::class, 'show'])->name('login');
+Route::post('/login', [Auth\LoginController::class, 'store']);
 Route::get('/verify-email', [Auth\EmailVerificationController::class, 'show'])->name('verification.notice');
 Route::post('/email/verification-notification', [Auth\EmailVerificationController::class, 'resend'])
     ->name('verification.resend');
@@ -24,7 +25,8 @@ Route::get('/stamp_correction_request/list', [User\MyRequestController::class, '
 
 // --- 管理者ユーザー（adminパス） ---
 // Route::prefix('admin')->name('admin.')->group(function () {
-Route::get('/login', [Auth\AdminLoginController::class, 'show'])->name('login'); // 規定パス準拠
+Route::get('/admin/login', [Auth\AdminLoginController::class, 'show'])->name('admin.login');
+Route::post('/admin/login', [Auth\AdminLoginController::class, 'store']);
 
 Route::middleware(['auth:admin'])->group(function () {
     Route::get('/attendance/list', [Admin\DailyController::class, 'index'])->name('attendance.list');

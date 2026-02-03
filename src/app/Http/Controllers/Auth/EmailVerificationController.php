@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
 class EmailVerificationController extends Controller
@@ -14,10 +15,17 @@ class EmailVerificationController extends Controller
         return view('auth.email-verify');
     }
 
-    // 再送処理（見た目確認後、ロジック実装時に使用）
+    public function verify(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+
+        return redirect()->route('attendance.index');
+    }
+
     public function resend(Request $request)
     {
-        // ここに再送ロジックを記述
-        return back()->with('message', 'verification-link-sent');
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('message', '確認メールを再送しました。');
     }
 }
