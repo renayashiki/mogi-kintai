@@ -11,9 +11,14 @@ Route::post('/register', [Auth\RegisterController::class, 'store']);
 Route::get('/login', [Auth\LoginController::class, 'show'])->name('login');
 Route::post('/login', [Auth\LoginController::class, 'store']);
 Route::get('/verify-email', [Auth\EmailVerificationController::class, 'show'])->name('verification.notice');
+// 2. ★追加：メール内のリンクをクリックした時の処理（これがないと認証が完了しません）
+Route::get('/email/verify/{id}/{hash}', [Auth\EmailVerificationController::class, 'verify'])
+    ->middleware(['auth', 'signed'])
+    ->name('verification.verify');
+
+// 3. 再送処理（現状のまま）
 Route::post('/email/verification-notification', [Auth\EmailVerificationController::class, 'resend'])
     ->name('verification.resend');
-
 
 // --- 一般ユーザー（勤怠関連） ---
 // Route::middleware(['auth'])->group(function () {
