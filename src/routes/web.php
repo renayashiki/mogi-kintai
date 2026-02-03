@@ -1,18 +1,33 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth;
+use App\Http\Controllers\User;
+use App\Http\Controllers\Admin;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+// --- 一般ユーザー（認証用ルートはFortifyが生成しますが、念のため明記） ---
+Route::get('/register', [Auth\RegisterController::class, 'show'])->name('register');
+Route::get('/login', [Auth\LoginController::class, 'show'])->name('login');
+Route::get('/verify-email', [Auth\EmailVerificationController::class, 'show'])->name('verification.notice');
 
-Route::get('/', function () {
-    return view('welcome');
+// --- 一般ユーザー（勤怠関連） ---
+// Route::middleware(['auth'])->group(function () {
+Route::get('/attendance', [User\StampController::class, 'index'])->name('attendance.index');
+Route::get('/attendance/list', [User\MonthlyController::class, 'index'])->name('attendance.list');
+Route::get('/attendance/detail/{id}', [User\WorkDetailController::class, 'show'])->name('attendance.detail');
+Route::get('/stamp_correction_request/list', [User\MyRequestController::class, 'index'])->name('attendance.request.list');
+// });
+
+// --- 管理者ユーザー（adminパス） ---
+// Route::prefix('admin')->name('admin.')->group(function () {
+Route::get('/login', [Auth\AdminLoginController::class, 'show'])->name('login'); // 規定パス準拠
+
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get('/attendance/list', [Admin\DailyController::class, 'index'])->name('attendance.list');
+    Route::get('/attendance/{id}', [Admin\EditController::class, 'show'])->name('attendance.detail');
+    Route::get('/staff/list', [Admin\StaffController::class, 'index'])->name('staff.list');
+    Route::get('/attendance/staff/{id}', [Admin\StaffLogController::class, 'index'])->name('staff.log');
+    Route::get('/stamp_correction_request/list', [Admin\ApprovalController::class, 'index'])->name('request.list');
+    Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [Admin\ApprovalController::class, 'show'])->name('request.approve');
 });
+// });
