@@ -7,8 +7,12 @@ use App\Http\Controllers\Admin;
 
 // --- 一般ユーザー（認証用ルートはFortifyが生成しますが、念のため明記） ---
 Route::get('/register', [Auth\RegisterController::class, 'show'])->name('register');
+Route::post('/register', [Auth\RegisterController::class, 'store']);
 Route::get('/login', [Auth\LoginController::class, 'show'])->name('login');
 Route::get('/verify-email', [Auth\EmailVerificationController::class, 'show'])->name('verification.notice');
+Route::post('/email/verification-notification', [Auth\EmailVerificationController::class, 'resend'])
+    ->name('verification.resend');
+
 
 // --- 一般ユーザー（勤怠関連） ---
 // Route::middleware(['auth'])->group(function () {

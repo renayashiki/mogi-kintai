@@ -1,0 +1,91 @@
+body {
+    background: rgba(255, 255, 255, 1);
+    overflow-y: auto;
+    margin: 0;
+}
+
+.auth-content {
+    background-color: rgba(255, 255, 255, 1);
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    width: 100%;
+    max-width: 476px;
+    margin: 40px auto;
+}
+
+.content-title {
+    font-size: 22.4px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    margin-bottom: 24.5px;
+    margin-top: 31.5px;
+}
+
+.form-group {
+    margin-bottom: 26px;
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    font-size: 16.8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 1);
+    margin-bottom: 3.5px;
+}
+
+.form-input {
+    width: 100%;
+    height: 41.3px;
+    padding: 0 12.6px;
+    border: 1px solid rgba(95, 95, 95, 1);
+    border-radius: 2.8px;
+    box-sizing: border-box;
+    font-size: 15.4px;
+    font-weight: 400;
+}
+
+.error-message {
+    position: absolute;
+    left: 0;
+    top: 74px;
+    line-height: 1;
+}
+
+.submit-btn {
+    width: 100%;
+    height: 45.5px;
+    background: rgba(0, 0, 0, 1);
+    border: none;
+    border-radius: 3.5px;
+    color: rgba(255, 255, 255, 1);
+    font-size: 18.2px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    margin-top: 35px;
+    cursor: pointer;
+}
+
+.register-link-area {
+    text-align: center;
+    margin-top: 14px;
+    padding-bottom: 40px;
+}
+
+.register-link {
+    font-size: 14px;
+    color: rgba(0, 115, 204, 1);
+    text-decoration: none;
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+}
+
+@media (max-width: 520px) {
+    .auth-content {
+        max-width: 100%;
+        padding: 0 20px;
+    }
+}

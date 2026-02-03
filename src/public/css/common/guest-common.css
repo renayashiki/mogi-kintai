@@ -1,0 +1,43 @@
+.auth-header {
+    background: rgba(0, 0, 0, 1);
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 0;
+    margin-bottom: 20px;
+}
+
+.auth-header-inner {
+    width: 100%;
+    max-width: 1515px;
+    height: 60px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.header-logo {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    width: 250px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+}
+
+.logo-icon {
+    width: auto;
+    height: 100%;
+}
+
+.logo-text {
+    width: auto;
+    height: 100%;
+}
+
+
+
