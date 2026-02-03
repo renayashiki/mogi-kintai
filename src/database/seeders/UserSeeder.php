@@ -37,23 +37,43 @@ class UserSeeder extends Seeder
             'admin_status' => 0,
         ]);
 
-        // その他のスタッフ
         $staffs = [
             ['name' => '山田 太郎', 'email' => 'taro.y@coachtech.com'],
             ['name' => '増田 一世', 'email' => 'issei.m@coachtech.com'],
             ['name' => '山本 敬吉', 'email' => 'keikichi.y@coachtech.com'],
             ['name' => '秋田 朋美', 'email' => 'tomomi.a@coachtech.com'],
             ['name' => '中西 教夫', 'email' => 'norio.n@coachtech.com'],
-            ['name' => '山田 花子', 'email' => 'hanako.y@coachtech.com'],
         ];
 
+        // その他のスタッフ
         foreach ($staffs as $staff) {
+            // 基本は「勤務外」
+            $status = '勤務外';
+
+            // 特定のユーザーだけステータスを「予備」として固定
+            if ($staff['name'] === '増田 一世') {
+                $status = '出勤中';
+            } elseif ($staff['name'] === '秋田 朋美') {
+                $status = '休憩中';
+            } elseif ($staff['name'] === '中西 教夫') {
+                $status = '退勤済';
+            }
+
             User::create([
                 'name' => $staff['name'],
                 'email' => $staff['email'],
                 'password' => Hash::make('password123'),
                 'admin_status' => 0,
+                'attendance_status' => $status,
             ]);
         }
+
+        User::create([
+            'name' => '山田 花子',
+            'email' => 'hanako.y@coachtech.com',
+            'password' => Hash::make('password123'),
+            'admin_status' => 0,
+            'attendance_status' => '勤務外',
+        ]);
     }
 }
