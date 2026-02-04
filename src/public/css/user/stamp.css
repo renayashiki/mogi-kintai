@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     padding-top: 100px; /* top位置を考慮した余白 */
-    padding: 100px 0;
+    padding: 120px 0;
     /* 親(.main)の中で中央に寄せるならこれ */
     flex-grow: 1;
     justify-content: flex-start;
@@ -11,20 +11,20 @@
 
 /* ステータスバッジ */
 .status-badge {
-    width: 100px;
-    height: 40px;
+    width: 72px;
+    height: 30px;
     background: rgba(200, 200, 200, 1);
     border-radius: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
 }
 
 .status-text {
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 13px;
     color: rgba(105, 105, 105, 1);
     line-height: 100%;
     letter-spacing: 0.15em;
@@ -34,10 +34,10 @@
 .stamp-date {
     font-family: 'Inter', sans-serif;
     font-weight: 400;
-    font-size: 40px;
+    font-size: 34px;
     color: rgba(0, 0, 0, 1);
     line-height: 100%;
-    margin: 0 0 32px 0;
+    margin: 0 0 30px 0;
 }
 
 /* 時間 */
@@ -47,7 +47,7 @@
     font-size: 80px;
     color: rgba(0, 0, 0, 1);
     line-height: 100%;
-    margin-bottom: 80px;
+    margin-bottom: 75px;
 }
 
 /* ボタン共通 */
@@ -63,7 +63,7 @@
 }
 
 .stamp-button {
-    width: 221px;
+    width: 220px;
     height: 77px;
     border-radius: 20px;
     font-family: 'Inter', sans-serif;
