@@ -1,0 +1,115 @@
+/* --- 全体レイアウト設定 --- */
+body {
+    background-color: rgba(240, 239, 242, 1);
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    /* bodyへのflex指定は廃止しました */
+}
+
+/* ヘッダー：高さ 60px 固定 */
+.header {
+    background: rgba(0, 0, 0, 1);
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.header-inner {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 40px; 
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.header-logo svg {
+    width: 280px;
+    height: auto;
+    display: block;
+}
+
+/* ナビ枠：右寄せを維持 */
+.header-nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    gap: 25px;
+}
+
+/* ログアウトボタンを少しだけ離す */
+.nav-list .nav-item:last-child {
+    margin-left: 10px;
+}
+
+.nav-link,
+.logout-button {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    color: rgba(255, 255, 255, 1);
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    line-height: 100%;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+/* --- メインエリア：規約に沿った「高さ」の確保 --- */
+.main {
+    width: 100%;
+    /* flexを使わず、vh（ビューポート単位）を使用して
+       最低限必要な高さを確保します。
+       これなら html, body をいじらずに済み、規約上も安全です。
+    */
+    min-height: calc(100vh - 60px); 
+    background-color: rgba(240, 239, 242, 1);
+    box-sizing: border-box;
+}
+
+/* --- レスポンシブ設定 --- */
+
+@media screen and (max-width: 1250px) {
+    .header-logo svg {
+        width: 180px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .header-inner {
+        padding: 0 20px;
+    }
+    .nav-list {
+        gap: 15px;
+    }
+    .nav-list .nav-item:last-child {
+        margin-left: 10px;
+    }
+    .header-logo svg {
+        width: 150px;
+    }
+    .nav-link,
+    .logout-button {
+        font-size: 15px;
+    }
+}
