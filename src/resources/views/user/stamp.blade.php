@@ -22,32 +22,37 @@
         </div>
 
         {{-- 日付 (ページ主見出し) --}}
-        <h1 class="stamp-date">2026年2月4日(水)</h1>
+        <h1 class="stamp-date" id="current-date">
+            {{ now()->format('Y年n月j日') }}({{ ['日', '月', '火', '水', '木', '金', '土'][now()->dayOfWeek] }})</h1>
 
         {{-- 現在時刻 (大きなデジタル時計) --}}
-        <div class="stamp-time">10:30</div>
+        <div class="stamp-time" id="current-time">{{ now()->format('H:i') }}</div>
 
         {{-- 打刻アクションエリア --}}
         <div class="stamp-actions">
             @if ($attendanceStatus === 'outside')
-                <form action="#" method="post">
+                <form action="{{ route('attendance.store') }}" method="post">
                     @csrf
+                    <input type="hidden" name="type" value="clock_in">
                     <button type="submit" class="stamp-button btn-black">出勤</button>
                 </form>
             @elseif ($attendanceStatus === 'working')
                 <div class="button-group">
-                    <form action="#" method="post">
+                    <form action="{{ route('attendance.store') }}" method="post">
                         @csrf
+                        <input type="hidden" name="type" value="clock_out">
                         <button type="submit" class="stamp-button btn-black">退勤</button>
                     </form>
-                    <form action="#" method="post">
+                    <form action="{{ route('attendance.store') }}" method="post">
                         @csrf
+                        <input type="hidden" name="type" value="rest_in">
                         <button type="submit" class="stamp-button btn-white">休憩入</button>
                     </form>
                 </div>
             @elseif ($attendanceStatus === 'resting')
-                <form action="#" method="post">
+                <form action="{{ route('attendance.store') }}" method="post">
                     @csrf
+                    <input type="hidden" name="type" value="rest_out">
                     <button type="submit" class="stamp-button btn-white">休憩戻</button>
                 </form>
             @elseif ($attendanceStatus === 'finished')
@@ -55,4 +60,22 @@
             @endif
         </div>
     </div>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const days = ['日', '月', '火', '水', '木', '金', '土'];
+            const dateEl = document.getElementById('current-date');
+            const timeEl = document.getElementById('current-time');
+
+            if (dateEl) {
+                dateEl.textContent = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日(${days[now.getDay()]})`;
+            }
+            if (timeEl) {
+                timeEl.textContent = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0');
+            }
+        }
+        // 1秒(1000ms)ごとに実行
+        setInterval(updateClock, 1000);
+    </script>
 @endsection

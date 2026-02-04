@@ -24,6 +24,7 @@ Route::post('/email/verification-notification', [Auth\EmailVerificationControlle
 // --- 一般ユーザー（勤怠関連） ---
 // Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/attendance', [User\StampController::class, 'index'])->name('attendance.index');
+Route::post('/attendance', [User\StampController::class, 'store'])->name('attendance.store');
 Route::get('/attendance/list', [User\MonthlyController::class, 'index'])->name('attendance.list');
 Route::get('/attendance/detail/{id}', [User\WorkDetailController::class, 'show'])->name('attendance.detail');
 Route::get('/stamp_correction_request/list', [User\MyRequestController::class, 'index'])->name('attendance.request.list');

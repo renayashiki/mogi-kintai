@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     padding-top: 100px; /* top位置を考慮した余白 */
-    padding: 120px 0;
+    padding: 140px 0;
     /* 親(.main)の中で中央に寄せるならこれ */
     flex-grow: 1;
     justify-content: flex-start;
@@ -34,20 +34,20 @@
 .stamp-date {
     font-family: 'Inter', sans-serif;
     font-weight: 400;
-    font-size: 34px;
+    font-size: 26px;
     color: rgba(0, 0, 0, 1);
     line-height: 100%;
-    margin: 0 0 30px 0;
+    margin: 0 0 25px 0;
 }
 
 /* 時間 */
 .stamp-time {
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 80px;
+    font-size: 62px;
     color: rgba(0, 0, 0, 1);
     line-height: 100%;
-    margin-bottom: 75px;
+    margin-bottom: 60px;
 }
 
 /* ボタン共通 */
@@ -59,16 +59,16 @@
 
 .button-group {
     display: flex;
-    gap: 82px; /* 退勤と休憩入の間隔 */
+    gap: 50px; /* 退勤と休憩入の間隔 */
 }
 
 .stamp-button {
-    width: 220px;
-    height: 77px;
-    border-radius: 20px;
+    width: 144px;
+    height: 50px;
+    border-radius: 15px;
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 32px;
+    font-size: 22px;
     letter-spacing: 0.15em;
     cursor: pointer;
     border: none;
@@ -89,14 +89,13 @@
 .btn-white {
     background: rgba(255, 255, 255, 1);
     color: rgba(0, 0, 0, 1);
-    border: 1px solid rgba(0, 0, 0, 1); /* 見本画像の視認性確保のため */
 }
 
 /* 退勤後のメッセージ */
 .finish-message {
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 26px;
+    font-size: 19px;
     color: rgba(0, 0, 0, 1);
     letter-spacing: 0.15em;
     text-align: center;

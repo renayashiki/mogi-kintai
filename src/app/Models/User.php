@@ -18,6 +18,11 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array<int, string>
      */
+    const STATUS_OUTSIDE = 'outside';
+    const STATUS_WORKING = 'working';
+    const STATUS_RESTING = 'resting';
+    const STATUS_FINISHED = 'finished';
+
     protected $fillable = [
         'name',
         'email',
