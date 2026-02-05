@@ -1,0 +1,90 @@
+/* --- 管理者共通レイアウト設定 --- */
+body {
+    background-color: rgba(240, 239, 242, 1);
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.header {
+    background: rgba(0, 0, 0, 1);
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.header-inner {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-logo svg {
+    width: 280px;
+    height: auto;
+    display: block;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    padding-right: 15px;
+    align-items: center;
+    /* ボタン同士の間隔設定 */
+    gap: 40px; /* デフォルトの間隔（申請一覧とログアウトの間など） */
+}
+
+/* 勤怠一覧とスタッフ一覧の間隔を少し狭く設定 (Figma left値の差分を考慮) */
+.nav-item:nth-child(1) {
+    margin-right: -4px; /* gap 43px に対して少し狭める調整 */
+}
+
+.nav-link,
+.logout-button {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500; /* Figma: Bold */
+    font-size: 18px; /* Figma 指定値 */
+    color: rgba(255, 255, 255, 1); /* Figma 指定値 */
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    line-height: 100%;
+    white-space: nowrap;
+}
+
+.main {
+    width: 100%;
+    min-height: calc(100vh - 60px);
+    background-color: rgba(240, 239, 242, 1);
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* レスポンシブ：管理者用は文字が大きいため早めに調整 */
+@media screen and (max-width: 1400px) {
+    .nav-link, .logout-button {
+        font-size: 18px;
+    }
+    .nav-list {
+        gap: 40px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .header-logo svg {
+        width: 200px;
+    }
+    .nav-link, .logout-button {
+        font-size: 14px;
+    }
+}

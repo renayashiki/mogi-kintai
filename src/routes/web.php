@@ -21,6 +21,11 @@ Route::get('/email/verify/{id}/{hash}', [Auth\EmailVerificationController::class
 Route::post('/email/verification-notification', [Auth\EmailVerificationController::class, 'resend'])
     ->name('verification.resend');
 
+
+// --- 管理者ログイン ---
+Route::get('/admin/login', [Auth\AdminLoginController::class, 'show'])->name('admin.login.view');
+Route::post('/admin/login', [Auth\AdminLoginController::class, 'store'])->name('admin.login');
+
 // --- 一般ユーザー（勤怠関連） ---
 // Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/attendance', [User\StampController::class, 'index'])->name('attendance.index');

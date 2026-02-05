@@ -1,0 +1,159 @@
+.daily-container {
+    padding: 111px 306px 0; /* ヘッダー高さを考慮 */
+    background-color: rgba(240, 239, 242, 1);
+}
+
+.daily-header {
+    width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    margin-bottom: 47px;
+}
+
+.title-line {
+    width: 8px; /* Figma: border-width 8px */
+    height: 40px;
+    background-color: rgba(0, 0, 0, 1);
+    margin-right: 13px;
+}
+
+.daily-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    color: rgba(0, 0, 0, 1);
+    margin: 0;
+}
+
+/* 日付選択バー */
+.date-selector-bar {
+    width: 700px;
+    height: 50px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    box-sizing: border-box;
+    margin-bottom: 46px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.date-nav {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 10px;
+}
+
+.nav-icon {
+    opacity: 1;
+    display: flex;
+    align-items: center;
+}
+
+.nav-icon svg {
+    width: 24px;  /* サイズを明示的に指定 */
+    height: 24px;
+}
+
+
+.nav-text {
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.15em;
+    color: rgba(115, 115, 115, 1);
+}
+
+.calendar-picker {
+    position: relative;
+}
+
+.calendar-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.selected-date {
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 20px;
+    color: rgba(0, 0, 0, 1);
+}
+
+#date-input {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* テーブルエリア */
+.attendance-table-wrapper {
+    width: 900px;
+    margin-left: auto;  /* 追記 */
+    margin-right: auto; /* 追記 */
+    background: rgba(255, 255, 255, 1);
+    /* 縮小時に中身が切れるのを防ぐ */
+    max-width: 100%;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table thead th {
+    height: 40px;
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 14px;
+    color: rgba(115, 115, 115, 1);
+    text-align: center;
+    border-bottom: 3px solid rgba(225, 225, 225, 1);
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 1);;
+}
+
+.attendance-table tbody td {
+    height: 40px;
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 14px;
+    color: rgba(115, 115, 115, 1);
+    text-align: center;
+    border-bottom: 2px solid rgba(225, 225, 225, 1);
+}
+
+.detail-link {
+    color: rgba(0, 0, 0, 1);
+    text-decoration: none;
+}
+
+/* カラム幅の比率調整 */
+.col-name {
+    width: 20%;
+}
+
+.col-start, .col-end, .col-rest, .col-total {
+    width: 15%;
+}
+
+.col-detail {
+    width: 20%;
+}
+
+/* レスポンシブ対応 */
+@media screen and (max-width: 1540px) {
+    .daily-container { padding: 111px 50px 0; }
+    .date-selector-bar, .attendance-table-wrapper { width: 100%; max-width: 900px; }
+}
