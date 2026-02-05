@@ -30,7 +30,7 @@
 
         {{-- 打刻アクションエリア --}}
         <div class="stamp-actions">
-            @if ($attendanceStatus === 'outside')
+            @if ($attendanceStatus === 'outside' && !$hasClockIn)
                 <form action="{{ route('attendance.store') }}" method="post">
                     @csrf
                     <input type="hidden" name="type" value="clock_in">

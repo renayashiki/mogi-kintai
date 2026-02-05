@@ -14,15 +14,26 @@ class StampController extends Controller
 {
     public function index(Request $request)
     {
-        // 開発用パラメータがあれば優先
-        $attendanceStatus = $request->query('status');
-
-        // パラメータがない場合は、Userテーブルの attendance_status（規約のDB設計）から取得
-        if (!$attendanceStatus) {
-            $attendanceStatus = Auth::user()->attendance_status ?? 'outside';
+        // 開発中ログイン処理（ミドルウェアONにしたら削除）
+        if (!Auth::check()) {
+            Auth::loginUsingId(1);
         }
+        $user = Auth::user();
+        $today = Carbon::today();
 
-        return view('user.stamp', compact('attendanceStatus'));
+        // 1. まず今日の出勤レコードがあるか確認
+        $todayRecord = AttendanceRecord::where('user_id', $user->id)
+            ->whereDate('date', $today)
+            ->first();
+
+        // 2. 「出勤済みか」「退勤済みか」の判定
+        // 変数名を $todayRecord に統一してエラーを解消
+        $hasClockIn = $todayRecord ? true : false;
+        // 3. 今のステータス（基本はUserテーブルの値。なければ outside）
+        $attendanceStatus = $request->query('status') ?? $user->attendance_status ?? 'outside';
+
+
+        return view('user.stamp', compact('attendanceStatus', 'hasClockIn'));
     }
 
     public function store(Request $request)
@@ -39,6 +50,15 @@ class StampController extends Controller
 
         switch ($type) {
             case 'clock_in':
+                // 【重要：二重出勤防止】今日すでにレコードがある場合は何もしない
+                $exists = AttendanceRecord::where('user_id', $user->id)
+                    ->whereDate('date', $today)
+                    ->exists();
+
+                if ($exists) {
+                    return redirect()->route('attendance.index');
+                }
+
                 AttendanceRecord::create([
                     'user_id' => $user->id,
                     'date' => $today,
@@ -67,6 +87,17 @@ class StampController extends Controller
                 return redirect()->route('attendance.index');
 
             case 'clock_out':
+                // 【重要】今日すでに退勤時刻が記録されているレコードがあるかチェック
+                $alreadyClockedOut = AttendanceRecord::where('user_id', $user->id)
+                    ->whereDate('date', $today)
+                    ->whereNotNull('clock_out')
+                    ->exists();
+
+                if ($alreadyClockedOut) {
+                    // すでに退勤済みなら、何もせずリダイレクト（2回目の保存をさせない）
+                    return redirect()->route('attendance.index');
+                }
+
                 // 1. 当日のレコードを取得
                 $record = AttendanceRecord::where('user_id', $user->id)->whereNull('clock_out')->latest()->first();
 
