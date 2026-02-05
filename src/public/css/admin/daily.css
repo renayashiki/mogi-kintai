@@ -1,20 +1,28 @@
+/* ==========================================
+   全体コンテナ・レイアウト
+   ========================================== */
 .daily-container {
-    padding: 111px 306px 0; /* ヘッダー高さを考慮 */
+    padding: 60px 0 0; 
     background-color: rgba(240, 239, 242, 1);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
 }
 
+/* ==========================================
+   ヘッダーエリア
+   ========================================== */
 .daily-header {
-    width: 850px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 820px;
     display: flex;
     align-items: center;
-    margin-bottom: 47px;
+    margin-bottom: 26px;
 }
 
 .title-line {
-    width: 8px; /* Figma: border-width 8px */
-    height: 40px;
+    width: 8px;
+    height: 30px;
     background-color: rgba(0, 0, 0, 1);
     margin-right: 13px;
 }
@@ -22,88 +30,106 @@
 .daily-title {
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 30px;
+    font-size: 22px;
     color: rgba(0, 0, 0, 1);
     margin: 0;
 }
 
-/* 日付選択バー */
+/* ==========================================
+   日付選択バー
+   ========================================== */
 .date-selector-bar {
-    width: 700px;
-    height: 50px;
+    width: 650px;
+    height: 46px;
     background: rgba(255, 255, 255, 1);
     border-radius: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 30px;
+    padding: 0 25px;
     box-sizing: border-box;
-    margin-bottom: 46px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-bottom: 35px;
+    position: relative;
 }
 
+/* ナビゲーション（前日・翌日） */
 .date-nav {
     display: flex;
     align-items: center;
     text-decoration: none;
-    gap: 10px;
+    gap: 8px;
+    position: relative;
+    z-index: 2; /* 整理：必要最小限の重ね順 */
 }
 
-.nav-icon {
-    opacity: 1;
-    display: flex;
-    align-items: center;
+/* アイコン：強引な詳細度(body...)を廃止し、シンプルに定義 */
+.date-nav .nav-icon svg {
+    width: 20px;
+    height: 15px;
+    display: block;
+    /* fill: rgba(115, 115, 115, 1); */
 }
 
-.nav-icon svg {
-    width: 24px;  /* サイズを明示的に指定 */
-    height: 24px;
-}
 
+/* 左矢印のみ反転：クラスセレクタでスマートに記述 */
+.date-nav.prev .nav-icon {
+    transform: scaleX(-1);
+}
 
 .nav-text {
-    font-family: 'Inter';
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: 0.15em;
-    color: rgba(115, 115, 115, 1);
+    color: rgba(115, 115, 115, 1); /* Figma指定色：#737373から修正 */
 }
 
+/* --- カレンダー選択 --- */
 .calendar-picker {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto; 
+    padding: 0 10px;
+    z-index: 1;
 }
 
 .calendar-label {
     display: flex;
     align-items: center;
     gap: 12px;
-    cursor: pointer;
-}
-
-.selected-date {
-    font-family: 'Inter';
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 20px;
     color: rgba(0, 0, 0, 1);
+    cursor: pointer;
+}
+
+.calendar-label svg {
+    width: 24px;
+    height: 24px;
 }
 
 #date-input {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
     opacity: 0;
     cursor: pointer;
+    z-index: 3;
 }
 
-/* テーブルエリア */
+/* ==========================================
+   テーブルエリア
+   ========================================== */
 .attendance-table-wrapper {
-    width: 900px;
-    margin-left: auto;  /* 追記 */
-    margin-right: auto; /* 追記 */
+    width: 850px;
     background: rgba(255, 255, 255, 1);
-    /* 縮小時に中身が切れるのを防ぐ */
-    max-width: 100%;
+    border-radius: 10px;
+    overflow: hidden; 
+    margin-bottom: 80px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .attendance-table {
@@ -112,48 +138,54 @@
 }
 
 .attendance-table thead th {
-    height: 40px;
-    font-family: 'Inter';
+    height: 38px;
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 14px;
-    color: rgba(115, 115, 115, 1);
+    color: rgba(115, 115, 115, 1); /* Figma指定色 */
     text-align: center;
-    border-bottom: 3px solid rgba(225, 225, 225, 1);
-    position: sticky;
-    top: 0;
-    background: rgba(255, 255, 255, 1);;
+    vertical-align: middle;  /* 上下中央 */
+    border-bottom: 3px solid #e1e1e1;
+    background: #ffffff;
 }
 
 .attendance-table tbody td {
-    height: 40px;
-    font-family: 'Inter';
+    height: 45px;
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 14px;
-    color: rgba(115, 115, 115, 1);
+    color: rgba(115, 115, 115, 1); /* Figma指定色 */
     text-align: center;
-    border-bottom: 2px solid rgba(225, 225, 225, 1);
+    border-bottom: 1px solid #e1e1e1;
 }
 
+/* 詳細ボタン：ボーダーを撤去し、Figmaの指示通りに */
 .detail-link {
-    color: rgba(0, 0, 0, 1);
+    color: #000000;
     text-decoration: none;
+    padding: 4px 16px;
+    border-radius: 5px;
+    transition: opacity 0.2s;
 }
 
-/* カラム幅の比率調整 */
+.detail-link:hover {
+    opacity: 0.7;
+}
+
+/* カラム幅比率 */
 .col-name {
     width: 20%;
 }
-
-.col-start, .col-end, .col-rest, .col-total {
-    width: 15%;
+.col-start, .col-end, .col-rest, .col-total, .col-detail {
+    width: 16%;
+    color: rgba(225, 225, 225, 1);
 }
 
-.col-detail {
-    width: 20%;
-}
-
-/* レスポンシブ対応 */
+/* レスポンシブ */
 @media screen and (max-width: 1540px) {
-    .daily-container { padding: 111px 50px 0; }
-    .date-selector-bar, .attendance-table-wrapper { width: 100%; max-width: 900px; }
+    .daily-container { padding: 62px 50px 0; }
+    .date-selector-bar, .attendance-table-wrapper { 
+        width: 100%; 
+        max-width: 800px; /* ここもデザインに合わせて再固定 */
+    }
 }

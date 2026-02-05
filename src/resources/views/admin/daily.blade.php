@@ -82,10 +82,14 @@
             const dateInput = document.getElementById('date-input');
             const calendarLabel = document.querySelector('.calendar-label');
 
-            // ラベルをクリックしたときにカレンダーの選択画面を出す（モダンブラウザ対応）
+            // labelをクリックしたときに確実にカレンダーを開く
             calendarLabel.addEventListener('click', function(e) {
-                if ('showPicker' in HTMLInputElement.prototype) {
+                // デフォルトの動作を保証
+                if (typeof dateInput.showPicker === 'function') {
                     dateInput.showPicker();
+                } else {
+                    dateInput.focus();
+                    dateInput.click();
                 }
             });
         });
