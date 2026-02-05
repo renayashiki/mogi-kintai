@@ -39,7 +39,7 @@
    日付選択バー
    ========================================== */
 .date-selector-bar {
-    width: 650px;
+    width: 800px;
     height: 46px;
     background: rgba(255, 255, 255, 1);
     border-radius: 10px;
@@ -124,7 +124,7 @@
    テーブルエリア
    ========================================== */
 .attendance-table-wrapper {
-    width: 850px;
+    width: 800px;
     background: rgba(255, 255, 255, 1);
     border-radius: 10px;
     overflow: hidden; 
