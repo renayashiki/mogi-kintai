@@ -61,12 +61,23 @@
                         @endphp
                         <tr>
                             <td class="col-name">{{ $user->name }}</td>
+
+                            {{-- 出勤・退勤 (H:i 形式) --}}
                             <td class="col-start">{{ $attendance ? $attendance->clock_in->format('H:i') : '' }}</td>
                             <td class="col-end">
                                 {{ $attendance && $attendance->clock_out ? $attendance->clock_out->format('H:i') : '' }}
                             </td>
-                            <td class="col-rest">{{ $attendance ? $attendance->total_rest_time : '' }}</td>
-                            <td class="col-total">{{ $attendance ? $attendance->total_work_time : '' }}</td>
+
+                            {{-- 休憩時間 (秒を切り捨て) --}}
+                            <td class="col-rest">
+                                {{ $attendance && $attendance->total_rest_time ? \Carbon\Carbon::parse($attendance->total_rest_time)->format('H:i') : '' }}
+                            </td>
+
+                            {{-- 合計勤務時間 (total_time を使用し、秒を切り捨て) --}}
+                            <td class="col-total">
+                                {{ $attendance && $attendance->total_time ? \Carbon\Carbon::parse($attendance->total_time)->format('H:i') : '' }}
+                            </td>
+
                             <td class="col-detail">
                                 <a href="{{ route('admin.attendance.detail', ['id' => $user->id]) }}"
                                     class="detail-link">詳細</a>
