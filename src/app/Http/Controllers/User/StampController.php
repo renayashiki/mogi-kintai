@@ -18,6 +18,7 @@ class StampController extends Controller
         if (!Auth::check()) {
             Auth::loginUsingId(1);
         }
+
         $user = Auth::user();
         $today = Carbon::today();
 
@@ -26,12 +27,22 @@ class StampController extends Controller
             ->whereDate('date', $today)
             ->first();
 
-        // 2. 「出勤済みか」「退勤済みか」の判定
-        // 変数名を $todayRecord に統一してエラーを解消
+        // 判定フラグ
         $hasClockIn = $todayRecord ? true : false;
-        // 3. 今のステータス（基本はUserテーブルの値。なければ outside）
-        $attendanceStatus = $request->query('status') ?? $user->attendance_status ?? 'outside';
+        $hasClockOut = ($todayRecord && $todayRecord->clock_out) ? true : false;
 
+        // --- ここで「直後の表示」と「再ログイン後の表示」を分ける ---
+        if ($request->query('status') === 'finished') {
+            // 退勤ボタンを押した直後（URLに ?status=finished がある時）
+            $attendanceStatus = 'finished';
+        } elseif ($hasClockOut) {
+            // 一度画面を離れた後や、再ログイン後（URLにクエリがない時）
+            $attendanceStatus = 'outside';
+        } elseif ($hasClockIn) {
+            $attendanceStatus = $user->attendance_status;
+        } else {
+            $attendanceStatus = 'outside';
+        }
 
         return view('user.stamp', compact('attendanceStatus', 'hasClockIn'));
     }

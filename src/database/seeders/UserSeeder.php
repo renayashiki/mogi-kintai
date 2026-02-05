@@ -48,15 +48,15 @@ class UserSeeder extends Seeder
         // その他のスタッフ
         foreach ($staffs as $staff) {
             // 基本は「勤務外」
-            $status = '勤務外';
+            $status = 'outside';
 
             // 特定のユーザーだけステータスを「予備」として固定
             if ($staff['name'] === '増田 一世') {
-                $status = '出勤中';
+                $status = 'working';
             } elseif ($staff['name'] === '秋田 朋美') {
-                $status = '休憩中';
+                $status = 'resting';
             } elseif ($staff['name'] === '中西 教夫') {
-                $status = '退勤済';
+                $status = 'finished';
             }
 
             User::create([
@@ -73,7 +73,7 @@ class UserSeeder extends Seeder
             'email' => 'hanako.y@coachtech.com',
             'password' => Hash::make('password123'),
             'admin_status' => 0,
-            'attendance_status' => '勤務外',
+            'attendance_status' => 'outside',
         ]);
     }
 }

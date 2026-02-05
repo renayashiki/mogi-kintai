@@ -27,7 +27,7 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'admin_status' => 0,
-            'attendance_status' => '勤務外',
+            'attendance_status' => 'outside',
         ]);
 
         // 3. メール認証用のイベント発行（これを書かないとメールが飛びません）

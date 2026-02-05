@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken()->nullable();
             $table->tinyInteger('admin_status');
-            $table->string('attendance_status')->default('勤務外');
+            $table->string('attendance_status')->default('outside');
             $table->timestamps();
         });
     }
