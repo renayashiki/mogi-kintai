@@ -16,17 +16,27 @@ class LoginController extends Controller
 
     public function store(LoginRequest $request)
     {
-        // 前回のロジックをそのまま適用
-        if (!Auth::check()) {
-            if (!Auth::attempt($request->only('email', 'password'))) {
+        // 'web' ガードを明示的に指定
+        if (!Auth::guard('web')->check()) {
+            if (!Auth::guard('web')->attempt($request->only('email', 'password'))) {
                 throw ValidationException::withMessages([
                     'login_error' => 'ログイン情報が登録されていません',
                 ]);
             }
         }
-
         $request->session()->regenerate();
 
-        return redirect()->intended(route('attendance.index'));
+       // ログインしたユーザー情報を取得
+        /** @var \App\Models\User $user */
+        $user = Auth::guard('web')->user(); // ここも guard を指定
+
+        // 【重要】ここで手動チェックを入れることで、ミドルウェアとの衝突を防ぐ
+        if ($user->hasVerifiedEmail()) {
+            // 認証済みなら打刻画面へ
+            return redirect()->route('attendance.index');
+        }
+
+        // 未認証ならメール確認誘導画面へ
+        return redirect()->route('verification.notice');
     }
 }

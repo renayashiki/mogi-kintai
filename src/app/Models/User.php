@@ -60,4 +60,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(AttendanceCorrect::class);
     }
+    /**
+     * メール認証済みかどうかを判定する（根本解決のための上書き）
+     * DBの email_verified_at に値が入っていれば、セッションの状態に関わらず「認証済み」とみなす。
+     */
+    public function hasVerifiedEmail()
+    {
+        return ! is_null($this->email_verified_at);
+    }
 }

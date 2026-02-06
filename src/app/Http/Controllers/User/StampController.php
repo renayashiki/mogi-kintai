@@ -14,11 +14,7 @@ class StampController extends Controller
 {
     public function index(Request $request)
     {
-        // 開発中ログイン処理（ミドルウェアONにしたら削除）
-        if (!Auth::check()) {
-            Auth::loginUsingId(1);
-        }
-
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $today = Carbon::today();
 
@@ -49,10 +45,6 @@ class StampController extends Controller
 
     public function store(Request $request)
     {
-        // 開発中のみ ミドルウェアONにしたら消す：IDが1のユーザーで強制ログインさせる（ミドルウェアOFFでも動く）
-        if (!Auth::check()) {
-            Auth::loginUsingId(1);
-        }
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $type = $request->input('type');
