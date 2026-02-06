@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@coachtech.com',
             'password' => Hash::make('password123'),
             'admin_status' => 1,
+            'email_verified_at' => now(),
         ]);
 
         // 1. 一般画面見本用：西 伶奈（メールも一般用）
@@ -27,6 +28,7 @@ class UserSeeder extends Seeder
             'email' => 'reina.n@coachtech.com',
             'password' => Hash::make('password123'),
             'admin_status' => 0,
+            'email_verified_at' => now(),
         ]);
 
         // 2. 管理画面見本用：西 玲奈（漢字を"玲"に変更。メールは管理テスト用）
@@ -35,6 +37,7 @@ class UserSeeder extends Seeder
             'email' => 'reina.admin@coachtech.com',
             'password' => Hash::make('password123'),
             'admin_status' => 0,
+            'email_verified_at' => now(),
         ]);
 
         $staffs = [
@@ -65,6 +68,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'admin_status' => 0,
                 'attendance_status' => $status,
+                'email_verified_at' => now(),
             ]);
         }
 
@@ -74,6 +78,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password123'),
             'admin_status' => 0,
             'attendance_status' => 'outside',
+            'email_verified_at' => now(),
         ]);
     }
 }
