@@ -11,37 +11,41 @@ class RestSeeder extends Seeder
 {
     public function run()
     {
-        $records = AttendanceRecord::all();
-        // 直近数日間の判定用（昨日、一昨日、3日前）
-        $recentDates = [
-            Carbon::yesterday()->format('Y-m-d'),
-            Carbon::today()->subDays(2)->format('Y-m-d'),
-            Carbon::today()->subDays(3)->format('Y-m-d'),
-        ];
+        $records = AttendanceRecord::with('user')->get();
 
         foreach ($records as $record) {
-            // --- 共通：1回目の休憩（全員・全日程） ---
-            Rest::create([
-                'attendance_record_id' => $record->id,
-                'rest_in' => '12:00:00',
-                'rest_out' => '13:00:00',
-            ]);
+            // 2023年6月のデータは「見本通り」休憩1回(12-13時)に固定
+            if (Carbon::parse($record->date)->format('Y-m') === '2023-06') {
+                $this->createRest($record->id, '12:00:00', '13:00:00');
+                continue;
+            }
 
-            // --- 山本 敬吉さんの「直近の日付」のみ、複数回休憩をばらまく ---
-            // ※ 2023-06-01 はここに含まれないため、休憩1回（1時間）のまま維持されます。
-            if ($record->user->name === '山本 敬吉' && in_array($record->date, $recentDates)) {
-                // 2回目の休憩を追加（15:00 - 15:15）
-                Rest::create([
-                    'attendance_record_id' => $record->id,
-                    'rest_in' => '15:00:00',
-                    'rest_out' => '15:15:00',
-                ]);
-                // 勤務レコードの合計時間を更新（休憩1:15、勤務7:45）
+            // --- 2025年〜2026年のデータ（技術アピール：休憩を分割） ---
+            // 30%の確率で休憩を2回に分ける（例：昼45分 ＋ 午後15分）
+            if (rand(1, 100) <= 30) {
+                // 1回目：12:00 - 12:45 (45分)
+                $this->createRest($record->id, '12:00:00', '12:45:00');
+                // 2回目：15:00 - 15:15 (15分)
+                $this->createRest($record->id, '15:00:00', '15:15:00');
+
+                // DB上の合計時間は「1時間」で維持される
                 $record->update([
-                    'total_rest_time' => '01:15:00',
-                    'total_time' => '07:45:00',
+                    'total_rest_time' => '01:00:00',
+                    'total_time' => '08:00:00',
                 ]);
+            } else {
+                // 残り70%は通常の1時間休憩
+                $this->createRest($record->id, '12:00:00', '13:00:00');
             }
         }
+    }
+
+    private function createRest($recordId, $in, $out)
+    {
+        Rest::create([
+            'attendance_record_id' => $recordId,
+            'rest_in' => $in,
+            'rest_out' => $out,
+        ]);
     }
 }

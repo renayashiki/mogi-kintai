@@ -8,6 +8,10 @@
     display: flex;
     flex-direction: column;
     align-items: center; 
+    font-family: 'Inter', sans-serif;
+    /* 数字の「1」を棒状にする設定 */
+    font-feature-settings: "cv01" 1;
+    font-weight: 700;
 }
 
 /* ==========================================
@@ -56,14 +60,14 @@
     display: flex;
     align-items: center;
     text-decoration: none;
-    gap: 8px;
+    gap: 6px;
     position: relative;
     z-index: 2;
 }
 
 .date-nav .nav-icon svg {
-    width: 20px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
     display: block;
 }
 
@@ -74,7 +78,7 @@
 .nav-text {
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 12px;
     letter-spacing: 0.15em;
     color: rgba(115, 115, 115, 1);
 }
@@ -115,7 +119,7 @@
 .attendance-table-wrapper {
     width: 800px;
     background: rgba(255, 255, 255, 1);
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden; 
     margin-bottom: 80px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -124,53 +128,77 @@
 .attendance-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
-/* 基本セル設定 */
-.attendance-table th,
-.attendance-table td {
-    height: 45px;
+/* 基本セル設定：詳細度を高めて上書きを防ぐ */
+.daily-container .attendance-table th,
+.daily-container .attendance-table td {
+    height: 38px;
     vertical-align: middle;
     text-align: center;
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 13px;
     color: rgba(115, 115, 115, 1);
+    /* cv01を強制適用 */
+    font-feature-settings: "cv01" 1;
 }
 
 .attendance-table thead th {
     border-bottom: 3px solid #e1e1e1;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 1);
 }
 
 .attendance-table tbody td {
-    border-bottom: 1px solid #e1e1e1;
+    border-bottom: 2px solid #e1e1e1;
 }
 
-/* 名前列の調整（左寄せ＋余白） */
+/* 名前列 */
 .attendance-table .col-name {
-    width: 20%;
-    text-align: left;
-    padding-left: 45px;
+    width: 8%; 
 }
 
-/* 数値列の調整 */
-.attendance-table .col-start,
-.attendance-table .col-end,
-.attendance-table .col-rest,
-.attendance-table .col-total {
-    width: 14%;
+.attendance-table thead th.col-name {
+    text-align: center;
 }
 
-/* 詳細列の調整 */
+.attendance-table tbody td.col-name {
+    text-align: center;
+}
+
+/* 数値列：ここが一番の修正ポイント。クラスを重ねて詳細度を最大化 */
+.daily-container .attendance-table-wrapper .attendance-table .col-start,
+.daily-container .attendance-table-wrapper .attendance-table .col-end,
+.daily-container .attendance-table-wrapper .attendance-table .col-rest,
+.daily-container .attendance-table-wrapper .attendance-table .col-total {
+    width: 7%;
+    padding-left: 60px;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.1em;
+    font-variant-numeric: normal;
+    /* 再定義：cv01を確実にオンにする */
+    font-feature-settings: "cv01" 1;
+}
+
+/* 詳細列 */
 .attendance-table .col-detail {
-    width: 15%;
-    text-align: left;
-    padding-left: 30px;
+    width: 10%;
 }
 
+.attendance-table tbody td.col-detail {
+    text-align: right;
+    padding-right: 75px; 
+    box-sizing: border-box;
+}
+
+.attendance-table thead th.col-detail {
+    text-align: center;
+}
+
+/* リンク */
 .detail-link {
-    color: #000000;
+    color: rgba(0, 0, 0, 1);
     text-decoration: none;
     font-weight: 700;
     transition: opacity 0.2s;
@@ -182,9 +210,11 @@
 
 /* レスポンシブ */
 @media screen and (max-width: 1540px) {
-    .daily-container { padding: 62px 50px 0; }
+    .daily-container {
+        padding: 62px 50px 0;
+    }
     .date-selector-bar, .attendance-table-wrapper { 
-        width: 100%; 
+        width: 100%;
         max-width: 800px;
     }
 }

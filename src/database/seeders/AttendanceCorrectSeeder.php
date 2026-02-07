@@ -17,18 +17,22 @@ class AttendanceCorrectSeeder extends Seeder
         // 1. 西 伶奈の申請
         $west = User::where('name', '西 伶奈')->first();
         $westRecord = AttendanceRecord::where('user_id', $west->id)->where('date', '2023-06-01')->first();
-        AttendanceCorrect::create([
-            'user_id' => $west->id,
-            'attendance_record_id' => $westRecord->id,
-            'approval_status' => '承認待ち',
-            'application_date' => '2023-06-02',
-            'new_date' => '2023-06-01',
-            'new_clock_in' => '09:00:00',
-            'new_clock_out' => '18:00:00',
-            'new_rest1_in' => '12:00:00',
-            'new_rest1_out' => '13:00:00',
-            'comment' => '遅延のため',
-        ]);
+
+        // 西 伶奈：10件の同一申請（画像1, 2枚目用）
+        for ($i = 0; $i < 10; $i++) {
+            AttendanceCorrect::create([
+                'user_id' => $west->id,
+                'attendance_record_id' => $westRecord->id,
+                'approval_status' => '承認待ち',
+                'application_date' => '2023-06-02',
+                'new_date' => '2023-06-01',
+                'new_clock_in' => '09:00:00',
+                'new_clock_out' => '18:00:00',
+                'new_rest1_in' => '12:00:00',
+                'new_rest1_out' => '13:00:00',
+                'comment' => '遅延のため',
+            ]);
+        }
 
         // 2. 山田 太郎の申請
         $taro = User::where('name', '山田 太郎')->first();
@@ -39,8 +43,8 @@ class AttendanceCorrectSeeder extends Seeder
             'approval_status' => '承認待ち',
             'application_date' => '2023-08-02',
             'new_date' => '2023-06-01',
-            'new_clock_in' => '09:15:00',
-            'new_clock_out' => '18:15:00',
+            'new_clock_in' => '09:00:00',
+            'new_clock_out' => '18:00:00',
             'new_rest1_in' => '12:00:00',
             'new_rest1_out' => '13:00:00',
             'comment' => '遅延のため',

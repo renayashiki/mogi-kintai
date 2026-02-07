@@ -1,0 +1,164 @@
+.monthly-container {
+    padding: 60px 0 0;
+    background-color: rgba(240, 239, 242, 1);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.monthly-header {
+    width: 820px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 26px;
+}
+
+.title-line {
+    width: 8px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 1);
+    margin-right: 13px;
+}
+
+.monthly-title {
+    font-weight: 700;
+    font-size: 22px;
+    margin: 0;
+}
+
+.month-selector-bar {
+    width: 800px;
+    height: 42px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    margin-bottom: 35px;
+}
+
+.month-nav {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 2px;
+    color: rgba(115, 115, 115, 1);
+    position: relative;
+    z-index: 2;
+}
+
+.month-nav .nav-icon svg {
+    width: 15px;
+    height: 10px;
+    display: block;
+}
+
+/* 前月の矢印を反転させて左向きにする */
+.month-nav.prev .nav-icon {
+    transform: scaleX(-1);
+}
+
+.nav-text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: rgba(115, 115, 115, 1);
+}
+
+.calendar-picker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ラベル（アイコンと文字）を「クリック可能なボタン」として扱う */
+.calendar-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: rgba(0, 0, 0, 1);
+    cursor: pointer;
+    position: relative;
+    z-index: 5; /* inputより上に持ってくる */
+}
+
+/* inputは「隠し要素」として裏に置いておくだけにする */
+#month-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;  /* 幅をなくして邪魔させない */
+    height: 0;
+    opacity: 0;
+    pointer-events: none; /* 直接のクリックは無視させる */
+}
+
+.attendance-table-wrapper {
+    width: 800px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 10px;
+    margin-bottom: 80px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table th,
+.attendance-table td {
+    height: 36px;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: rgba(115, 115, 115, 1);
+    font-feature-settings: "cv01" 1;
+}
+
+.attendance-table thead th {
+    border-bottom: 3px solid #e1e1e1;
+}
+
+.attendance-table tbody td {
+    border-bottom: 2px solid #e1e1e1;
+}
+
+.col-date {
+    width: 20%;
+}
+
+.col-start, .col-end, .col-rest, .col-total {
+    width: 16%;
+}
+
+.col-detail {
+    width: 16%;
+}
+
+.attendance-table .col-start, .attendance-table .col-end, .attendance-table .col-rest, .attendance-table .col-total {
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.1em;
+    font-variant-numeric: normal;
+}
+
+.detail-link {
+    color: rgba(0, 0, 0, 1);
+    text-decoration: none;
+}
+
+@media screen and (max-width: 1540px) {
+    .monthly-header, .month-selector-bar, .attendance-table-wrapper {
+        width: 90%;
+        max-width: 800px;
+    }
+}
