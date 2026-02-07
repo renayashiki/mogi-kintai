@@ -37,6 +37,6 @@ class AttendanceRecord extends Model
 
     public function attendanceCorrects()
     {
-        return $this->hasMany(AttendanceCorrect::class);
+        return $this->hasOne(AttendanceCorrect::class);
     }
 }
