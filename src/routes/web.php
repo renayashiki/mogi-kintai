@@ -28,6 +28,7 @@ Route::post('/admin/login', [Auth\AdminLoginController::class, 'store'])->name('
 
 // --- 管理者ユーザー ---
 Route::middleware(['auth:admin'])->group(function () {
+    Route::post('/logout', [Auth\LogoutController::class, 'logout'])->name('logout');
     Route::get('/admin/attendance/list', [Admin\DailyController::class, 'index'])->name('admin.attendance.list');
     Route::get('/admin/attendance/{id}', [Admin\EditController::class, 'show'])->name('admin.attendance.detail');
     Route::get('/admin/staff/list', [Admin\StaffController::class, 'index'])->name('staff.list');
@@ -46,5 +47,6 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::post('/attendance', [User\StampController::class, 'store'])->name('attendance.store');
     Route::get('/attendance/list', [User\MonthlyController::class, 'index'])->name('attendance.list');
     Route::get('/attendance/detail/{id}', [User\WorkDetailController::class, 'show'])->name('attendance.detail');
+    Route::post('/attendance/detail/{id}', [User\WorkDetailController::class, 'update'])->name('attendance.update');
     Route::get('/stamp_correction_request/list', [User\MyRequestController::class, 'index'])->name('attendance.request.list');
 });

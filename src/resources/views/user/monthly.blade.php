@@ -82,7 +82,13 @@
                                 {{ $attendance && $attendance->total_time ? ltrim(mb_convert_kana(\Carbon\Carbon::parse($attendance->total_time)->format('H:i'), 'a'), '0') : '' }}
                             </td>
                             <td class="col-detail">
-                                <a href="{{ route('attendance.detail', ['id' => $dateStr]) }}" class="detail-link">詳細</a>
+                                @if ($attendance)
+                                    <a href="{{ route('attendance.detail', ['id' => $attendance->id]) }}"
+                                        class="detail-link">詳細</a>
+                                @else
+                                    {{-- 空白日は span にしてクリックしても何も起きないようにする --}}
+                                    <span class="detail-link">詳細</span>
+                                @endif
                             </td>
                         </tr>
                     @endfor

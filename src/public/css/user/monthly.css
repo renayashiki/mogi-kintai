@@ -133,6 +133,11 @@
     border-bottom: 2px solid #e1e1e1;
 }
 
+.attendance-table thead th.col-date {
+    text-align: left;
+    padding-left: 45px; /* 左端に寄りすぎないよう調整 */
+}
+
 .col-date {
     width: 20%;
     letter-spacing: 0.1em;
