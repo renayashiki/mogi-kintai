@@ -135,6 +135,8 @@
 
 .col-date {
     width: 20%;
+    letter-spacing: 0.1em;
+    font-variant-numeric: normal;
 }
 
 .col-start, .col-end, .col-rest, .col-total {
