@@ -14,6 +14,9 @@ class AttendanceRecordSeeder extends Seeder
         // 1. 【見本再現】2023年6月の固定データ
         $this->seedJune2023Data();
 
+        // 【追加】2023年6月の前後3ヶ月（3-5月, 7-9月）を埋める
+        $this->seed2023SurroundingData();
+
         // 2. 【機能検証】評価時の3ヶ月前から「今日」まで（全員ランダム休暇あり）
         $this->seedDynamicEvaluationData();
     }
@@ -47,6 +50,46 @@ class AttendanceRecordSeeder extends Seeder
                 if (in_array($day, $offDays)) continue;
 
                 $this->saveRecord($staff->id, $dateString);
+            }
+        }
+    }
+
+    /**
+     * 追加：2023年6月の前後3ヶ月のランダムデータを生成
+     */
+    private function seed2023SurroundingData(): void
+    {
+        $staffs = User::where('admin_status', 0)->get();
+
+        // 前後3ヶ月の期間を定義（6月は既にseedJune2023Dataで作っているので除外）
+        $ranges = [
+            ['start' => '2023-03-01', 'end' => '2023-05-31'],
+            ['start' => '2023-07-01', 'end' => '2023-09-30'],
+        ];
+
+        foreach ($staffs as $staff) {
+            foreach ($ranges as $range) {
+                $current = Carbon::parse($range['start']);
+                $end = Carbon::parse($range['end']);
+
+                while ($current <= $end) {
+                    // 基本ロジックは seedDynamicEvaluationData と同様（土日のどちらか休み）
+                    if ($current->isWeekday()) {
+                        $this->saveRecord($staff->id, $current->format('Y-m-d'));
+                    } elseif ($current->isSaturday()) {
+                        if (rand(0, 1) === 0) {
+                            $this->saveRecord($staff->id, $current->format('Y-m-d'));
+                        } else {
+                            $nextDay = $current->copy()->addDay();
+                            if ($nextDay <= $end) {
+                                $this->saveRecord($staff->id, $nextDay->format('Y-m-d'));
+                            }
+                        }
+                    }
+                    $current->addDay();
+                    // 日曜日の重複処理を避けるため、日曜ならwhileの先頭へ
+                    if ($current->isSunday()) $current->addDay();
+                }
             }
         }
     }
