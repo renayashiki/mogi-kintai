@@ -25,6 +25,6 @@ class DailyController extends Controller
             ->orderBy('clock_in', 'asc') // 山田太郎→西伶奈の順（秒数で制御）
             ->get();
 
-        return view('admin.daily', compact('attendances', 'dateString'));
+        return view('admin.daily', compact('attendances', 'dateString', 'date'));
     }
 }
