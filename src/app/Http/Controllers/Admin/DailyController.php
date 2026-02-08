@@ -28,7 +28,8 @@ class DailyController extends Controller
             })
             ->whereDate('date', $date->format('Y-m-d'))
             ->orderBy('clock_in', 'asc')
-            ->get();
+            ->get()
+            ->unique('user_id');
 
         // 両方の変数を View に渡す
         return view('admin.daily', compact('users', 'attendances', 'date'));
