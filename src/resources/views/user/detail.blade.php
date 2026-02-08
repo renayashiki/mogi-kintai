@@ -101,7 +101,7 @@
 
             {{-- ボタン・メッセージは枠(wrapper)の外へ --}}
             <div class="detail-actions">
-                @if ($attendance->status === 'pending')
+                @if ($hasPendingRequest)
                     <p class="pending-message">＊承認待ちのため修正はできません。</p>
                 @else
                     <button type="submit" class="submit-button">修正</button>

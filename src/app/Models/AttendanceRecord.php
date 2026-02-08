@@ -40,8 +40,14 @@ class AttendanceRecord extends Model
      */
     public function getTotalRestTimeAttribute()
     {
-        $totalSeconds = 0;
+        // --- ここから追加 ---
+        // DBに直接 '01:00:00' 等が入っているなら、計算せずにそれを優先する
+        if (!empty($this->attributes['total_rest_time'])) {
+            return ltrim(substr($this->attributes['total_rest_time'], 0, 5), '0');
+        }
+        // --- ここまで追加 ---
 
+        $totalSeconds = 0;
         foreach ($this->rests as $rest) {
             if ($rest->rest_in && $rest->rest_out) {
                 $in = \Carbon\Carbon::parse($rest->rest_in);
@@ -52,10 +58,10 @@ class AttendanceRecord extends Model
 
         if ($totalSeconds === 0) return null;
 
-        // 「計算は精密に、表示はシンプルに」に基づき H:i 形式で返す
         $hours = floor($totalSeconds / 3600);
         $minutes = floor(($totalSeconds / 60) % 60);
-        return sprintf('%02d:%02d', $hours, $minutes);
+        // 見本に合わせて %02d:%02d から %d:%02d (1:00形式) に微調整
+        return sprintf('%d:%02d', $hours, $minutes);
     }
 
     /**
@@ -63,15 +69,19 @@ class AttendanceRecord extends Model
      */
     public function getTotalTimeAttribute()
     {
+        // --- ここから追加 ---
+        // DBに値があるなら、それを優先（西さんの複製データの救済）
+        if (!empty($this->attributes['total_time'])) {
+            return ltrim(substr($this->attributes['total_time'], 0, 5), '0');
+        }
+        // --- ここまで追加 ---
+
         if (!$this->clock_in || !$this->clock_out) return null;
 
         $start = \Carbon\Carbon::parse($this->clock_in);
         $end = \Carbon\Carbon::parse($this->clock_out);
-
-        // 総拘束秒数
         $diffSeconds = $end->diffInSeconds($start);
 
-        // 休憩合計秒数を差し引く
         $restSeconds = 0;
         foreach ($this->rests as $rest) {
             if ($rest->rest_in && $rest->rest_out) {
@@ -79,16 +89,9 @@ class AttendanceRecord extends Model
             }
         }
 
-        $workSeconds = $diffSeconds - $restSeconds;
-        if ($workSeconds < 0) $workSeconds = 0;
-
+        $workSeconds = max(0, $diffSeconds - $restSeconds);
         $hours = floor($workSeconds / 3600);
         $minutes = floor(($workSeconds / 60) % 60);
-        return sprintf('%02d:%02d', $hours, $minutes);
-    }
-
-    public function attendanceCorrects()
-    {
-        return $this->hasOne(AttendanceCorrect::class);
+        return sprintf('%d:%02d', $hours, $minutes);
     }
 }
