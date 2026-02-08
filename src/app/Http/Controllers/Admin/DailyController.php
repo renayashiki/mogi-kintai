@@ -15,23 +15,16 @@ class DailyController extends Controller
         $dateString = $request->get('date', now()->format('Y-m-d'));
         $date = Carbon::parse($dateString);
 
-        // --- スタッフ一覧用の順序（西→山田）を維持した $users を取得 ---
-        $users = User::where('name', '!=', '山田 花子')
-            ->where('admin_status', '!=', 1)
-            ->get(); // これで View 側の $user に対するエラーが消えます
-
-        // --- 勤怠一覧用の順序（山田→西）を維持した $attendances を取得 ---
-        $attendances = AttendanceRecord::with('user')
+        // 山田花子と管理職を除外
+        $attendances = AttendanceRecord::with(['user', 'rests'])
             ->whereHas('user', function ($query) {
                 $query->where('name', '!=', '山田 花子')
                     ->where('admin_status', '!=', 1);
             })
             ->whereDate('date', $date->format('Y-m-d'))
-            ->orderBy('clock_in', 'asc')
-            ->get()
-            ->unique('user_id');
+            ->orderBy('clock_in', 'asc') // 山田太郎→西伶奈の順（秒数で制御）
+            ->get();
 
-        // 両方の変数を View に渡す
-        return view('admin.daily', compact('users', 'attendances', 'date'));
+        return view('admin.daily', compact('attendances', 'dateString'));
     }
 }
