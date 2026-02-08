@@ -13,17 +13,55 @@ class WorkDetailController extends Controller
 {
     public function show($id)
     {
-        // 休憩リレーションも含めて取得
-        $attendance = AttendanceRecord::with('rests')->findOrFail($id);
+        // 1. 親レコードの取得
+        $attendance = AttendanceRecord::with(['rests', 'user'])->findOrFail($id);
 
-        if ($attendance->user_id !== Auth::id()) {
-            abort(403);
-        }
-
-        // 承認待ち申請の有無を確認（画像2枚目の出し分け用）
-        $hasPendingRequest = AttendanceCorrect::where('attendance_record_id', $id)
+        // 2. 承認待ちの申請（子）があるか取得
+        // リレーションがあれば $attendance->attendanceCorrects()->where(...) でも可
+        $pendingRequest = AttendanceCorrect::where('attendance_record_id', $id)
             ->where('approval_status', '承認待ち')
-            ->exists();
+            ->with('attendanceCorrectRests') // 3回目以降の休憩
+            ->first();
+
+        $hasPendingRequest = (bool)$pendingRequest;
+
+        // 3. 承認待ちがある場合、表示用オブジェクトの中身を「申請内容」で上書きする
+        if ($hasPendingRequest) {
+            // 基本情報の上書き
+            $attendance->clock_in = $pendingRequest->new_clock_in;
+            $attendance->clock_out = $pendingRequest->new_clock_out;
+            $attendance->comment = $pendingRequest->comment;
+
+            // 休憩データの差し替え（Bladeで @foreach ($attendance->rests ...) している箇所のため）
+            // AttendanceCorrectにある new_rest1, new_rest2 と、
+            // AttendanceCorrectRestsにある 3回目以降を統合して、擬似的なCollectionを作る
+            $newRests = collect();
+
+            // 休憩1 (new_rest1_in/out)
+            if ($pendingRequest->new_rest1_in) {
+                $newRests->push((object)[
+                    'rest_in' => $pendingRequest->new_rest1_in,
+                    'rest_out' => $pendingRequest->new_rest1_out
+                ]);
+            }
+            // 休憩2 (new_rest2_in/out)
+            if ($pendingRequest->new_rest2_in) {
+                $newRests->push((object)[
+                    'rest_in' => $pendingRequest->new_rest2_in,
+                    'rest_out' => $pendingRequest->new_rest2_out
+                ]);
+            }
+            // 休憩3以降 (attendance_correct_restsテーブル)
+            foreach ($pendingRequest->attendanceCorrectRests as $extra) {
+                $newRests->push((object)[
+                    'rest_in' => $extra->new_rest_in,
+                    'rest_out' => $extra->new_rest_out
+                ]);
+            }
+
+            // Bladeのループで使う $attendance->rests を申請内容に丸ごと入れ替える
+            $attendance->setRelation('rests', $newRests);
+        }
 
         return view('user.detail', compact('attendance', 'hasPendingRequest'));
     }
@@ -36,19 +74,18 @@ class WorkDetailController extends Controller
         // 2. メインの申請データ作成
         // $attendance の値をベースに、$request で上書きする形にします
         $correctRequest = AttendanceCorrect::create([
-            'attendance_record_id' => $attendance->id, // $attendance を活用
+            'attendance_record_id' => $id,
             'user_id'              => Auth::id(),
-            'new_clock_in'        => $request->new_clock_in,
-            'new_clock_out'       => $request->new_clock_out,
-
-            // 休憩1・2：リクエストの配列から取得。なければ元の値を参照する
-            'new_rest1_in'        => $request->rests[0]['in'] ?? null,
-            'new_rest1_out'       => $request->rests[0]['out'] ?? null,
-            'new_rest2_in'        => $request->rests[1]['in'] ?? null,
-            'new_rest2_out'       => $request->rests[1]['out'] ?? null,
-
-            'comment'             => $request->comment,
-            'approval_status'     => '承認待ち',
+            'new_date'             => $attendance->date, // 元のレコードの日付をセット
+            'new_clock_in'         => $request->clock_in, // ここでマッピング
+            'new_clock_out'        => $request->clock_out,
+            'new_rest1_in'         => $request->rests[0]['in'] ?? null,
+            'new_rest1_out'        => $request->rests[0]['out'] ?? null,
+            'new_rest2_in'         => $request->rests[1]['in'] ?? null,
+            'new_rest2_out'        => $request->rests[1]['out'] ?? null,
+            'comment'              => $request->comment,
+            'approval_status'      => '承認待ち',
+            'application_date'     => now()->format('Y-m-d'), // シーダーに合わせて追加
         ]);
 
         // 3. 3回目以降の休憩の保存
@@ -68,6 +105,7 @@ class WorkDetailController extends Controller
             }
         }
 
-        return redirect()->route('attendance.request.list')->with('success', '修正申請を提出しました。');
+        return redirect()->route('attendance.detail', ['id' => $id])
+            ->with('message', '修正申請を提出しました');
     }
 }

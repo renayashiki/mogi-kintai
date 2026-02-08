@@ -12,7 +12,7 @@
     width: 700px;
     display: flex;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 30px;
 }
 
 .title-line {
@@ -41,12 +41,13 @@ form {
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     overflow: hidden;
-    margin-bottom: 15px; /* 下のボタンとの間隔 */
+    margin-bottom: 10px; /* 下のボタンとの間隔 */
 }
 
 .detail-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
 /* ① thとtdの文字色・スタイルの分離と、② 上下中央揃え */
@@ -80,7 +81,7 @@ form {
 /* テキスト表示（名前・日付） */
 .name-display, .date-display {
     font-weight: 700;
-    font-size: 14px;
+    font-size: 12px;
     color: rgba(0, 0, 0, 1);
 }
 
@@ -90,7 +91,7 @@ form {
 
 
 .year-val {
-    margin-right: 110px;
+    margin-right: 125px;
     margin-left: 10px;
 }
 
@@ -98,6 +99,7 @@ form {
 .time-group {
     display: flex;
     align-items: flex-start;
+    gap: 40px;
 }
 
 .input-field {
@@ -115,10 +117,28 @@ form {
 }
 
 .range-tilde {
-    margin: 0 40px;
+    margin: 0;
     font-weight: 700;
     color: #000;
 }
+
+
+/* 承認待ちの際のテキスト表示スタイル */
+.text-display {
+    width: 76px; /* input-fieldと同じ幅にして位置を揃える */
+    text-align: center;
+    font-weight: 700;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.text-display-comment {
+    font-weight: 700;
+    font-size: 14px;
+    display: block;
+    padding: 10px 0;
+}
+
 
 /* ③ 備考の幅を「開始時間の頭〜終了時間のお尻」に合わせる */
 .textarea-container {
@@ -149,6 +169,12 @@ form {
     margin: 10px 0; /* 他の行の文字位置(padding 18px)と高さを揃える */
 }
 
+.text-display-multiline{
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+}
+
 /* --- もし備考ラベル(th)の文字も上に寄ってしまう場合は、th側も調整 --- */
 .detail-table tr:last-child .col-label {
     vertical-align: middle;
@@ -159,7 +185,29 @@ form {
     width: 700px; /* テーブルと同じ幅に合わせる */
     display: flex;
     justify-content: flex-end; /* 右寄せ */
-    padding-top: 5px;
+}
+
+/* --- エラーメッセージ表示エリア --- */
+.error-container {
+    width: 700px; /* テーブル幅と同一にする */
+    margin: 0 auto 10px auto; /* 中央寄せにし、下に少し余白 */
+}
+
+.error-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    padding-left: 10px;
+    text-align: left; /* 左寄せ */
+}
+
+.error-item {
+    font-family: 'Inter', sans-serif;
+    color: #ff0000;
+    font-weight: 700;
+    font-size: 12px; /* pending-messageとサイズを統一 */
+    letter-spacing: 0.1em;
+    margin-bottom: 4px; /* エラーが複数ある際の間隔 */
 }
 
 .submit-button {
@@ -173,6 +221,7 @@ form {
     font-size: 15px;
     cursor: pointer;
     transition: opacity 0.2s;
+    margin-top: 10px;
 }
 
 .submit-button:hover {
@@ -183,9 +232,9 @@ form {
 .pending-message {
     width: 100%;
     font-family: 'Inter', sans-serif;
-    font-weight: 800;
-    font-size: 18px;
+    font-weight: 700;
+    font-size: 13px;
     letter-spacing: 0.15em;
     color: rgba(255, 0, 0, 0.5);
-    text-align: center;
+    text-align: right;
 }
