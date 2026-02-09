@@ -57,7 +57,7 @@
                                             class="input-field">
                                         <span class="range-tilde">〜</span>
                                         <input type="text" name="clock_out"
-                                            value="{{ old('clock_out', \Carbon\Carbon::parse($attendance->clock_out)->format('H:i')) }}"
+                                            value="{{ old('clock_out', $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}"
                                             class="input-field">
                                     </div>
                                 @endif
@@ -81,7 +81,7 @@
                                                 class="input-field">
                                             <span class="range-tilde">〜</span>
                                             <input type="text" name="rests[{{ $index }}][out]"
-                                                value="{{ old("rests.$index.out", \Carbon\Carbon::parse($rest->rest_out)->format('H:i')) }}"
+                                                value="{{ old("rests.$index.out", $rest->rest_out ? \Carbon\Carbon::parse($rest->rest_out)->format('H:i') : '') }}"
                                                 class="input-field">
                                         @endif
                                     </div>
