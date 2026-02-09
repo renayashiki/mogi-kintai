@@ -37,7 +37,7 @@ Route::middleware(['auth:admin'])->group(function () {
 
     // 見た目作成中のミドルウェアコメントアウト中は一般とパスが被っているため、この一覧はミドルウェアONまではコメントアウト。
     // 反対に、管理者画面の見た目作成時は一般をコメントアウトすることを忘れずに
-    Route::get('/stamp_correction_request/list', [Admin\ApprovalController::class, 'index'])->name('admin.request.list');
+    // Route::get('/stamp_correction_request/list', [Admin\CorrectionRequestController::class, 'index'])->name('admin.request.list');
 
     Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [Admin\ApprovalController::class, 'show'])->name('admin.request.approve');
 });
@@ -49,5 +49,13 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::get('/attendance/list', [User\MonthlyController::class, 'index'])->name('attendance.list');
     Route::get('/attendance/detail/{id}', [User\WorkDetailController::class, 'show'])->name('attendance.detail');
     Route::post('/attendance/detail/{id}', [User\WorkDetailController::class, 'update'])->name('attendance.update');
-    Route::get('/stamp_correction_request/list', [User\MyRequestController::class, 'index'])->name('attendance.request.list');
+    // Route::get('/stamp_correction_request/list', [User\MyRequestController::class, 'index'])->name('attendance.request.list');
 });
+
+// 申請一覧：共通パス（名前を1つに統一）
+Route::get('/stamp_correction_request/list', function (\Illuminate\Http\Request $request) {
+    if (\Illuminate\Support\Facades\Auth::guard('admin')->check()) {
+        return app(\App\Http\Controllers\Admin\CorrectionRequestController::class)->index($request);
+    }
+    return app(\App\Http\Controllers\User\MyRequestController::class)->index($request);
+})->name('attendance.request.list'); // 名前をこちらに統一
