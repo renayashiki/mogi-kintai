@@ -1,0 +1,162 @@
+/* --- レイアウト基本 --- */
+.request-container {
+    padding: 50px 0;
+    background-color: rgba(240, 239, 242, 1);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 全体を中央寄せ */
+    font-family: 'Inter', sans-serif;
+    font-feature-settings: "cv01" 1;
+}
+
+/* タイトルエリアの復元 */
+.request-header {
+    width: 750px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.title-line {
+    width: 8px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 1);
+    margin-right: 13px;
+}
+
+.request-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* ステータスタブエリアの復元 */
+.status-tab-wrapper {
+    width: 750px;
+    margin-bottom: 30px;
+}
+
+.status-tabs {
+    display: flex;
+    gap: 100px;
+    padding-left: 50px;
+    margin-bottom: 8px;
+}
+
+.tab-item {
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 1);
+    letter-spacing: 0.15em;
+}
+
+/* タブの太さ切り替え */
+.tab-item.is-active {
+    font-weight: 700;
+}
+
+.status-line {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 1);
+    margin-bottom: 4px;
+}
+
+/* --- テーブルエリアの復元 --- */
+.table-wrapper {
+    width: 750px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.request-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.request-table th, .request-table td {
+    height: 34px;
+    vertical-align: middle;
+    font-size: 12px;
+    color: rgba(115, 115, 115, 1); /* フォントカラー */
+    font-weight: 600;
+}
+
+/* ヘッダーのボーダー */
+.request-table thead th {
+    border-bottom: 2px solid rgba(225, 225, 225, 1);
+}
+
+/* ボディのボーダー */
+.request-table tbody td {
+    border-bottom: 1px solid rgba(225, 225, 225, 1);
+}
+
+/* --- ① 各カラムの配置調整（!importantなし） --- */
+
+/* 状態カラム：中央寄せ */
+.request-table .col-status {
+    width: 15%;
+    text-align: left;
+    padding-left: 40px;
+}
+
+/* 名前・日時・理由：左寄せ */
+.request-table .col-name,
+.request-table .col-target-date,
+.request-table .col-reason,
+.request-table .col-app-date {
+    width: 20%; /* 理由以外の幅を均等化 */
+    text-align: left;
+    padding-left: 5px;
+}
+
+.request-table .col-name{
+    padding-left: 35px;
+}
+
+/* 各幅の調整 */
+.col-name        {
+    width: 12%;
+}
+
+.col-target-date {
+    width: 18%;
+}
+
+.col-reason {
+    width: 22%;
+}
+
+.col-app-date {
+    width: 18%;
+}
+
+/* 理由だけ幅を広く取る */
+.request-table .col-reason {
+    width: 20%;
+}
+
+/* ② 詳細ボタン：ズレを直し右余白を確保 */
+.request-table .col-detail {
+    width: 15%;
+    text-align: left; /* 文字を右に寄せる */
+}
+
+.detail-link {
+    color: rgba(0, 0, 0, 1);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+/* レスポンシブ：中央維持 */
+@media screen and (max-width: 1540px) {
+    .request-header, .status-tab-wrapper, .table-wrapper {
+        width: 95%;
+        max-width: 750px;
+    }
+}
