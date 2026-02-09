@@ -8,13 +8,13 @@
         <nav class="header-nav">
             <ul class="nav-list">
                 <li class="nav-item">
-                    <a href="/admin/attendance/list" class="nav-link">勤怠一覧</a>
+                    <a href="{{ route('admin.attendance.list') }}" class="nav-link">勤怠一覧</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/staff/list" class="nav-link">スタッフ一覧</a>
+                    <a href="{{ route('staff.list') }}" class="nav-link">スタッフ一覧</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/request/list" class="nav-link">申請一覧</a>
+                    <a href="{{ route('attendance.request.list') }}" class="nav-link">申請一覧</a>
                 </li>
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="post" class="logout-form">
