@@ -82,7 +82,7 @@
                             </td>
 
                             <td class="col-detail">
-                                <a href="{{ route('admin.attendance.detail', ['id' => $attendance->user_id]) }}"
+                                <a href="{{ route('admin.attendance.detail', ['id' => $attendance->id]) }}"
                                     class="detail-link">詳細</a>
                             </td>
                         </tr>

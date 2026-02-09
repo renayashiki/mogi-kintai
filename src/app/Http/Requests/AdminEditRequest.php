@@ -24,17 +24,12 @@ class AdminEditRequest extends FormRequest
     public function rules()
     {
         return [
-            'new_clock_in' => ['required', 'date_format:H:i'],
-            // ルール①：退勤は出勤より後（＝出勤より前ならエラー）
-            'new_clock_out' => ['required', 'date_format:H:i', 'after:new_clock_in'],
+            'clock_in' => ['required', 'date_format:H:i'],
+            'clock_out' => ['required', 'date_format:H:i', 'after:clock_in'],
 
-            // 休憩1
-            'new_rest1_in' => ['nullable', 'date_format:H:i', 'after:new_clock_in', 'before:new_clock_out'],
-            'new_rest1_out' => ['nullable', 'date_format:H:i', 'after:new_rest1_in', 'before:new_clock_out'],
-
-            // 休憩2（休憩1の後、かつ出勤・退勤の間）
-            'new_rest2_in' => ['nullable', 'date_format:H:i', 'after:new_rest1_out', 'before:new_clock_out'],
-            'new_rest2_out' => ['nullable', 'date_format:H:i', 'after:new_rest2_in', 'before:new_clock_out'],
+            // required から nullable に変更
+            'rests.*.in' => ['nullable', 'date_format:H:i', 'after:clock_in', 'before:clock_out'],
+            'rests.*.out' => ['nullable', 'date_format:H:i', 'after:rests.*.in', 'before:clock_out'],
 
             'comment' => ['required', 'string', 'max:255'],
         ];
@@ -43,33 +38,38 @@ class AdminEditRequest extends FormRequest
     public function messages()
     {
         return [
-            /**
-             * 1. 出勤時間が退勤時間より後になっている場合、および退勤時間が出勤時間より前になっている場合
-             */
-            // after:new_clock_inに違反 ＝「退勤時間が出勤時間より前」の状態を検知
-            'new_clock_out.after' => '出勤時間もしくは退勤時間が不適切な値です',
+            'clock_in.required'  => '出勤時間を入力してください',
+            'clock_in.date_format' => '出勤時間は、\'00:00\'形式の半角で入力して下さい',
+            'clock_out.required' => '退勤時間を入力してください',
+            'clock_out.date_format' => '退勤時間は、\'00:00\'形式の半角で入力して下さい',
+            'rests.*.in.date_format' => '休憩開始時間は、\'00:00\'形式の半角で入力して下さい',
+            'rests.*.out.date_format' => '休憩終了時間は、\'00:00\'形式の半角で入力して下さい',
+            // 1. 出勤・退勤（FN029-1）
+            'clock_in.after' => '出勤時間もしくは退勤時間が不適切な値です',
+            'clock_out.after' => '出勤時間もしくは退勤時間が不適切な値です',
 
-            /**
-             * 2. 休憩開始時間が出勤時間より前になっている場合、及び退勤時間より後になっている場合
-             */
-            // after:new_clock_inに違反 ＝「休憩開始時間が出勤時間より前」を検知
-            'new_rest1_in.after' => '休憩時間が不適切な値です',
-            'new_rest2_in.after' => '休憩時間が不適切な値です',
-            // before:new_clock_outに違反 ＝「休憩開始時間が退勤時間より後」を検知
-            'new_rest1_in.before' => '休憩時間が不適切な値です',
-            'new_rest2_in.before' => '休憩時間が不適切な値です',
+            // 2. 休憩開始（FN029-2）
+            'rests.*.in.after' => '休憩時間が不適切な値です',
+            'rests.*.in.before' => '休憩時間が不適切な値です',
+            'rests.*.out.after'  => '休憩時間が不適切な値です',
 
-            /**
-             * 3. 休憩終了時間が退勤時間より後になっている場合
-             */
-            // before:new_clock_outに違反 ＝「休憩終了時間が退勤時間より後」を検知
-            'new_rest1_out.before' => '休憩時間もしくは退勤時間が不適切な値です',
-            'new_rest2_out.before' => '休憩時間もしくは退勤時間が不適切な値です',
+            // 3. 休憩終了（FN029-3）
+            'rests.*.out.before' => '休憩時間もしくは退勤時間が不適切な値です',
 
-            /**
-             * 4. 備考欄が未入力になっている場合
-             */
+            // 4. 備考（FN029-4）
             'comment.required' => '備考を記入してください',
+            'comment.max' => '備考は255文字以内で記入してください',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'clock_in' => '出勤時間',
+            'clock_out' => '退勤時間',
+            'rests.*.in' => '休憩開始時間',
+            'rests.*.out' => '休憩終了時間',
+            'comment' => '備考',
         ];
     }
 }

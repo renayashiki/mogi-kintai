@@ -105,7 +105,6 @@ class WorkDetailController extends Controller
             }
         }
 
-        return redirect()->route('attendance.detail', ['id' => $id])
-            ->with('message', '修正申請を提出しました');
+        return redirect()->route('attendance.detail', ['id' => $id]);
     }
 }

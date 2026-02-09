@@ -14,15 +14,13 @@ class UserEditRequest extends FormRequest
     public function rules()
     {
         return [
-            // FN029-1: 出勤・退勤
             'clock_in' => ['required', 'date_format:H:i'],
             'clock_out' => ['required', 'date_format:H:i', 'after:clock_in'],
 
-            // FN029-2,3: 休憩（配列）
+            // required から nullable に変更
             'rests.*.in' => ['nullable', 'date_format:H:i', 'after:clock_in', 'before:clock_out'],
             'rests.*.out' => ['nullable', 'date_format:H:i', 'after:rests.*.in', 'before:clock_out'],
 
-            // FN029-4: 備考
             'comment' => ['required', 'string', 'max:255'],
         ];
     }
@@ -50,6 +48,7 @@ class UserEditRequest extends FormRequest
 
             // 4. 備考（FN029-4）
             'comment.required' => '備考を記入してください',
+            'comment.max' => '備考は255文字以内で記入してください',
         ];
     }
 

@@ -31,6 +31,7 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::post('/logout', [Auth\LogoutController::class, 'logout'])->name('logout');
     Route::get('/admin/attendance/list', [Admin\DailyController::class, 'index'])->name('admin.attendance.list');
     Route::get('/admin/attendance/{id}', [Admin\EditController::class, 'show'])->name('admin.attendance.detail');
+    Route::post('/admin/attendance/update/{id}', [Admin\EditController::class, 'update'])->name('admin.attendance.update');
     Route::get('/admin/staff/list', [Admin\StaffController::class, 'index'])->name('staff.list');
     Route::get('/admin/attendance/staff/{id}', [Admin\StaffLogController::class, 'index'])->name('staff.log');
 
