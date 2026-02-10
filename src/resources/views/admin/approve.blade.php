@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', '申請詳細')
+@section('title', '申請承認')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/admin/approve.css') }}">

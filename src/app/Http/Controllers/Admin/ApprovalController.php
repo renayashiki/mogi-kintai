@@ -25,7 +25,7 @@ class ApprovalController extends Controller
             ->orderBy('application_date', 'desc')
             ->get();
 
-        return redirect()->route('attendance.request.list', ['status' => 'approved']);
+        return view('admin.requests', compact('requests', 'status'));
     }
 
     /**
