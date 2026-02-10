@@ -1,0 +1,186 @@
+/* --- レイアウト基本 --- */
+.monthly-container {
+    padding: 40px 0 0;
+    background-color: rgba(240, 239, 242, 1);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.monthly-header {
+    width: 720px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 26px;
+}
+
+.title-line {
+    width: 8px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 1);
+    margin-right: 13px;
+}
+
+.monthly-title {
+    font-weight: 700;
+    font-size: 22px;
+    margin: 0;
+}
+
+/* 月選択バー */
+.month-selector-bar {
+    width: 700px;
+    height: 42px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    margin-bottom: 35px;
+}
+
+.month-nav {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 2px;
+}
+
+.month-nav.prev .nav-icon {
+    transform: scaleX(-1);
+    padding-left: 5px;
+}
+
+.nav-text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: rgba(115, 115, 115, 1);
+}
+
+.calendar-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 1);
+    cursor: pointer;
+}
+
+#month-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+/* テーブルエリア */
+.attendance-table-wrapper {
+    width: 700px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table th,
+.attendance-table td {
+    height: 36px;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: rgba(115, 115, 115, 1);
+}
+
+.attendance-table thead th {
+    border-bottom: 3px solid rgba(225, 225, 225, 1);
+}
+
+
+
+.attendance-table tbody td {
+    border-bottom: 2px solid rgba(225, 225, 225, 1);
+}
+
+
+.col-date {
+    width: 16%;
+    text-align: left;
+    padding-left: 10px;
+    letter-spacing: 0.1em;
+}
+
+.col-start, .col-end, .col-rest, .col-total {
+    width: 10%;
+    letter-spacing: 0.1em;
+}
+
+th.col-date {
+    text-align: left;
+    padding-left: 50px; /* ここで「日付」の文字位置だけを微調整 */
+}
+
+
+.col-detail {
+    width: 16%;
+    text-align: right;    /* 詳細ボタンを右に寄せる */
+    padding-right: 45px; /* 右側に余白を設ける */
+}
+
+.detail-link {
+    color: rgba(0, 0, 0, 1);
+    text-decoration: none;
+}
+
+/* CSVボタン */
+.csv-export-container {
+    width: 700px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 80px;
+}
+
+.csv-button {
+    width: 184px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 1);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.csv-button span {
+    color: rgba(255, 255, 255, 1);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 0.15em;
+}
+
+/* --- ② レスポンシブ対応 --- */
+@media screen and (max-width: 700px) {
+    .monthly-header,
+    .month-selector-bar,
+    .attendance-table-wrapper,
+    .csv-export-container {
+        width: 95%;
+    }
+    
+    .col-date { padding-left: 15px; }
+    .col-detail { padding-right: 15px; }
+}
