@@ -32,6 +32,6 @@ class AdminLoginController extends Controller
         $request->session()->regenerate();
 
         // ログイン成功後は管理者用の勤怠一覧画面へ
-        return redirect()->intended(route('admin.attendance.list'));
+        return redirect()->route('admin.attendance.list');
     }
 }
