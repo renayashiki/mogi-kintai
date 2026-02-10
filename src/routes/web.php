@@ -34,11 +34,6 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::post('/admin/attendance/update/{id}', [Admin\EditController::class, 'update'])->name('admin.attendance.update');
     Route::get('/admin/staff/list', [Admin\StaffController::class, 'index'])->name('staff.list');
     Route::get('/admin/attendance/staff/{id}', [Admin\StaffLogController::class, 'index'])->name('staff.log');
-
-    // 見た目作成中のミドルウェアコメントアウト中は一般とパスが被っているため、この一覧はミドルウェアONまではコメントアウト。
-    // 反対に、管理者画面の見た目作成時は一般をコメントアウトすることを忘れずに
-    // Route::get('/stamp_correction_request/list', [Admin\CorrectionRequestController::class, 'index'])->name('admin.request.list');
-
     Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [Admin\ApprovalController::class, 'show'])->name('admin.request.approve');
     Route::post('/stamp_correction_request/approve/{attendance_correct_request_id}', [Admin\ApprovalController::class, 'approve'])->name('admin.attendance.approve');
 });

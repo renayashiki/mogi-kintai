@@ -15,14 +15,14 @@ class DailyController extends Controller
         $dateString = $request->get('date', now()->format('Y-m-d'));
         $date = Carbon::parse($dateString);
 
-        // 山田花子と管理職を除外
+        // 管理職のみを除外（山田花子は表示対象に含める）
         $attendances = AttendanceRecord::with(['user', 'rests'])
             ->whereHas('user', function ($query) {
-                $query->where('name', '!=', '山田 花子')
-                    ->where('admin_status', '!=', 1);
+                // 山田花子の除外条件を削除し、管理者(1)以外のみを指定
+                $query->where('admin_status', '!=', 1);
             })
             ->whereDate('date', $date->format('Y-m-d'))
-            ->orderBy('clock_in', 'asc') // 山田太郎→西伶奈の順（秒数で制御）
+            ->orderBy('clock_in', 'asc')
             ->get();
 
         return view('admin.daily', compact('attendances', 'dateString', 'date'));

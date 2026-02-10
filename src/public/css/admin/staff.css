@@ -1,0 +1,116 @@
+/* --- レイアウト基本 --- */
+.staff-container {
+    padding: 80px 0;
+    background-color: rgba(240, 239, 242, 1);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+}
+
+.staff-header {
+    width: 700px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.title-line {
+    width: 8px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 1);
+    margin-right: 15px;
+}
+
+.staff-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* --- テーブルエリア --- */
+.table-wrapper {
+    width: 700px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.staff-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* ヘッダーのスタイル */
+.staff-table thead th {
+    height: 40px;
+    vertical-align: middle;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(115, 115, 115, 1);
+    border-bottom: 2px solid rgba(225, 225, 225, 1);
+    letter-spacing: 0.15em;
+}
+
+/* ボディのスタイル */
+.staff-table tbody td {
+    height: 40px;
+    vertical-align: middle;
+    font-size: 13px;
+    color: rgba(115, 115, 115, 1);
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    border-bottom: 1px solid rgba(225, 225, 225, 1);
+}
+
+/* --- カラム幅の設定 --- */
+.col-name { width: 25%; }
+.col-email { width: 50%; }
+.col-detail { width: 25%; }
+
+/* --- th の位置合わせ --- */
+.staff-table thead th.col-name {
+    padding-left: 130px;
+    text-align: center;
+}
+
+.staff-table thead th.col-email {
+    text-align: center;
+    padding-left: 10px; /* td と同期 */
+}
+
+.staff-table thead th.col-detail {
+    text-align: left;
+    padding-right: 50px;
+}
+
+/* --- td の位置設定（元の理想値を維持） --- */
+.staff-table tbody td.col-name {
+    padding-left: 60px;
+    text-align: right;
+}
+
+.staff-table tbody td.col-email {
+    padding-left: 10px;
+    text-align: center;
+}
+
+.staff-table tbody td.col-detail {
+    text-align: left;
+    padding-left: 10px;
+}
+
+.detail-link {
+    color: rgba(0, 0, 0, 1);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+@media screen and (max-width: 750px) {
+    .staff-header, .table-wrapper {
+        width: 95%;
+    }
+}
