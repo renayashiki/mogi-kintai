@@ -16,7 +16,7 @@
 >※Docker環境でのログ出力や画像保存時のエラー（Permission Denied）を防ぐため、必ず実行してください。
 3. 「.env.example」ファイルを 「.env」ファイルに命名を変更。または、新しく.envファイルを作成
 
-    `# cp .env.example .env`
+`# cp .env.example .env`
 
 4. 環境変数の設定
 >DBの設定ー.envに以下の環境変数を修正
@@ -149,17 +149,19 @@ php artisan test tests/Feature/RegisterTest.php
  'email' => 'reina.n@coachtech.com',
  'password' => 'password123'
 ```
-> 一般ユーザーページの機能確認ができます。見本の2023年6月の前後3か月と現在の日付から前3ヶ月のデータをダミーデータとして入れており、その期間内で機能確認が可能です。
+> 一般ユーザーページの機能確認ができます。見本の2023年6月の前後3か月と現在の日付から前3ヶ月のデータをダミーデータとして入れており、その期間内で機能確認が可能です。※西 伶奈についても見本UIと完全一致のダミーデータにした場合、リレーションや仕様書と矛盾が生じるため、データ数や見え方は一致させ、日付等は考慮してダミーデータを作成しています。
+
+
 
 **特記事項**
-- 管理者ページの申請一覧見本UIでは「山田 花子」というユーザーが存在しますが、スタッフ一覧ページ見本UIでは「山田 花子」は存在していません。見本を完全再現し、管理者の申請一覧画面でのみは表示される形で再現しています。
+- 管理者ページの申請一覧見本UIでは「山田 花子」というユーザーが存在しますが、スタッフ一覧ページ見本UIでは「山田 花子」は存在していません。見本UIを完全再現した形で山田花子を表示/非表示にすることは可能ですが、システムや仕様書、テーブル設計の矛盾を避けるために、見本UIどおり山田花子は存在させ、スタッフ一覧画面や勤怠一覧にも整合性を保つために表示しています。
 
 
 **スタッフ一覧に存在する他ユーザー**
 > パスワードは共通のため、以下のユーザー別メールアドレスでログインし操作確認も可能です。ダミーデータが挿入されている期間は上記同様、見本の2023年6月の前後3か月と現在の日付から前3ヶ月です。
 
 | 名前 | メールアドレス | ログイン時の状態 |
-| :--- | :--- | :--- | :--- | 山田 太郎 | `taro.y@coachtech.com`| 増田 一世 | `issei.m@coachtech.com`|秋田 朋美 | `tomomi.a@coachtech.com`| 中西 教夫 | `norio.n@coachtech.com` |
+| :--- | :--- | :--- | :--- | 山田 太郎 | `taro.y@coachtech.com`| 増田 一世 | `issei.m@coachtech.com`|秋田 朋美 | `tomomi.a@coachtech.com`| 中西 教夫 | `norio.n@coachtech.com` |山田花子| `hanako.y@coachtech.com`|
 <br>
 
 ## 使用技術(実行環境)
@@ -178,27 +180,15 @@ php artisan test tests/Feature/RegisterTest.php
 
 
 ## テーブル設計
-![usersテーブル](./docs/usersテーブル模擬1.png)
+![usersテーブル](./docs/usersテーブル②模擬.png)
 
-![profilesテーブル](./docs/profilesテーブル模擬①.png)
-> profilesテーブルはユーザーの表示用・編集用情報を管理するためにusersテーブルと分離しています。認証情報とプロフィール情報の責務を分け、将来的な拡張や管理性を考慮した設計としています
+![attendance_recordsテーブル](./docs/attendance_recordsテーブル②模擬.png)
 
-![productsテーブル](./docs/productsテーブル模擬1.png)
-> 本アプリでは「1商品につき画像1枚」という仕様のため、商品画像はproductsテーブルにimageカラムとして保持しています。この点に関しては、将来的な画像対応よりも仕様に忠実な形でシンプルな構成を選択しました。将来的に複数画像で対応する場合は別テーブルに切り出す想定。
+![restsテーブル](./docs/restsテーブル②模擬.png)
 
-![categoriesテーブル](./docs/categoriesテーブル模擬①.png)
+![attendance_correctsテーブル](./docs/attendance_correctsテーブル②模擬.png)
 
-![product_categoriesテーブル](./docs/product_categoriesテーブル(中間)模擬①.png)
-> categories と products は多対多関係となり、中間テーブルproduct_categories を使用しています。複合ユニーク：(category_id, product_id)
-
-![commentsテーブル](./docs/コメントテーブル①.png)
-> comments はユーザーと商品の中間テーブルではなく、独立したエンティティとして管理しています
-
-![favoritesテーブル](./docs/新favoritesテーブル.png)
-> favoritesは中間テーブルではなく、独立したエンティティとして管理しています。※ 複合ユニーク：(user_id, product_id)
-
-![odersテーブル](./docs/新オーダーテーブル.png)
-
+![attendance_correct_restsテーブル](./docs/attendance_correct_restsテーブル②模擬.png)
 
 
 ## ER図

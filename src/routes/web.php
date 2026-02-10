@@ -34,6 +34,7 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::post('/admin/attendance/update/{id}', [Admin\EditController::class, 'update'])->name('admin.attendance.update');
     Route::get('/admin/staff/list', [Admin\StaffController::class, 'index'])->name('staff.list');
     Route::get('/admin/attendance/staff/{id}', [Admin\StaffLogController::class, 'index'])->name('staff.log');
+    Route::get('/admin/attendance/staff/{id}/csv', [Admin\StaffLogController::class, 'exportCsv'])->name('staff.log.csv');
     Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [Admin\ApprovalController::class, 'show'])->name('admin.request.approve');
     Route::post('/stamp_correction_request/approve/{attendance_correct_request_id}', [Admin\ApprovalController::class, 'approve'])->name('admin.attendance.approve');
 });
