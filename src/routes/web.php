@@ -40,6 +40,7 @@ Route::middleware(['auth:admin'])->group(function () {
     // Route::get('/stamp_correction_request/list', [Admin\CorrectionRequestController::class, 'index'])->name('admin.request.list');
 
     Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [Admin\ApprovalController::class, 'show'])->name('admin.request.approve');
+    Route::post('/stamp_correction_request/approve/{attendance_correct_request_id}', [Admin\ApprovalController::class, 'approve'])->name('admin.attendance.approve');
 });
 
 // --- 一般ユーザー（勤怠関連） ---
@@ -53,9 +54,15 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
 });
 
 // 申請一覧：共通パス（名前を1つに統一）
+// 申請一覧：共通パス
 Route::get('/stamp_correction_request/list', function (\Illuminate\Http\Request $request) {
+    // フルパス (\Illuminate\Support\Facades\Auth) で書くことで、
+    // 上の use App\Http\Controllers\Auth との衝突を避けます
     if (\Illuminate\Support\Facades\Auth::guard('admin')->check()) {
         return app(\App\Http\Controllers\Admin\CorrectionRequestController::class)->index($request);
     }
-    return app(\App\Http\Controllers\User\MyRequestController::class)->index($request);
-})->name('attendance.request.list'); // 名前をこちらに統一
+    if (\Illuminate\Support\Facades\Auth::guard('web')->check()) {
+        return app(\App\Http\Controllers\User\MyRequestController::class)->index($request);
+    }
+    return redirect()->route('login');
+})->name('attendance.request.list');
