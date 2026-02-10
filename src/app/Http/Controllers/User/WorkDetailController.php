@@ -25,6 +25,11 @@ class WorkDetailController extends Controller
 
         $hasPendingRequest = (bool)$pendingRequest;
 
+        // 3. 承認済みの申請があるか取得（ボタン非表示の判定用）
+        $isApproved = AttendanceCorrect::where('attendance_record_id', $id)
+            ->where('approval_status', '承認済み')
+            ->exists();
+
         // 3. 承認待ちがある場合、表示用オブジェクトの中身を「申請内容」で上書きする
         if ($hasPendingRequest) {
             // 基本情報の上書き
@@ -63,7 +68,7 @@ class WorkDetailController extends Controller
             $attendance->setRelation('rests', $newRests);
         }
 
-        return view('user.detail', compact('attendance', 'hasPendingRequest'));
+        return view('user.detail', compact('attendance', 'hasPendingRequest', 'isApproved'));
     }
 
     public function update(UserEditRequest $request, $id)
