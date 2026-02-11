@@ -43,7 +43,10 @@ class AttendanceRecord extends Model
         // --- ここから追加 ---
         // DBに直接 '01:00:00' 等が入っているなら、計算せずにそれを優先する
         if (!empty($this->attributes['total_rest_time'])) {
-            return ltrim(substr($this->attributes['total_rest_time'], 0, 5), '0');
+            $parts = explode(':', $this->attributes['total_rest_time']);
+            $hours = (int)$parts[0];   // '00' -> 0
+            $minutes = (int)$parts[1]; // '35' -> 35
+            return sprintf('%d:%02d', $hours, $minutes); // 0:35 / 1:00 / 10:00 形式を確定
         }
         // --- ここまで追加 ---
 
@@ -72,7 +75,10 @@ class AttendanceRecord extends Model
         // --- ここから追加 ---
         // DBに値があるなら、それを優先（西さんの複製データの救済）
         if (!empty($this->attributes['total_time'])) {
-            return ltrim(substr($this->attributes['total_time'], 0, 5), '0');
+            $parts = explode(':', $this->attributes['total_time']);
+            $hours = (int)$parts[0];
+            $minutes = (int)$parts[1];
+            return sprintf('%d:%02d', $hours, $minutes);
         }
         // --- ここまで追加 ---
 

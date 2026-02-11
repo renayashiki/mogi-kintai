@@ -73,11 +73,11 @@
                             </td>
                             <td class="col-rest">
                                 {{-- モデルのアクセサを利用 --}}
-                                {{ $attendance && $attendance->total_rest_time ? ltrim(mb_convert_kana($attendance->total_rest_time, 'a'), '0') : '' }}
+                                {{ $attendance && $attendance->total_rest_time ? mb_convert_kana($attendance->total_rest_time, 'a') : '' }}
                             </td>
                             <td class="col-total">
                                 {{-- モデルのアクセサを利用 --}}
-                                {{ $attendance && $attendance->total_time ? ltrim(mb_convert_kana($attendance->total_time, 'a'), '0') : '' }}
+                                {{ $attendance && $attendance->total_time ? mb_convert_kana($attendance->total_time, 'a') : '' }}
                             </td>
                             <td class="col-detail">
                                 @if ($attendance)

@@ -58,6 +58,7 @@
 /* 前月の矢印を反転させて左向きにする */
 .month-nav.prev .nav-icon {
     transform: scaleX(-1);
+    padding-left: 5px;
 }
 
 .nav-text {

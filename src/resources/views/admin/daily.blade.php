@@ -73,12 +73,12 @@
 
                             {{-- 休憩時間 (01:00 -> 1:00) --}}
                             <td class="col-rest">
-                                {{ $attendance && $attendance->total_rest_time ? ltrim(mb_convert_kana(\Carbon\Carbon::parse($attendance->total_rest_time)->format('H:i'), 'a'), '0') : '' }}
+                                {{ $attendance && $attendance->total_rest_time ? mb_convert_kana($attendance->total_rest_time, 'a') : '' }}
                             </td>
 
                             {{-- 合計勤務時間 (01:00 -> 1:00) --}}
                             <td class="col-total">
-                                {{ $attendance && $attendance->total_time ? ltrim(mb_convert_kana(\Carbon\Carbon::parse($attendance->total_time)->format('H:i'), 'a'), '0') : '' }}
+                                {{ $attendance && $attendance->total_time ? mb_convert_kana($attendance->total_time, 'a') : '' }}
                             </td>
 
                             <td class="col-detail">
