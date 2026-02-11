@@ -211,10 +211,33 @@
 /* レスポンシブ */
 @media screen and (max-width: 1540px) {
     .daily-container {
-        padding: 62px 50px 0;
+        padding: 60px 50px 0;
     }
     .date-selector-bar, .attendance-table-wrapper { 
         width: 100%;
         max-width: 800px;
+    }
+
+.daily-container .attendance-table-wrapper .attendance-table .col-start,
+    .daily-container .attendance-table-wrapper .attendance-table .col-end,
+    .daily-container .attendance-table-wrapper .attendance-table .col-rest,
+    .daily-container .attendance-table-wrapper .attendance-table .col-total {
+        /* white-space は縮小時のみならず、常に1行にする設定として有効化 */
+        white-space: nowrap; 
+        
+        /* 1100px以下（崩れ始める目安）になったら余白をリセット */
+        @media screen and (max-width: 1100px) {
+            padding-left: 0;
+            text-align: center;
+            width: auto;
+        }
+    }
+
+    /* 詳細列も同様 */
+    .daily-container .attendance-table-wrapper .attendance-table tbody td.col-detail {
+        @media screen and (max-width: 1100px) {
+            padding-right: 0;
+            text-align: center;
+        }
     }
 }
