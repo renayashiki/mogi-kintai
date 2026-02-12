@@ -14,7 +14,7 @@ class MyRequestController extends Controller
         $status = $request->query('status', 'pending');
         $dbStatus = ($status === 'approved') ? '承認済み' : '承認待ち';
 
-        $requests = AttendanceCorrect::with(['user', 'attendanceRecord']) // 親レコードもロード
+        $requests = AttendanceCorrect::with(['user', 'attendanceRecord.rests']) // 孫リレーションまでロード
             ->where('user_id', Auth::id())
             ->where('approval_status', $dbStatus)
             ->orderBy('application_date', 'desc')

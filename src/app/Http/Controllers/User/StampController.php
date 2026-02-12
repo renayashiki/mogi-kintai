@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AttendanceRecord;
 use App\Models\Rest;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -90,58 +89,45 @@ class StampController extends Controller
                 return redirect()->route('attendance.index');
 
             case 'clock_out':
-                // 【重要】今日すでに退勤時刻が記録されているレコードがあるかチェック
+                // ① 二重退勤チェック（既存通り）
                 $alreadyClockedOut = AttendanceRecord::where('user_id', $user->id)
                     ->whereDate('date', $today)
                     ->whereNotNull('clock_out')
                     ->exists();
 
                 if ($alreadyClockedOut) {
-                    // すでに退勤済みなら、何もせずリダイレクト（2回目の保存をさせない）
                     return redirect()->route('attendance.index');
                 }
 
-                // 1. 当日のレコードを取得
-                $record = AttendanceRecord::where('user_id', $user->id)->whereNull('clock_out')->latest()->first();
+                // ② レコード取得（既存通り）
+                $record = AttendanceRecord::where('user_id', $user->id)
+                    ->whereNull('clock_out')
+                    ->latest()
+                    ->first();
 
                 if (!$record) {
-                    // もし見つからなければ、仕方ないので日付で探す（予備）
-                    $record = AttendanceRecord::where('user_id', $user->id)
-                        ->whereDate('date', $today)
-                        ->first();
+                    $record = AttendanceRecord::where('user_id', $user->id)->whereDate('date', $today)->first();
                 }
 
-                $record->load('rests');
+                // ③【ここから重要：原材料モードへの切り替え】
+                $record->load('rests'); // 休憩をロード
+                $record->clock_out = $now; // メモリ上で退勤時刻をセット（アクセサ計算用）
 
-                // 2. 出勤・退勤時刻をCarbonインスタンスとして確定（秒は0に揃える）
-                $clockIn = Carbon::parse($record->clock_in);
-                $clockOut = $now;
+                // 手動の diffInSeconds は一切不要！アクセサを呼ぶだけ
+                $totalRestTime = $record->total_rest_time; // モデルが勝手に H:i を出す
+                $totalWorkTime = $record->total_time;      // モデルが勝手に H:i を出す
 
-
-                // 3. 休憩時間の合計（秒）を算出
-                $totalRestSeconds = 0;
-                foreach ($record->rests as $rest) {
-                    if ($rest->rest_in && $rest->rest_out) {
-                        $totalRestSeconds += Carbon::parse($rest->rest_out)->diffInSeconds(Carbon::parse($rest->rest_in));
-                    }
-                }
-
-                // 4. 総勤務時間（秒）の計算：(退勤 - 出勤) - 休憩合計
-                $staySeconds = $clockOut->diffInSeconds($clockIn);
-                $totalWorkingSeconds = max(0, $staySeconds - $totalRestSeconds);
-
-
-                // 5. DB保存（UI仕様に合わせ H:i:00 の形式で文字列として保存）
+                // ④ 保存（刻印）
                 $record->update([
-                    'clock_out' => $clockOut->format('Y-m-d H:i:s'),
-                    'total_rest_time' => gmdate('H:i:s', $totalRestSeconds),
-                    'total_time' => gmdate('H:i:s', max(0, $totalWorkingSeconds)),
+                    'clock_out' => $now, // Carbonインスタンスのまま渡してOK（Laravelがよしなにします）
+                    'total_rest_time' => $totalRestTime,
+                    'total_time' => $totalWorkTime,
                 ]);
 
-
-                // 6. ユーザーステータスの更新
+                // ⑤ ユーザーステータスの更新（ここも仕様通り残っています！）
                 $user->update(['attendance_status' => 'finished']);
 
+                // ⑥ リダイレクト（ここも残っています！）
                 return redirect('/attendance?status=finished');
         }
     }

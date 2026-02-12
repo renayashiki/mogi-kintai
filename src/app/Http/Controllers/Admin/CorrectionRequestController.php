@@ -9,7 +9,7 @@ use App\Models\AttendanceCorrect;
 class CorrectionRequestController extends Controller
 {
     /**
-     * 管理者：修正申請一覧（承認待ち・承認済み）
+     * FN041: 申請一覧取得機能（管理者）
      */
     public function index(Request $request)
     {
@@ -19,8 +19,11 @@ class CorrectionRequestController extends Controller
         // DB上の文言に変換
         $dbStatus = ($status === 'approved') ? '承認済み' : '承認待ち';
 
-        // 全一般ユーザーの申請を、リレーションと共に取得
-        $requests = AttendanceCorrect::with(['user'])
+        // 原材料（休憩申請レコード）も一緒に取得しておく
+        $requests = AttendanceCorrect::with([
+            'user',
+            'attendanceCorrectRests' // 3回目以降の休憩データも事前にロード
+        ])
             ->where('approval_status', $dbStatus)
             ->orderBy('application_date', 'desc')
             ->get();

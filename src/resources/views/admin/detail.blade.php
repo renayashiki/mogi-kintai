@@ -32,10 +32,8 @@
                             <th class="col-label">日付</th>
                             <td class="col-value">
                                 <div class="date-display">
-                                    <span
-                                        class="year-val">{{ \Carbon\Carbon::parse($attendance->date)->format('Y年') }}</span>
-                                    <span
-                                        class="date-val">{{ \Carbon\Carbon::parse($attendance->date)->format('n月j日') }}</span>
+                                    <span class="year-val">{{ $attendance->date->format('Y年') }}</span>
+                                    <span class="date-val">{{ $attendance->date->format('n月j日') }}</span>
                                 </div>
                             </td>
                         </tr>
@@ -45,15 +43,15 @@
                                 @if ($hasPendingRequest)
                                     <div class="time-group">
                                         <span
-                                            class="text-display">{{ \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') }}</span>
+                                            class="text-display">{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}</span>
                                         <span class="range-tilde">〜</span>
                                         <span
-                                            class="text-display">{{ \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') }}</span>
+                                            class="text-display">{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}</span>
                                     </div>
                                 @else
                                     <div class="time-group">
                                         <input type="text" name="clock_in"
-                                            value="{{ old('clock_in', \Carbon\Carbon::parse($attendance->clock_in)->format('H:i')) }}"
+                                            value="{{ old('clock_in', $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '') }}"
                                             class="input-field">
                                         <span class="range-tilde">〜</span>
                                         <input type="text" name="clock_out"
@@ -71,13 +69,13 @@
                                     <div class="time-group">
                                         @if ($hasPendingRequest)
                                             <span
-                                                class="text-display">{{ \Carbon\Carbon::parse($rest->rest_in)->format('H:i') }}</span>
+                                                class="text-display">{{ $rest->rest_in ? \Carbon\Carbon::parse($rest->rest_in)->format('H:i') : '' }}</span>
                                             <span class="range-tilde">〜</span>
                                             <span
                                                 class="text-display">{{ $rest->rest_out ? \Carbon\Carbon::parse($rest->rest_out)->format('H:i') : '' }}</span>
                                         @else
                                             <input type="text" name="rests[{{ $index }}][in]"
-                                                value="{{ old("rests.$index.in", \Carbon\Carbon::parse($rest->rest_in)->format('H:i')) }}"
+                                                value="{{ old("rests.$index.in", $rest->rest_in ? \Carbon\Carbon::parse($rest->rest_in)->format('H:i') : '') }}"
                                                 class="input-field">
                                             <span class="range-tilde">〜</span>
                                             <input type="text" name="rests[{{ $index }}][out]"

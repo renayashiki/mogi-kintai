@@ -35,21 +35,33 @@ class AttendanceRecord extends Model
         return $this->hasMany(Rest::class);
     }
 
-    /**
-     * 休憩合計時間を算出するアクセサ (total_rest_time)
-     */
-    public function getTotalRestTimeAttribute()
-    {
-        // --- ここから追加 ---
-        // DBに直接 '01:00:00' 等が入っているなら、計算せずにそれを優先する
-        if (!empty($this->attributes['total_rest_time'])) {
-            $parts = explode(':', $this->attributes['total_rest_time']);
-            $hours = (int)$parts[0];   // '00' -> 0
-            $minutes = (int)$parts[1]; // '35' -> 35
-            return sprintf('%d:%02d', $hours, $minutes); // 0:35 / 1:00 / 10:00 形式を確定
-        }
-        // --- ここまで追加 ---
+/* -------------------------------------------------------------------------
+     * 新方針：精密計算メソッド（心臓部）
+     * ------------------------------------------------------------------------- */
 
+    /**
+     * 【計算ロジック】実働合計時間を秒単位で算出する
+     */
+    public function getWorkSeconds(): int
+    {
+        if (!$this->clock_in || !$this->clock_out) {
+            return 0;
+        }
+
+        $start = \Carbon\Carbon::parse($this->clock_in);
+        $end = \Carbon\Carbon::parse($this->clock_out);
+        $diffSeconds = $end->diffInSeconds($start);
+
+        $restSeconds = $this->getRestSeconds();
+
+        return (int)max(0, $diffSeconds - $restSeconds);
+    }
+
+    /**
+     * 【計算ロジック】休憩合計時間を秒単位で算出する
+     */
+    public function getRestSeconds(): int
+    {
         $totalSeconds = 0;
         foreach ($this->rests as $rest) {
             if ($rest->rest_in && $rest->rest_out) {
@@ -58,13 +70,33 @@ class AttendanceRecord extends Model
                 $totalSeconds += $out->diffInSeconds($in);
             }
         }
+        return (int)$totalSeconds;
+    }
 
-        if ($totalSeconds === 0) return null;
-
-        $hours = floor($totalSeconds / 3600);
-        $minutes = floor(($totalSeconds / 60) % 60);
-        // 見本に合わせて %02d:%02d から %d:%02d (1:00形式) に微調整
+    /**
+     * 【整形ロジック】秒を 1:00 形式の文字列に変換する
+     */
+    private function formatSecondsToShimei(int $seconds): string
+    {
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds / 60) % 60);
         return sprintf('%d:%02d', $hours, $minutes);
+    }
+
+    /* -------------------------------------------------------------------------
+     * アクセサ（表示用：DBのカラム値を無視して常に再計算する）
+     * ------------------------------------------------------------------------- */
+
+    /**
+     * 休憩合計時間を算出するアクセサ (total_rest_time)
+     */
+    public function getTotalRestTimeAttribute()
+    {
+        // DBの中身を見ず、常にリレーションから計算
+        $seconds = $this->getRestSeconds();
+        if ($seconds === 0) return null;
+
+        return $this->formatSecondsToShimei($seconds);
     }
 
     /**
@@ -72,32 +104,10 @@ class AttendanceRecord extends Model
      */
     public function getTotalTimeAttribute()
     {
-        // --- ここから追加 ---
-        // DBに値があるなら、それを優先（西さんの複製データの救済）
-        if (!empty($this->attributes['total_time'])) {
-            $parts = explode(':', $this->attributes['total_time']);
-            $hours = (int)$parts[0];
-            $minutes = (int)$parts[1];
-            return sprintf('%d:%02d', $hours, $minutes);
-        }
-        // --- ここまで追加 ---
-
+        // DBの中身を見ず、常にリレーションから計算
         if (!$this->clock_in || !$this->clock_out) return null;
 
-        $start = \Carbon\Carbon::parse($this->clock_in);
-        $end = \Carbon\Carbon::parse($this->clock_out);
-        $diffSeconds = $end->diffInSeconds($start);
-
-        $restSeconds = 0;
-        foreach ($this->rests as $rest) {
-            if ($rest->rest_in && $rest->rest_out) {
-                $restSeconds += \Carbon\Carbon::parse($rest->rest_out)->diffInSeconds(\Carbon\Carbon::parse($rest->rest_in));
-            }
-        }
-
-        $workSeconds = max(0, $diffSeconds - $restSeconds);
-        $hours = floor($workSeconds / 3600);
-        $minutes = floor(($workSeconds / 60) % 60);
-        return sprintf('%d:%02d', $hours, $minutes);
+        $seconds = $this->getWorkSeconds();
+        return $this->formatSecondsToShimei($seconds);
     }
 }

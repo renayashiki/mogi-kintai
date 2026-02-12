@@ -56,18 +56,25 @@
                             $requestedRests = [];
                             if ($correctionRequest->new_rest1_in) {
                                 $requestedRests[] = [
-                                    'in' => $correctionRequest->new_rest1_in,
-                                    'out' => $correctionRequest->new_rest1_out,
+                                    'in' => \Carbon\Carbon::parse($correctionRequest->new_rest1_in),
+                                    'out' => $correctionRequest->new_rest1_out
+                                        ? \Carbon\Carbon::parse($correctionRequest->new_rest1_out)
+                                        : null,
                                 ];
                             }
                             if ($correctionRequest->new_rest2_in) {
                                 $requestedRests[] = [
-                                    'in' => $correctionRequest->new_rest2_in,
-                                    'out' => $correctionRequest->new_rest2_out,
+                                    'in' => \Carbon\Carbon::parse($correctionRequest->new_rest2_in),
+                                    'out' => $correctionRequest->new_rest2_out
+                                        ? \Carbon\Carbon::parse($correctionRequest->new_rest2_out)
+                                        : null,
                                 ];
                             }
                             foreach ($correctionRequest->attendanceCorrectRests as $extra) {
-                                $requestedRests[] = ['in' => $extra->new_rest_in, 'out' => $extra->new_rest_out];
+                                $requestedRests[] = [
+                                    'in' => \Carbon\Carbon::parse($extra->new_rest_in),
+                                    'out' => $extra->new_rest_out ? \Carbon\Carbon::parse($extra->new_rest_out) : null,
+                                ];
                             }
                         @endphp
 
@@ -76,12 +83,11 @@
                                 <th class="col-label">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
                                 <td class="col-value">
                                     <div class="time-group">
-                                        {{-- [原則] 表示はシンプルに（秒切り捨て） --}}
-                                        <span
-                                            class="text-display">{{ \Carbon\Carbon::parse($rest['in'])->format('H:i') }}</span>
+                                        {{-- ここで format('H:i') が安全に呼べるようになります --}}
+                                        <span class="text-display">{{ $rest['in']->format('H:i') }}</span>
                                         <span class="range-tilde">〜</span>
                                         <span
-                                            class="text-display">{{ $rest['out'] ? \Carbon\Carbon::parse($rest['out'])->format('H:i') : '' }}</span>
+                                            class="text-display">{{ $rest['out'] ? $rest['out']->format('H:i') : '' }}</span>
                                     </div>
                                 </td>
                             </tr>

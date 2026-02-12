@@ -30,68 +30,70 @@ class ApprovalController extends Controller
 
     /**
      * FN050: 申請詳細表示
+     * [修正点] 申請に紐づく追加休憩(attendanceCorrectRests)を確実にロード
      */
     public function show($attendance_correct_request_id)
     {
-        $correctionRequest = AttendanceCorrect::with(['user', 'attendanceCorrectRests'])
+        $correctionRequest = AttendanceCorrect::with(['user', 'attendanceCorrectRests', 'attendanceRecord'])
             ->findOrFail($attendance_correct_request_id);
 
         return view('admin.approve', compact('correctionRequest'));
     }
 
     /**
-     * FN051: 承認機能（休憩1-2カラム＋3以降別テーブル対応版）
+     * FN051: 承認機能
+     * [修正点] DBの物理的な個数・時刻・合計時間をすべて同期させる
      */
     public function approve($attendance_correct_request_id)
     {
-        // 修正案のロジックを統合した完成版
         $correctionRequest = AttendanceCorrect::with('attendanceCorrectRests')->findOrFail($attendance_correct_request_id);
 
         DB::transaction(function () use ($correctionRequest) {
-            // ① 勤怠レコード本体の更新（リレーションを利用）
             $attendance = $correctionRequest->attendanceRecord;
 
-            $attendance->update([
-                'date'      => $correctionRequest->new_date,
-                'clock_in'  => $correctionRequest->new_clock_in,
-                'clock_out' => $correctionRequest->new_clock_out,
-                'comment'   => $correctionRequest->comment,
-                // [原則] 計算は精密に、表示はシンプルに。
-                // 合計時間はアクセサで再計算させるため、ここではnull更新またはそのままにします
-                'total_time' => null,
-                'total_rest_time' => null,
-            ]);
-
-            // ② 既存の休憩をリセット
+            // ① 本番の休憩テーブル(rests)を、申請内容で完全に入れ替える
+            // これにより物理的なレコード個数が申請と一致する
             $attendance->rests()->delete();
 
-            // ③ 申請された休憩データを本番（restsテーブル）へ移行
-            // 休憩1
+            $newRests = [];
             if ($correctionRequest->new_rest1_in) {
-                $attendance->rests()->create([
-                    'rest_in'  => $correctionRequest->new_rest1_in,
-                    'rest_out' => $correctionRequest->new_rest1_out,
-                ]);
+                $newRests[] = ['in' => $correctionRequest->new_rest1_in, 'out' => $correctionRequest->new_rest1_out];
             }
-            // 休憩2
             if ($correctionRequest->new_rest2_in) {
-                $attendance->rests()->create([
-                    'rest_in'  => $correctionRequest->new_rest2_in,
-                    'rest_out' => $correctionRequest->new_rest2_out,
-                ]);
+                $newRests[] = ['in' => $correctionRequest->new_rest2_in, 'out' => $correctionRequest->new_rest2_out];
             }
-            // 休憩3以降
             foreach ($correctionRequest->attendanceCorrectRests as $extra) {
+                $newRests[] = ['in' => $extra->new_rest_in, 'out' => $extra->new_rest_out];
+            }
+
+            foreach ($newRests as $restData) {
                 $attendance->rests()->create([
-                    'rest_in'  => $extra->new_rest_in,
-                    'rest_out' => $extra->new_rest_out,
+                    'rest_in'  => $restData['in'],
+                    'rest_out' => $restData['out'],
                 ]);
             }
 
-            // ④ ステータス更新
+            // ② 最新の休憩レコードを元に、モデルの心臓部(アクセサ用メソッド)で精密計算
+            $attendance->load('rests');
+            $totalRestTime = $attendance->getTotalRestTimeAttribute(); // 例: "1:00"
+            $totalWorkTime = $attendance->getTotalTimeAttribute();     // 例: "8:00"
+
+            // ③ 本番の勤怠テーブル(attendance_records)に全てを刻印
+            // 備考(comment)もここでユーザーの申請内容に書き換わる
+            $attendance->update([
+                'date'            => $correctionRequest->new_date,
+                'clock_in'        => $correctionRequest->new_clock_in,
+                'clock_out'       => $correctionRequest->new_clock_out,
+                'total_rest_time' => $totalRestTime,
+                'total_time'      => $totalWorkTime,
+                'comment'         => $correctionRequest->comment,
+            ]);
+
+            // ④ 申請レコード自体のステータスを「承認済み」にする
             $correctionRequest->update(['approval_status' => '承認済み']);
         });
 
-        return redirect()->route('attendance.request.list', ['status' => 'approved']);
+        return redirect()->route('attendance.request.list', ['status' => 'approved'])
+            ->with('success', '申請を承認しました。');
     }
 }

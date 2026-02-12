@@ -70,16 +70,16 @@
                         <tr>
                             <td class="col-date">{{ $date->format('m/d') }}({{ $dayName }})</td>
                             <td class="col-start">
-                                {{ $attendance ? mb_convert_kana(\Carbon\Carbon::parse($attendance->clock_in)->format('H:i'), 'a') : '' }}
+                                {{ $attendance ? $attendance->clock_in->format('H:i') : '' }}
                             </td>
                             <td class="col-end">
-                                {{ $attendance && $attendance->clock_out ? mb_convert_kana(\Carbon\Carbon::parse($attendance->clock_out)->format('H:i'), 'a') : '' }}
+                                {{ $attendance && $attendance->clock_out ? $attendance->clock_out->format('H:i') : '' }}
                             </td>
                             <td class="col-rest">
-                                {{ $attendance && $attendance->total_rest_time ? mb_convert_kana($attendance->total_rest_time, 'a') : '' }}
+                                {{ $attendance && $attendance->clock_out ? $attendance->total_rest_time : '' }}
                             </td>
                             <td class="col-total">
-                                {{ $attendance && $attendance->total_time ? mb_convert_kana($attendance->total_time, 'a') : '' }}
+                                {{ $attendance && $attendance->clock_out ? $attendance->total_time : '' }}
                             </td>
                             <td class="col-detail">
                                 @if ($attendance)
