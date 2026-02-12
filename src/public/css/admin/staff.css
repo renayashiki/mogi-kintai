@@ -64,6 +64,7 @@
     font-weight: 600;
     font-family: 'Inter', sans-serif;
     border-bottom: 1px solid rgba(225, 225, 225, 1);
+    letter-spacing: 0.1em;
 }
 
 /* --- カラム幅の設定 --- */
@@ -100,7 +101,7 @@
 
 .staff-table tbody td.col-detail {
     text-align: left;
-    padding-left: 10px;
+    padding-left: 16px;
 }
 
 .detail-link {

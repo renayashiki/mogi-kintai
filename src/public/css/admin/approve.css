@@ -40,7 +40,7 @@ form {
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .detail-table {
@@ -51,7 +51,7 @@ form {
 
 .col-label {
     width: 260px;
-    padding: 22px 0 22px 50px;
+    padding: 17px 0 17px 50px;
     font-weight: 700;
     font-size: 13px;
     color: rgba(115, 115, 115, 1);
@@ -61,7 +61,7 @@ form {
 }
 
 .col-value {
-    padding: 22px 50px 22px 0;
+    padding: 17px 50px 17px 0;
     text-align: left;
     vertical-align: middle;
     border-bottom: 2px solid #e1e1e1;
@@ -75,20 +75,40 @@ form {
     border-bottom: none;
 }
 
-.name-display, .date-display {
+
+.name-display {
+    display: inline-block; /* margin を効かせるために必要 */
+    margin-left: 16px;    /* 日付の year-val と同じ数値にする */
+    font-size: 13px;
+}
+.textarea-container {
+    padding-left: 8px; /* ここで調整 */
+}
+
+/* pタグ自体のマージンは0にする */
+.text-display-multiline {
     font-weight: 700;
     font-size: 12px;
+    margin-left: 0;
+    display: block; /* 改行を維持 */
+}
+
+.name-display, .date-display {
+    font-weight: 700;
+    font-size: 13px;
 }
 
 .year-val {
-    margin-right: 125px;
-    margin-left: 10px;
+    margin-right: 118px;
+    margin-left: 16px;
 }
 
 .time-group {
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 45px;
+    letter-spacing: 0.1em;
+    font-size: 12px;
 }
 
 .text-display {
@@ -117,8 +137,8 @@ form {
 .submit-button {
     width: 92px;
     height: 35px;
-    background-color: #000;
-    color: #fff;
+    background-color: rgba(0, 0, 0, 1);
+    color: rgba(255, 255, 255, 1);
     border: none;
     border-radius: 4px;
     font-weight: 700;
@@ -128,13 +148,18 @@ form {
 
 /* 承認済みボタン（Figma準拠） */
 .approved-button {
-    width: 92px;
-    height: 35px;
-    background-color: #bfbfbf; /* 承認済み用グレー */
-    color: #fff;
+    width: 88px;
+    height: 32px;
+    background-color: rgba(105, 105, 105, 1); /* 承認済み用グレー */
+    color: rgba(255, 255, 255, 1);
     border: none;
     border-radius: 4px;
-    font-weight: 700;
-    font-size: 14px;
+    font-weight: 500;
+    font-size: 15px;
     cursor: default;
+    display: flex;
+    justify-content: center; /* 左右中央 */
+    align-items: center;     /* 上下中央 */
+    line-height: 2;          /* 行の高さをリセットして中央に */
+    padding: 0;              /* 余計な内白を消す */
 }

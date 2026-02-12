@@ -86,6 +86,11 @@
     font-weight: 600;
 }
 
+.request-table thead th {
+letter-spacing: 0.1em;
+}
+
+
 /* ヘッダーのボーダー */
 .request-table thead th {
     border-bottom: 2px solid rgba(225, 225, 225, 1);
@@ -103,6 +108,7 @@
     width: 15%;
     text-align: left;
     padding-left: 40px;
+    letter-spacing: 0.1em;
 }
 
 /* 名前・日時・理由：左寄せ */
@@ -120,16 +126,18 @@
 }
 
 /* 各幅の調整 */
-.col-name        {
+.col-name{
     width: 12%;
+    letter-spacing: 0.1em;
 }
 
-.col-target-date {
+.col-target-date{
     width: 18%;
 }
 
 .col-reason {
     width: 22%;
+    letter-spacing: 0.1em;
 }
 
 .col-app-date {
@@ -139,12 +147,14 @@
 /* 理由だけ幅を広く取る */
 .request-table .col-reason {
     width: 20%;
+    letter-spacing: 0.1em;
 }
 
 /* ② 詳細ボタン：ズレを直し右余白を確保 */
 .request-table .col-detail {
     width: 15%;
-    text-align: left; /* 文字を右に寄せる */
+    text-align: left;
+    letter-spacing: 0.1em;
 }
 
 .detail-link {

@@ -143,6 +143,7 @@
     color: rgba(115, 115, 115, 1);
     /* cv01を強制適用 */
     font-feature-settings: "cv01" 1;
+    letter-spacing: 0.1em;
 }
 
 .attendance-table thead th {
@@ -156,7 +157,7 @@
 
 /* 名前列 */
 .attendance-table .col-name {
-    width: 8%; 
+    width: 8%;
 }
 
 .attendance-table thead th.col-name {
@@ -188,12 +189,13 @@
 
 .attendance-table tbody td.col-detail {
     text-align: right;
-    padding-right: 75px; 
+    padding-right: 72px;
     box-sizing: border-box;
 }
 
 .attendance-table thead th.col-detail {
     text-align: center;
+    letter-spacing: 0.1em;
 }
 
 /* リンク */
@@ -223,8 +225,7 @@
     .daily-container .attendance-table-wrapper .attendance-table .col-rest,
     .daily-container .attendance-table-wrapper .attendance-table .col-total {
         /* white-space は縮小時のみならず、常に1行にする設定として有効化 */
-        white-space: nowrap; 
-        
+        white-space: nowrap;
         /* 1100px以下（崩れ始める目安）になったら余白をリセット */
         @media screen and (max-width: 1100px) {
             padding-left: 0;

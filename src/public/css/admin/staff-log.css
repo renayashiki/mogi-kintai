@@ -67,7 +67,7 @@
     gap: 12px;
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 16px;
     color: rgba(0, 0, 0, 1);
     cursor: pointer;
 }
@@ -96,13 +96,14 @@
 
 .attendance-table th,
 .attendance-table td {
-    height: 36px;
+    height: 34px;
     text-align: center;
     vertical-align: middle;
     font-weight: 700;
     font-family: 'Inter', sans-serif;
     font-size: 13px;
     color: rgba(115, 115, 115, 1);
+    letter-spacing: 0.1em;
 }
 
 .attendance-table thead th {
