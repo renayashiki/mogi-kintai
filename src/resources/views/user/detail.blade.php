@@ -41,7 +41,7 @@
                         <tr>
                             <th class="col-label">出勤・退勤</th>
                             <td class="col-value">
-                                @if ($hasPendingRequest || $isApproved)
+                                @if ($hasPendingRequest)
                                     {{-- 承認待ちはテキストのみ --}}
                                     <div class="time-group">
                                         <span class="text-display">{{ $attendance->clock_in->format('H:i') }}</span>
@@ -70,7 +70,7 @@
                                 <th class="col-label">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
                                 <td class="col-value">
                                     <div class="time-group">
-                                        @if ($hasPendingRequest || $isApproved)
+                                        @if ($hasPendingRequest)
                                             <span
                                                 class="text-display">{{ $rest->rest_in ? \Carbon\Carbon::parse($rest->rest_in)->format('H:i') : '' }}</span>
                                             <span class="range-tilde">〜</span>
@@ -91,7 +91,7 @@
                         @endforeach
 
                         {{-- 仕様要件：追加で１つ分の入力フィールド --}}
-                        @if (!$hasPendingRequest && !$isApproved)
+                        @if (!$hasPendingRequest)
                             @php $nextIndex = $attendance->rests->count(); @endphp
                             <tr>
                                 <th class="col-label">{{ $nextIndex === 0 ? '休憩' : '休憩' . ($nextIndex + 1) }}</th>
@@ -111,7 +111,7 @@
                             <td class="col-value">
                                 {{-- 幅を休憩の開始〜終了に合わせるためのラッパー --}}
                                 <div class="textarea-container">
-                                    @if ($hasPendingRequest || $isApproved)
+                                    @if ($hasPendingRequest)
                                         {{-- 承認待ちはテキストとして表示（枠なし） --}}
                                         <p class="text-display-multiline">{{ $attendance->comment }}</p>
                                     @else
@@ -136,8 +136,7 @@
             </div>
             {{-- ボタン・メッセージは枠(wrapper)の外へ --}}
             <div class="detail-actions">
-                @if ($isApproved)
-                @elseif ($hasPendingRequest)
+                @if ($hasPendingRequest)
                     <p class="pending-message">*承認待ちのため修正はできません。</p>
                 @else
                     <button type="submit" class="submit-button">修正</button>

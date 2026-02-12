@@ -86,6 +86,6 @@ class WorkDetailController extends Controller
             }
         }
 
-        return redirect()->route('attendance.application.list');
+        return redirect()->route('attendance.request.list');
     }
 }

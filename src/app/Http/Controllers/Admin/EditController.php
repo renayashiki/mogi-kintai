@@ -108,7 +108,7 @@ class EditController extends Controller
             ]);
         });
 
-        return redirect()->route('admin.attendance.list', ['date' => AttendanceRecord::find($id)->date->format('Y-m-d')]);
+        return redirect()->route('attendance.request.list', ['date' => AttendanceRecord::find($id)->date->format('Y-m-d')]);
     }
 
     /**
