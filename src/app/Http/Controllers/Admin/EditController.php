@@ -68,10 +68,10 @@ class EditController extends Controller
      */
     public function update(AdminEditRequest $request, $id)
     {
-        DB::transaction(function () use ($request, $id) {
-            $attendance = AttendanceRecord::findOrFail($id);
-            $targetDate = $attendance->date->format('Y-m-d'); // 確実に Y-m-d 形式で取得
+        $attendance = AttendanceRecord::findOrFail($id);
+        $targetDate = $attendance->date->format('Y-m-d');
 
+        DB::transaction(function () use ($request, $attendance, $targetDate) {
             // 1. 休憩データの物理的な入れ替え（原材料の更新）
             $attendance->rests()->delete();
             if ($request->rests) {
@@ -108,7 +108,7 @@ class EditController extends Controller
             ]);
         });
 
-        return redirect()->route('attendance.request.list', ['date' => AttendanceRecord::find($id)->date->format('Y-m-d')]);
+        return redirect()->route('admin.attendance.list', ['date' => AttendanceRecord::find($id)->date->format('Y-m-d')]);
     }
 
     /**
