@@ -57,33 +57,43 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($attendances as $attendance)
+                    @foreach ($staffs as $staff)
+                        @php
+                            // その日のレコードを取り出す
+                            $attendance = $staff->attendanceRecords->first();
+                        @endphp
                         <tr>
-                            <td class="col-name">{{ $attendance->user->name }}</td>
+                            <td class="col-name">{{ $staff->name }}</td>
 
                             {{-- 出勤 --}}
                             <td class="col-start">
-                                {{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}
+                                {{ $attendance && $attendance->clock_in ? $attendance->clock_in->format('H:i') : '' }}
                             </td>
 
                             {{-- 退勤 --}}
                             <td class="col-end">
-                                {{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}
+                                {{ $attendance && $attendance->clock_out ? $attendance->clock_out->format('H:i') : '' }}
                             </td>
 
                             {{-- 休憩時間 (01:00 -> 1:00) --}}
                             <td class="col-rest">
-                                {{ $attendance->total_rest_time ?? '' }}
+                                {{ $attendance ? $attendance->total_rest_time : '' }}
                             </td>
 
                             {{-- 合計勤務時間 (01:00 -> 1:00) --}}
                             <td class="col-total">
-                                {{ $attendance->total_time ?? '' }}
+                                {{ $attendance ? $attendance->total_time : '' }}
                             </td>
 
                             <td class="col-detail">
-                                <a href="{{ route('admin.attendance.detail', ['id' => $attendance->id]) }}"
-                                    class="detail-link">詳細</a>
+                                @if ($attendance)
+                                    {{-- レコードがある人だけ詳細リンクを有効化 --}}
+                                    <a href="{{ route('admin.attendance.detail', ['id' => $attendance->id]) }}"
+                                        class="detail-link">詳細</a>
+                                @else
+                                    {{-- レコードがない（出勤していない）人は文字だけ表示 --}}
+                                    <span class="detail-link">詳細</span>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

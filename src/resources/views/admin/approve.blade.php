@@ -24,7 +24,7 @@
                     <tbody>
                         <tr>
                             <th class="col-label">名前</th>
-                            <td class="col-value">
+                            <td class="col-value col-name">
                                 <span
                                     class="name-display">{{ str_replace(' ', '　', $correctionRequest->user->name) }}</span>
                             </td>
@@ -95,7 +95,7 @@
 
                         <tr>
                             <th class="col-label">備考</th>
-                            <td class="col-value">
+                            <td class="col-value col-comment">
                                 <div class="textarea-container">
                                     <p class="text-display-multiline">{{ $correctionRequest->comment }}</p>
                                 </div>

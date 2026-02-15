@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\AttendanceRecord;
+use App\Models\User;
 use Carbon\Carbon;
 
 class DailyController extends Controller
@@ -14,15 +14,14 @@ class DailyController extends Controller
         $dateString = $request->get('date', now()->format('Y-m-d'));
         $date = Carbon::parse($dateString);
 
-        // 管理者(admin_status=1)以外を表示対象とする
-        $attendances = AttendanceRecord::with(['user', 'rests']) // restsを必ずロード
-            ->whereHas('user', function ($query) {
-                $query->where('admin_status', '!=', 1);
-            })
-            ->whereDate('date', $date->format('Y-m-d'))
-            ->orderBy('clock_in', 'asc')
+        // 管理者以外の全スタッフを、その日の勤怠（および休憩データ）ごと取得
+        $staffs = User::where('admin_status', '!=', 1)
+            ->with(['attendanceRecords' => function ($query) use ($date) {
+                $query->whereDate('date', $date->format('Y-m-d'))
+                    ->with('rests');
+            }])
             ->get();
 
-        return view('admin.daily', compact('attendances', 'dateString', 'date'));
+        return view('admin.daily', compact('staffs', 'dateString', 'date'));
     }
 }
