@@ -74,6 +74,17 @@ class AttendanceRecord extends Model
     }
 
     /**
+     * 【重要】DB保存用のフォーマット (HH:MM:SS)
+     * 内部での更新時にこれを使用します
+     */
+    public function formatSecondsForDb(int $seconds): string
+    {
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds / 60) % 60);
+        return sprintf('%02d:%02d:00', $hours, $minutes); // 秒を 00 で固定
+    }
+
+    /**
      * 【整形ロジック】秒を 1:00 形式の文字列に変換する
      */
     private function formatSecondsToShimei(int $seconds): string
