@@ -37,15 +37,23 @@ class WorkDetailController extends Controller
             $attendance->comment = $pendingRequest->comment;
 
             $newRests = collect();
+
+            // 共通の休憩作成クロージャ
+            $makeRest = function ($in, $out) {
+                return new \App\Models\Rest(['rest_in' => $in, 'rest_out' => $out]);
+            };
+
             if ($pendingRequest->new_rest1_in) {
-                $newRests->push((object)['rest_in' => $pendingRequest->new_rest1_in, 'rest_out' => $pendingRequest->new_rest1_out]);
+                $newRests->push($makeRest($pendingRequest->new_rest1_in, $pendingRequest->new_rest1_out));
             }
             if ($pendingRequest->new_rest2_in) {
-                $newRests->push((object)['rest_in' => $pendingRequest->new_rest2_in, 'rest_out' => $pendingRequest->new_rest2_out]);
+                $newRests->push($makeRest($pendingRequest->new_rest2_in, $pendingRequest->new_rest2_out));
             }
             foreach ($pendingRequest->attendanceCorrectRests as $extra) {
-                $newRests->push((object)['rest_in' => $extra->new_rest_in, 'rest_out' => $extra->new_rest_out]);
+                $newRests->push($makeRest($extra->new_rest_in, $extra->new_rest_out));
             }
+
+            // 重要：リレーションを上書きすることで、ビュー側の $attendance->rests がこれに置き換わる
             $attendance->setRelation('rests', $newRests);
         }
 
