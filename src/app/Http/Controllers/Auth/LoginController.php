@@ -16,21 +16,25 @@ class LoginController extends Controller
 
     public function store(LoginRequest $request)
     {
-        // 'web' ガードを明示的に指定
-        if (!Auth::guard('web')->check()) {
-            if (!Auth::guard('web')->attempt($request->only('email', 'password'))) {
-                throw ValidationException::withMessages([
-                    'login_error' => 'ログイン情報が登録されていません',
-                ]);
-            }
+        // --- 追加: 念のため現在のログイン状態を解除してクリーンにする ---
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // 1. 入力された情報でログインを試みる
+        if (!Auth::guard('web')->attempt($request->only('email', 'password'))) {
+            throw ValidationException::withMessages([
+                'login_error' => 'ログイン情報が登録されていません',
+            ]);
         }
+
+        // 2. ログイン成功後のセッション再生成（セッション固定攻撃対策）
         $request->session()->regenerate();
 
-       // ログインしたユーザー情報を取得
         /** @var \App\Models\User $user */
-        $user = Auth::guard('web')->user(); // ここも guard を指定
+        $user = Auth::guard('web')->user();
 
-        // 【重要】ここで手動チェックを入れることで、ミドルウェアとの衝突を防ぐ
+        // 3. メール認証状況を確認
         if ($user->hasVerifiedEmail()) {
             // 認証済みなら打刻画面へ
             return redirect()->route('attendance.index');

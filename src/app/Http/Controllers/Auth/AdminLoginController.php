@@ -22,6 +22,11 @@ class AdminLoginController extends Controller
      */
     public function store(LoginRequest $request)
     {
+        // --- 【重要】既存の管理者セッションをクリーンにする ---
+        Auth::guard('admin')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         // 管理者用ガード 'admin' を使用して認証を試行
         if (!Auth::guard('admin')->attempt($request->only('email', 'password'))) {
             throw ValidationException::withMessages([
