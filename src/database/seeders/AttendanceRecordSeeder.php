@@ -11,55 +11,48 @@ class AttendanceRecordSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. 【共通ロジック】全スタッフ（管理者以外）に対してデータを生成
-        $this->seedAllAttendanceData();
-    }
-
-    private function seedAllAttendanceData(): void
-    {
         $staffs = User::where('admin_status', 0)->get();
 
-        // 対象期間：2023年3月〜現在まで（見本時期＋直近評価用）
-        $startDate = Carbon::create(2023, 3, 1);
-        $endDate = Carbon::now();
-
         foreach ($staffs as $staff) {
-            $current = $startDate->copy();
+            // ① 2023年期間（見本の6月前後3ヶ月：3月〜9月）
+            $this->seedPeriod($staff->id, Carbon::create(2023, 3, 1), Carbon::create(2023, 9, 30));
 
-            while ($current <= $endDate) {
-                // 平日（月〜金）は必ず作成
-                if ($current->isWeekday()) {
-                    $this->saveRecord($staff->id, $current->format('Y-m-d'));
-                }
-                // 土日の処理：毎週「土日どちらか一方だけ」出勤させる
-                // これにより月4〜5日の休みが自然に発生する
-                elseif ($current->isSaturday()) {
-                    if (rand(0, 1) === 0) {
-                        $this->saveRecord($staff->id, $current->format('Y-m-d')); // 土曜出勤
-                    } else {
-                        // 土曜を飛ばして日曜に出勤
-                        $nextDay = $current->copy()->addDay();
-                        if ($nextDay <= $endDate) {
-                            $this->saveRecord($staff->id, $nextDay->format('Y-m-d'));
-                        }
+            // ② 2026年期間（現在から前3ヶ月）
+            $this->seedPeriod($staff->id, Carbon::now()->subMonths(3), Carbon::now());
+        }
+    }
+
+    private function seedPeriod($userId, $start, $end)
+    {
+        $current = $start->copy();
+        while ($current <= $end) {
+            // 【重要】週1〜2日の休みを再現するロジックを維持
+            if ($current->isWeekday()) {
+                // 平日は基本出勤（たまに休ませるならここを調整）
+                $this->saveRecord($userId, $current->format('Y-m-d'));
+            } elseif ($current->isSaturday()) {
+                // 土日のどちらか一方だけ出勤させることで、週休2日を維持
+                if (rand(0, 1) === 0) {
+                    $this->saveRecord($userId, $current->format('Y-m-d'));
+                } else {
+                    $nextDay = $current->copy()->addDay();
+                    if ($nextDay <= $end) {
+                        $this->saveRecord($userId, $nextDay->format('Y-m-d'));
                     }
                 }
+            }
 
+            $current->addDay();
+            // 日曜を処理済みなら飛ばす（重複防止）
+            if ($current->isSunday() && $current->dayOfWeek === 0) {
                 $current->addDay();
-                // 日曜を処理済みとして飛ばす（重複防止）
-                if ($current->isSunday()) {
-                    $current->addDay();
-                }
             }
         }
     }
 
     private function saveRecord($userId, $dateString)
     {
-        // ユーザー名での分岐を削除。秒数は一律 "00" で固定
-        // UIでの表示は「計算は精密に、表示はシンプルに」の原則通り
-        // Carbonやアクセサで "09:00" に変換されます
-
+        // 「計算は精密に、表示はシンプルに」に基づき秒まで保存
         AttendanceRecord::create([
             'user_id' => $userId,
             'date' => $dateString,

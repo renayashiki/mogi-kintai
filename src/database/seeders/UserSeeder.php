@@ -39,15 +39,5 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
             ]);
         }
-
-        // 山田 花子（スタッフ一覧からは除外されるが申請一覧には必要）
-        User::create([
-            'name' => '山田 花子',
-            'email' => 'hanako.y@coachtech.com',
-            'password' => Hash::make('password123'),
-            'admin_status' => 0,
-            'attendance_status' => 'outside',
-            'email_verified_at' => now(),
-        ]);
     }
 }
