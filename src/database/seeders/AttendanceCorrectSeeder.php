@@ -12,55 +12,63 @@ class AttendanceCorrectSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. 西 伶奈の申請
+        // 1. 【承認待ち】西 伶奈の申請（6/1を確実に含め、計9件作成）
         $west = User::where('name', '西 伶奈')->first();
-        $westPendingIds = []; // 承認済みと被らせないためのメモ
 
         if ($west) {
-            $allJuneRecords = AttendanceRecord::where('user_id', $west->id)
-                ->whereBetween('date', ['2023-06-01', '2023-06-30'])
+            // 6月1日のレコードをピンポイントで取得
+            $fixedRecord = AttendanceRecord::where('user_id', $west->id)
+                ->where('date', '2023-06-01')
+                ->first();
+
+            if ($fixedRecord) {
+                // ① まずは 6/1 を確実に「承認待ち」で作成
+                $this->createRequest($west->id, $fixedRecord, '承認待ち');
+            }
+
+            // ② 6/1 以外の 6月のレコードをランダムに 8件 取得して作成
+            $otherJuneRecords = AttendanceRecord::where('user_id', $west->id)
+                ->whereBetween('date', ['2023-06-02', '2023-06-30']) // 6/2以降から選ぶ
+                ->inRandomOrder()
+                ->take(8)
                 ->get();
 
-            if ($allJuneRecords->isNotEmpty()) {
-                $fixedRecord = $allJuneRecords->where('date', '2023-06-01')->first();
-                $otherRecords = $allJuneRecords->where('date', '!=', '2023-06-01');
-                $randomCount = min($otherRecords->count(), 8);
-                $randomRecords = $randomCount > 0 ? $otherRecords->random($randomCount) : collect();
-
-                $targetRecords = collect();
-                if ($fixedRecord) $targetRecords->push($fixedRecord);
-                $targetRecords = $targetRecords->merge($randomRecords);
-
-                foreach ($targetRecords as $record) {
-                    $this->createRequest($west->id, $record, '承認待ち');
-                    $westPendingIds[] = $record->id;
-                }
+            foreach ($otherJuneRecords as $record) {
+                $this->createRequest($west->id, $record, '承認待ち');
             }
         }
 
-        // 2. 山田 太郎（6月分）
+        // 2. 【承認待ち】山田 太郎（6/1固定）
         $this->seedSpecificUserRequest('山田 太郎', '2023-06-01');
 
-        // --- B. 【新規】承認済みデータを「被らないように」作成 ---
+        // --- B. 【承認済み】全スタッフに1〜2個ずつ作成 ---
 
         $staffs = User::where('admin_status', 0)->get();
         foreach ($staffs as $staff) {
-            // 既に「承認待ち」として登録されたIDを除外して取得
             $query = AttendanceRecord::where('user_id', $staff->id);
-            if ($staff->name === '西 伶奈') $query->whereNotIn('id', $westPendingIds);
-            if ($staff->name === '山田 太郎') $query->where('date', '!=', '2023-06-01');
 
-            $availableRecords = $query->get();
+            // 西さんの6月分は「承認待ち」専用なので、承認済みには絶対入れない
+            if ($staff->name === '西 伶奈') {
+                $query->whereNotBetween('date', ['2023-06-01', '2023-06-30']);
+            }
+
+            // 山田さんの6/1も承認済みには入れない
+            if ($staff->name === '山田 太郎') {
+                $query->where('date', '!=', '2023-06-01');
+            }
+
+            // 残りのデータから1〜2個をランダムに「承認済み」として作成
+            $availableRecords = $query->inRandomOrder()->take(rand(1, 2))->get();
 
             foreach ($availableRecords as $record) {
-                // 利用可能な日のうち、20%の確率で「承認済み」データを作成
-                if (rand(1, 100) <= 20) {
-                    $this->createRequest($staff->id, $record, '承認済み');
-                }
+                $this->createRequest($staff->id, $record, '承認済み');
             }
         }
     }
 
+    /**
+     * 申請レコード作成の共通メソッド
+     */
     private function createRequest($userId, $record, $status)
     {
         AttendanceCorrect::create([
@@ -73,15 +81,20 @@ class AttendanceCorrectSeeder extends Seeder
             'new_clock_out' => '18:00:00',
             'new_rest1_in' => '12:00:00',
             'new_rest1_out' => '13:00:00',
-            'comment' => '承認待ち'
+            'comment' => '電車遅延のため'
         ]);
     }
 
+    /**
+     * 特定ユーザーの特定日の「承認待ち」を作成するヘルパー
+     */
     private function seedSpecificUserRequest($name, $date)
     {
         $user = User::where('name', $name)->first();
         if ($user) {
-            $record = AttendanceRecord::where('user_id', $user->id)->where('date', $date)->first();
+            $record = AttendanceRecord::where('user_id', $user->id)
+                ->where('date', $date)
+                ->first();
             if ($record) {
                 $this->createRequest($user->id, $record, '承認待ち');
             }
