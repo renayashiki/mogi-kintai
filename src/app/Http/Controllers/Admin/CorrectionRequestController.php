@@ -25,7 +25,7 @@ class CorrectionRequestController extends Controller
             'attendanceCorrectRests' // 3回目以降の休憩データも事前にロード
         ])
             ->where('approval_status', $dbStatus)
-            ->orderBy('application_date', 'desc')
+            ->orderBy('new_date', 'asc')
             ->get();
 
         return view('admin.requests', compact('requests', 'status'));

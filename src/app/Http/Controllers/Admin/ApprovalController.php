@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceCorrect;
-use App\Models\AttendanceRecord;
-use App\Models\Rest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,7 +20,7 @@ class ApprovalController extends Controller
 
         $requests = AttendanceCorrect::with(['user'])
             ->where('approval_status', $dbStatus)
-            ->orderBy('application_date', 'desc')
+            ->orderBy('new_date', 'asc')
             ->get();
 
         return view('admin.requests', compact('requests', 'status'));
@@ -73,27 +71,25 @@ class ApprovalController extends Controller
                 ]);
             }
 
-            // ② 最新の休憩レコードを元に、モデルの心臓部(アクセサ用メソッド)で精密計算
+            // ② 最新の原材料から精密計算（モデルのメソッドを使用）
             $attendance->load('rests');
-            $totalRestTime = $attendance->getTotalRestTimeAttribute(); // 例: "1:00"
-            $totalWorkTime = $attendance->getTotalTimeAttribute();     // 例: "8:00"
+            $restSec = $attendance->getRestSeconds();
+            $workSec = $attendance->getWorkSeconds();
 
-            // ③ 本番の勤怠テーブル(attendance_records)に全てを刻印
-            // 備考(comment)もここでユーザーの申請内容に書き換わる
+            // ③ 本番テーブルに保存（秒付きフォーマットで統一）
             $attendance->update([
                 'date'            => $correctionRequest->new_date,
                 'clock_in'        => $correctionRequest->new_clock_in,
                 'clock_out'       => $correctionRequest->new_clock_out,
-                'total_rest_time' => $totalRestTime,
-                'total_time'      => $totalWorkTime,
+                'total_rest_time' => $attendance->formatSecondsForDb($restSec),
+                'total_time'      => $attendance->formatSecondsForDb($workSec),
                 'comment'         => $correctionRequest->comment,
             ]);
 
-            // ④ 申請レコード自体のステータスを「承認済み」にする
+            // ④ ステータス更新
             $correctionRequest->update(['approval_status' => '承認済み']);
         });
 
-        return redirect()->route('attendance.request.list', ['status' => 'approved'])
-            ->with('success', '申請を承認しました。');
+        return redirect()->route('attendance.request.list', ['status' => 'approved']);
     }
 }

@@ -46,9 +46,9 @@
 
 /* ヘッダーのスタイル */
 .staff-table thead th {
-    height: 40px;
+    height: 34px;
     vertical-align: middle;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: rgba(115, 115, 115, 1);
     border-bottom: 2px solid rgba(225, 225, 225, 1);
@@ -57,20 +57,29 @@
 
 /* ボディのスタイル */
 .staff-table tbody td {
-    height: 40px;
+    height: 34px;
     vertical-align: middle;
-    font-size: 13px;
+    font-size: 12px;
     color: rgba(115, 115, 115, 1);
     font-weight: 600;
     font-family: 'Inter', sans-serif;
-    border-bottom: 1px solid rgba(225, 225, 225, 1);
+    border-bottom: 2px solid rgba(225, 225, 225, 1);
     letter-spacing: 0.1em;
 }
 
 /* --- カラム幅の設定 --- */
-.col-name { width: 25%; }
-.col-email { width: 50%; }
-.col-detail { width: 25%; }
+.col-name {
+    width: 30%;
+}
+
+.col-email {
+    width: 50%;
+    letter-spacing: 0.1em;
+}
+
+.col-detail {
+    width: 25%;
+}
 
 /* --- th の位置合わせ --- */
 .staff-table thead th.col-name {
@@ -91,7 +100,8 @@
 /* --- td の位置設定（元の理想値を維持） --- */
 .staff-table tbody td.col-name {
     padding-left: 60px;
-    text-align: right;
+    text-align: center;
+    padding-left: 125px;
 }
 
 .staff-table tbody td.col-email {

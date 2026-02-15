@@ -17,7 +17,7 @@ class MyRequestController extends Controller
         $requests = AttendanceCorrect::with(['user', 'attendanceRecord.rests']) // 孫リレーションまでロード
             ->where('user_id', Auth::id())
             ->where('approval_status', $dbStatus)
-            ->orderBy('application_date', 'desc')
+            ->orderBy('new_date', 'asc')
             ->get();
 
         return view('user.requests', compact('requests', 'status'));

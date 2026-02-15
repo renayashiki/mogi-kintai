@@ -113,15 +113,18 @@ class StampController extends Controller
                 $record->load('rests'); // 休憩をロード
                 $record->clock_out = $now; // メモリ上で退勤時刻をセット（アクセサ計算用）
 
-                // 手動の diffInSeconds は一切不要！アクセサを呼ぶだけ
-                $totalRestTime = $record->total_rest_time; // モデルが勝手に H:i を出す
-                $totalWorkTime = $record->total_time;      // モデルが勝手に H:i を出す
+                // アクセサを呼ぶのではなく、計算メソッドを直接呼び、DB用フォーマットに通す
+                $restSec = $record->getRestSeconds();
+                $workSec = $record->getWorkSeconds();
 
-                // ④ 保存（刻印）
+                $totalRestDb = $record->formatSecondsForDb($restSec); // 01:00:00 形式
+                $totalWorkDb = $record->formatSecondsForDb($workSec); // 08:00:00 形式
+
+                // ④ 保存（ここを修正）
                 $record->update([
-                    'clock_out' => $now, // Carbonインスタンスのまま渡してOK（Laravelがよしなにします）
-                    'total_rest_time' => $totalRestTime,
-                    'total_time' => $totalWorkTime,
+                    'clock_out' => $now,
+                    'total_rest_time' => $totalRestDb, // 秒あり
+                    'total_time' => $totalWorkDb,      // 秒あり
                 ]);
 
                 // ⑤ ユーザーステータスの更新（ここも仕様通り残っています！）

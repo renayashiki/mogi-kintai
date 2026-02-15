@@ -65,19 +65,18 @@
                         <tr>
                             <td class="col-date">{{ $date->format('m/d') }}({{ $dayName }})</td>
                             <td class="col-start">
-                                {{-- ユーザー側と同様の表示ロジックに統一 --}}
-                                {{ $attendance ? mb_convert_kana(\Carbon\Carbon::parse($attendance->clock_in)->format('H:i'), 'a') : '' }}
+                                {{ $attendance ? Carbon::parse($attendance->clock_in)->format('H:i') : '' }}
                             </td>
                             <td class="col-end">
-                                {{ $attendance && $attendance->clock_out ? mb_convert_kana(\Carbon\Carbon::parse($attendance->clock_out)->format('H:i'), 'a') : '' }}
+                                {{ $attendance && $attendance->clock_out ? Carbon::parse($attendance->clock_out)->format('H:i') : '' }}
                             </td>
                             <td class="col-rest">
                                 {{-- モデルのアクセサを利用 --}}
-                                {{ $attendance && $attendance->total_rest_time ? mb_convert_kana($attendance->total_rest_time, 'a') : '' }}
+                                {{ $attendance->total_rest_time ?? '' }}
                             </td>
                             <td class="col-total">
                                 {{-- モデルのアクセサを利用 --}}
-                                {{ $attendance && $attendance->total_time ? mb_convert_kana($attendance->total_time, 'a') : '' }}
+                                {{ $attendance->total_time ?? '' }}
                             </td>
                             <td class="col-detail">
                                 @if ($attendance)

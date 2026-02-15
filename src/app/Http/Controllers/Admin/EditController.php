@@ -78,8 +78,8 @@ class EditController extends Controller
                 foreach ($request->rests as $restData) {
                     if (!empty($restData['in'])) {
                         $attendance->rests()->create([
-                            'rest_in'  => $targetDate . ' ' . $restData['in'],
-                            'rest_out' => !empty($restData['out']) ? $targetDate . ' ' . $restData['out'] : null,
+                            'rest_in'  => \Carbon\Carbon::parse($targetDate . ' ' . $restData['in']),
+                            'rest_out' => !empty($restData['out']) ? \Carbon\Carbon::parse($targetDate . ' ' . $restData['out']) : null,
                         ]);
                     }
                 }
@@ -87,38 +87,25 @@ class EditController extends Controller
 
             // 2. 勤怠本体の更新
             // まず時間をセット（計算のために一旦モデルの状態を更新するが、まだ save はしない）
-            $attendance->clock_in = $targetDate . ' ' . $request->clock_in;
-            $attendance->clock_out = $request->clock_out ? $targetDate . ' ' . $request->clock_out : null;
+            $attendance->clock_in = \Carbon\Carbon::parse($targetDate . ' ' . $request->clock_in);
+            $attendance->clock_out = $request->clock_out ? \Carbon\Carbon::parse($targetDate . ' ' . $request->clock_out) : null;
             $attendance->comment = $request->comment;
 
-            // 3. 最新の原材料（rests）に基づいて「秒」を計算し、DB保存用に整形
-            $attendance->load('rests'); // 更新後の休憩を読み込み直し
-
-            // 計算メソッドを呼び出し、DB保存用の H:i:s 形式を作る
+            // 3. 精密計算
+            $attendance->load('rests');
             $totalWorkSeconds = $attendance->getWorkSeconds();
             $totalRestSeconds = $attendance->getRestSeconds();
 
-            // 4. DBのカラム（加工品）に「正解」を書き込んで保存
+            // 4. 保存実行（formatSecondsForDb で秒付き刻印）
             $attendance->update([
                 'clock_in'  => $attendance->clock_in,
                 'clock_out' => $attendance->clock_out,
                 'comment'   => $attendance->comment,
-                'total_rest_time' => $this->formatSecondsForDb($totalRestSeconds),
-                'total_time'      => $this->formatSecondsForDb($totalWorkSeconds),
+                'total_rest_time' => $attendance->formatSecondsForDb($totalRestSeconds),
+                'total_time'      => $attendance->formatSecondsForDb($totalWorkSeconds),
             ]);
         });
 
-        return redirect()->route('admin.attendance.list', ['date' => AttendanceRecord::find($id)->date->format('Y-m-d')]);
-    }
-
-    /**
-     * DB保存用フォーマット (H:i:s)
-     */
-    private function formatSecondsForDb(int $seconds): string
-    {
-        $h = floor($seconds / 3600);
-        $m = floor(($seconds % 3600) / 60);
-        $s = $seconds % 60;
-        return sprintf('%02d:%02d:%02d', $h, $m, $s);
+        return redirect()->route('admin.attendance.list', ['date' => $targetDate]);
     }
 }
