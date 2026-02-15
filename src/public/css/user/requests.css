@@ -97,7 +97,7 @@ letter-spacing: 0.1em;
 
 /* ボディのボーダー */
 .request-table tbody td {
-    border-bottom: 1px solid rgba(225, 225, 225, 1);
+    border-bottom: 2px solid rgba(225, 225, 225, 1);
 }
 
 /* --- ① 各カラムの配置調整（!importantなし） --- */

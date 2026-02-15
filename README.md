@@ -1,9 +1,9 @@
-# coachtech フリマ
+# coachtech 勤怠管理アプリ
 
 ## 環境構築
 **Dockerビルド**
-1. `git clone git@github.com:renayashiki/mogi-furima.git`
-2. `cd /coachtech/laravel/mogi-furima`
+1. `git clone git@github.com:renayashiki/mogi-kintai.git`
+2. `cd /coachtech/laravel/mogi-kintai`
 3. DockerDesktopアプリを立ち上げる
 4. `docker-compose up -d --build`
 
@@ -13,7 +13,7 @@
 1. `docker-compose exec php bash`
 2. `# composer install`<br>
 `chmod -R 777 storage bootstrap/cache`
->※Docker環境でのログ出力や画像保存時のエラー（Permission Denied）を防ぐため、必ず実行してください。
+>※Docker環境でのログ出力（Permission Denied）を防ぐため、必ず実行してください。
 3. 「.env.example」ファイルを 「.env」ファイルに命名を変更。または、新しく.envファイルを作成
 
 `# cp .env.example .env`
@@ -32,7 +32,7 @@ DB_PASSWORD=laravel_pass
 
 >メール認証機能の設定・確認方法 (MailHog)ー.env.example` にあらかじめ MailHog 用の設定を記載しているため、環境構築後すぐにメール認証のテストが可能ですが、.envが以下の内容と相違がある場合は、書き換えが必要なため必ず内容を確認してください。
 
-- src/.envに以下のように変更
+- .envに以下のように変更
 ``` bash
 MAIL_MAILER=smtp
 MAIL_HOST=mailhog
@@ -79,13 +79,13 @@ docker compose exec mysql bash
 ```
 > DBを作成
 ```sql
-CREATE DATABASE IF NOT EXISTS mogi_furima_test;
+CREATE DATABASE IF NOT EXISTS mogi_kintai_test;
 ```
 <br>
 
 > 権限付与
 ```sql
-GRANT ALL PRIVILEGES ON mogi_furima_test.* TO 'laravel_user'@'%';
+GRANT ALL PRIVILEGES ON mogi_kintai_test.* TO 'laravel_user'@'%';
 ```
 <br>
 
@@ -97,18 +97,18 @@ EXIT;
 
 
 ###### 2.テスト用環境変数の設定
-phpコンテナにて
+phpコンテナにてテスト実行用の環境設定ファイルを作成します。
 ``` bash
 cp .env .env.testing
 ```
 - .env.testing の修正箇所：
-> DB_DATABASE=  ※　ここ今回のに変更mogi_furima_test
+> DB_DATABASE= mogi_kintai_test
 
 <br>
 
 ###### 3.テスト用データベースのマイグレーション
 ``` bash
-php artisan migrate --env=testing
+php artisan migrate:fresh --env=testing
 ```
 
 ###### 4.テストの実行
@@ -149,19 +149,15 @@ php artisan test tests/Feature/RegisterTest.php
  'email' => 'reina.n@coachtech.com',
  'password' => 'password123'
 ```
-> 一般ユーザーページの機能確認ができます。見本の2023年6月の前後3か月と現在の日付から前3ヶ月のデータをダミーデータとして入れており、その期間内で機能確認が可能です。※西 伶奈についても見本UIと完全一致のダミーデータにした場合、リレーションや仕様書と矛盾が生じるため、データ数や見え方は一致させ、日付等は考慮してダミーデータを作成しています。
+> 一般ユーザーページの機能確認ができます。見本の2023年6月の前後3か月と現在の日付から前3ヶ月のデータをダミーデータとして入れており、その期間内で機能確認が可能です。※西 伶奈についても見本UIと完全一致のダミーデータにした場合、リレーションや仕様書と矛盾が生じるため、データ数や見え方は一致させ、日付等はリレーションや仕様書と矛盾がないよう、考慮してダミーデータを挿入しています。
 
-
-
-**特記事項**
-- 管理者ページの申請一覧見本UIでは「山田 花子」というユーザーが存在しますが、スタッフ一覧ページ見本UIでは「山田 花子」は存在していません。見本UIを完全再現した形で山田花子を表示/非表示にすることは可能ですが、システムや仕様書、テーブル設計の矛盾を避けるために、見本UIどおり山田花子は存在させ、スタッフ一覧画面や勤怠一覧にも整合性を保つために表示しています。
 
 
 **スタッフ一覧に存在する他ユーザー**
 > パスワードは共通のため、以下のユーザー別メールアドレスでログインし操作確認も可能です。ダミーデータが挿入されている期間は上記同様、見本の2023年6月の前後3か月と現在の日付から前3ヶ月です。
 
 | 名前 | メールアドレス | ログイン時の状態 |
-| :--- | :--- | :--- | :--- | 山田 太郎 | `taro.y@coachtech.com`| 増田 一世 | `issei.m@coachtech.com`|秋田 朋美 | `tomomi.a@coachtech.com`| 中西 教夫 | `norio.n@coachtech.com` |山田花子| `hanako.y@coachtech.com`|
+| :--- | :--- | :--- | :--- | 山田 太郎 | `taro.y@coachtech.com`| 増田 一世 | `issei.m@coachtech.com`|秋田 朋美 | `tomomi.a@coachtech.com`| 中西 教夫 | `norio.n@coachtech.com` |
 <br>
 
 ## 使用技術(実行環境)
