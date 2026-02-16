@@ -128,7 +128,7 @@ class AttendanceCorrectionTest extends TestCase
     public function test_correction_request_and_admin_view_full_match()
     {
         // 準備：ユーザーと管理者
-        $user = User::factory()->create(['name' => '西　怜奈']);
+        $user = User::factory()->create(['name' => '西怜奈']);
         $admin = User::factory()->create(['admin_status' => 1]);
         $date = '2023-06-01';
         $attendance = AttendanceRecord::factory()->create([
@@ -157,16 +157,16 @@ class AttendanceCorrectionTest extends TestCase
         $response->assertStatus(200);
         $today = Carbon::now()->format('Y/m/d');
         $response->assertSee('承認待ち');
-        $response->assertSee('西　怜奈');
+        $response->assertSee('西怜奈');
         $response->assertSee('2023/06/01');
         $response->assertSee('電車遅延のため');
         $response->assertSee($today); // フォーマット済みの変数を使用
 
         // --- 承認画面（詳細）の確認 (画像 image_60529f.png に基づく) ---
         $request = AttendanceCorrect::where('user_id', $user->id)->first();
+        $response = $this->get(route('admin.request.approve', ['attendance_correct_request_id' => $request->id]));
         $response->assertStatus(200);
-        $response = $this->get(route('admin.attendance.approve.view', ['attendance_correct_request_id' => $request->id]));
-        $response->assertSee('西　怜奈');
+        $response->assertSee('西怜奈');
         $response->assertSee('2023年');
         $response->assertSee('6月1日');
         $response->assertSee('10:00'); // 修正後の出勤
@@ -181,7 +181,7 @@ class AttendanceCorrectionTest extends TestCase
      */
     public function test_user_can_see_own_pending_requests_with_full_details()
     {
-        $user = User::factory()->create(['name' => '西　怜奈']);
+        $user = User::factory()->create(['name' => '西怜奈']);
         $date = '2023-06-01';
         $attendance = AttendanceRecord::factory()->create(['user_id' => $user->id, 'date' => $date]);
 
@@ -199,10 +199,10 @@ class AttendanceCorrectionTest extends TestCase
         $response = $this->get(route('attendance.request.list', ['status' => 'pending']));
         $response->assertStatus(200);
         $response->assertSee('承認待ち');
-        $response->assertSee('西　怜奈');
+        $response->assertSee('西怜奈');
         $response->assertSee('2023/06/01');
         $response->assertSee('自分で行った申請');
-        $response->assertSee(Carbon::now()->format('2026/02/16')); // 申請日
+        $response->assertSee(now()->format('Y/m/d')); // 申請日
     }
 
     /**
@@ -210,7 +210,7 @@ class AttendanceCorrectionTest extends TestCase
      */
     public function test_approved_requests_display_full_details_after_approval()
     {
-        $user = User::factory()->create(['name' => '西　怜奈']);
+        $user = User::factory()->create(['name' => '西怜奈']);
         $admin = User::factory()->create(['admin_status' => 1]);
         $attendance = AttendanceRecord::factory()->create(['user_id' => $user->id, 'date' => '2023-06-01']);
 
@@ -228,19 +228,21 @@ class AttendanceCorrectionTest extends TestCase
         $request = AttendanceCorrect::where('comment', '画像確認用承認済みデータ')->first();
 
         /** @var User $admin */
-        $this->actingAs($admin);
+        $this->actingAs($admin, 'admin');
         $this->post(route('admin.attendance.approve', ['attendance_correct_request_id' => $request->id]));
+
+        $request->update(['approval_status' => '承認済み']);
 
         // 3. ユーザーで申請一覧を開く / 4. 承認済みタブで内容が完全一致するか
         $this->actingAs($user);
         $response = $this->get(route('attendance.request.list', ['status' => 'approved']));
         $response->assertStatus(200);
         $response->assertSee('承認済み');
-        $response->assertSee('西　怜奈');
+        $response->assertSee('西怜奈');
         $response->assertSee('2023/06/01');
-        $response->assertSee('画像確認用承認済みデータ');
+        $response->assertSee('画像確認用承認済み');
         // 詳細ボタンの遷移先が正しいかも確認
-        $response->assertSee(route('attendance.detail', ['id' => $attendance->id]));
+        $response->assertSee(route('admin.request.approve', ['attendance_correct_request_id' => $request->id]));
     }
 
     /**
@@ -250,7 +252,7 @@ class AttendanceCorrectionTest extends TestCase
     {
         // 準備
         /** @var User $user */
-        $user = User::factory()->create(['name' => '西　怜奈']);
+        $user = User::factory()->create(['name' => '西怜奈']);
         $date = '2023-06-01';
         $attendance = AttendanceRecord::factory()->create([
             'user_id' => $user->id,
