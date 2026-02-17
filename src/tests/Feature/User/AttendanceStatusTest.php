@@ -14,6 +14,7 @@ class AttendanceStatusTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * ID 5:ステータス確認機能
      * 勤務外の場合、勤怠ステータスが正しく表示される
      */
     public function test_status_is_outside_correctly()
@@ -28,7 +29,7 @@ class AttendanceStatusTest extends TestCase
 
         // 3. 画面上に表示されているステータスが「勤務外」となる
         $response->assertStatus(200); // 正常に開けたことを確認
-        $response->assertSee('勤務外');
+        $response->assertSee('<span class="status-text">勤務外</span>', false);
     }
 
     /**
@@ -53,7 +54,7 @@ class AttendanceStatusTest extends TestCase
 
         // 3. 画面上に表示されているステータスが「出勤中」となる
         $response->assertStatus(200); // 正常に開けたことを確認
-        $response->assertSee('出勤中');
+        $response->assertSee('<span class="status-text">出勤中</span>', false);
     }
 
     /**
@@ -83,7 +84,7 @@ class AttendanceStatusTest extends TestCase
 
         // 3. 画面上に表示されているステータスが「休憩中」となる
         $response->assertStatus(200); // 正常に開けたことを確認
-        $response->assertSee('休憩中');
+        $response->assertSee('<span class="status-text">休憩中</span>', false);
     }
 
     /**
@@ -109,6 +110,6 @@ class AttendanceStatusTest extends TestCase
 
         // 3. 画面上に表示されているステータスが「退勤済」となる
         $response->assertStatus(200); // 正常に開けたことを確認
-        $response->assertSee('退勤済');
+        $response->assertSee('<span class="status-text">退勤済</span>', false);
     }
 }

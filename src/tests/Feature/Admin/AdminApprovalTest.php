@@ -15,9 +15,8 @@ class AdminApprovalTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * ID:15 勤怠情報 修正機能(管理者)
      * 承認待ちの修正申請が全て表示されている
-     * 1. 管理者ユーザーにログインをする
-     * 2. 修正申請一覧ページを開き、承認待ちのタブを開く
      */
     public function test_admin_can_view_all_pending_requests()
     {
@@ -75,24 +74,38 @@ class AdminApprovalTest extends TestCase
 
     /**
      * 承認済みの修正申請が全て表示されている
-     * 1. 管理者ユーザーにログインをする
-     * 2. 修正申請一覧ページを開き、承認済みのタブを開く
      */
     public function test_admin_can_view_all_approved_requests()
     {
         $admin = User::factory()->create(['admin_status' => 1]);
-        $user = User::factory()->create(['name' => '増田 一世']);
-        $appDate = Carbon::create(2026, 2, 10, 9, 0, 0);
+        $user1 = User::factory()->create(['name' => '増田 一世']);
+        $user2 = User::factory()->create(['name' => '佐藤 次郎']);
 
+        $appDate1 = Carbon::create(2026, 2, 10, 9, 0, 0);
+        $appDate2 = Carbon::create(2026, 2, 11, 15, 0, 0);
+
+        // ユーザー1のデータ
         AttendanceCorrect::create([
-            'user_id' => $user->id,
+            'user_id' => $user1->id,
             'attendance_record_id' => AttendanceRecord::factory()->create()->id,
             'approval_status' => '承認済み',
             'new_date' => '2026-06-01',
-            'comment' => '修正完了分',
-            'application_date' => $appDate,
+            'comment' => '修正完了分1',
+            'application_date' => $appDate1,
             'new_clock_in' => '09:00:00',
             'new_clock_out' => '18:00:00',
+        ]);
+
+        // ユーザー2のデータ
+        AttendanceCorrect::create([
+            'user_id' => $user2->id,
+            'attendance_record_id' => AttendanceRecord::factory()->create()->id,
+            'approval_status' => '承認済み',
+            'new_date' => '2026-06-02',
+            'comment' => '修正完了分2',
+            'application_date' => $appDate2,
+            'new_clock_in' => '10:00:00',
+            'new_clock_out' => '19:00:00',
         ]);
 
         /** @var User $admin */
@@ -101,18 +114,24 @@ class AdminApprovalTest extends TestCase
 
         $response->assertStatus(200);
 
-        // 期待挙動：承認済みタブで、画像通りのカラムが表示されていること
+        // --- 期待挙動：承認済みタブで、全ユーザーのカラム情報が正確に表示されていること ---
+
+        // 1人目：増田さんの詳細検証
         $response->assertSee('承認済み');
         $response->assertSee('増田 一世');
-        $response->assertSee('2026/06/01'); // 対象日時
-        $response->assertSee('修正完了分');
-        $response->assertSee($appDate->format('Y/m/d')); // 申請日時
+        $response->assertSee('2026/06/01');                // 対象日時
+        $response->assertSee('修正完了分1');               // 申請理由
+        $response->assertSee($appDate1->format('Y/m/d')); // 申請日時
+
+        // 2人目：佐藤さんの詳細検証
+        $response->assertSee('佐藤 次郎');
+        $response->assertSee('2026/06/02');                // 対象日時
+        $response->assertSee('修正完了分2');               // 申請理由
+        $response->assertSee($appDate2->format('Y/m/d')); // 申請日時
     }
 
     /**
      * 修正申請の詳細内容が正しく表示されている
-     * 1. 管理者ユーザーにログインをする
-     * 2. 修正申請の詳細画面を開く
      */
     public function test_admin_can_view_request_detail_correctly()
     {
@@ -150,7 +169,7 @@ class AdminApprovalTest extends TestCase
     }
 
     /**
-     * 修正申請の承認処理が正しく行われ、全ての関連画面に反映される
+     * 修正申請の承認処理が正しく行われる
      */
     public function test_admin_approval_reflects_on_all_relevant_screens()
     {

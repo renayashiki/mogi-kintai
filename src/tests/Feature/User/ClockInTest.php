@@ -13,10 +13,8 @@ class ClockInTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * ID 6:出勤機能
      * 出勤ボタンが正しく機能する
-     * 1. ステータスが勤務外のユーザーにログインする
-     * 2. 画面に「出勤」ボタンが表示されていることを確認する
-     * 3. 出勤の処理を行う
      */
     public function test_clock_in_button_functions_correctly()
     {
@@ -29,19 +27,18 @@ class ClockInTest extends TestCase
         $response = $this->get(route('attendance.index'));
         $response->assertStatus(200);
         $response->assertSee('出勤');
+        $response->assertSee('<button type="submit" class="stamp-button btn-black">出勤</button>', false);
 
         // 3. 出勤の処理を行う
         $response = $this->post(route('attendance.store'), ['type' => 'clock_in']);
 
         // 完了後のリダイレクトとステータス変化を確認
         $response->assertRedirect(route('attendance.index'));
-        $this->get(route('attendance.index'))->assertSee('出勤中');
+        $this->get(route('attendance.index'))->assertSee('<span class="status-text">出勤中</span>', false);
     }
 
     /**
      * 出勤は一日一回のみできる
-     * 1. ステータスが退勤済であるユーザーにログインする
-     * 2. 勤務（出勤）ボタンが表示されないことを確認する
      */
     public function test_cannot_clock_in_twice_after_finishing()
     {
@@ -53,8 +50,8 @@ class ClockInTest extends TestCase
         AttendanceRecord::create([
             'user_id' => $user->id,
             'date' => Carbon::today()->format('Y-m-d'),
-            'clock_in' => Carbon::now()->subHours(8),
-            'clock_out' => Carbon::now(),
+            'clock_in' => '09:00:00',
+            'clock_out' => '18:00:00',
         ]);
 
         $this->actingAs($user);
@@ -69,9 +66,6 @@ class ClockInTest extends TestCase
 
     /**
      * 出勤時刻が勤怠一覧画面で確認できる
-     * 1. ステータスが勤務外のユーザーにログインする
-     * 2. 出勤の処理を行う
-     * 3. 勤怠一覧画面から出勤の日付を確認する
      */
     public function test_clock_in_time_is_recorded_correctly_in_list()
     {

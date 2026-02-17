@@ -14,7 +14,8 @@ class AttendanceCorrectionTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * FN029-1: 出勤時間が退勤時間より後になっている場合、エラーメッセージが表示される
+     * ID:11 勤怠詳細情報 修正機能
+     * 出勤時間が退勤時間より後になっている場合、エラーメッセージが表示される
      */
     public function test_error_when_clock_in_is_after_clock_out()
     {
@@ -48,7 +49,7 @@ class AttendanceCorrectionTest extends TestCase
     }
 
     /**
-     * FN029-2: 休憩開始時間が退勤時間より後になっている場合、エラーメッセージが表示される
+     * 休憩開始時間が退勤時間より後になっている場合、エラーメッセージが表示される
      */
     public function test_error_when_rest_in_is_after_clock_out()
     {
@@ -74,7 +75,7 @@ class AttendanceCorrectionTest extends TestCase
     }
 
     /**
-     * FN029-3: 休憩終了時間が退勤時間より後になっている場合、エラーメッセージが表示される
+     * 休憩終了時間が退勤時間より後になっている場合、エラーメッセージが表示される
      */
     public function test_error_when_rest_out_is_after_clock_out()
     {
@@ -99,7 +100,7 @@ class AttendanceCorrectionTest extends TestCase
     }
 
     /**
-     * FN029-4: 備考欄が未入力の場合、エラーメッセージが表示される
+     * 備考欄が未入力の場合、エラーメッセージが表示される
      */
     public function test_error_when_comment_is_empty()
     {
@@ -123,7 +124,7 @@ class AttendanceCorrectionTest extends TestCase
     }
 
     /**
-     * FN029-5: 修正申請処理が実行される
+     * 修正申請処理が実行される
      */
     public function test_correction_request_and_admin_view_full_match()
     {

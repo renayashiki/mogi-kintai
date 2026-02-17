@@ -16,9 +16,6 @@ class AttendanceDetailTest extends TestCase
     protected $user;
     protected $attendance;
 
-    /**
-     * テスト前の共通準備：勤怠情報が登録されたユーザーを作成
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -43,6 +40,7 @@ class AttendanceDetailTest extends TestCase
     }
 
     /**
+     * ID:10 勤怠詳細情報 取得機能
      * 1. 勤怠詳細画面の「名前」がログインユーザーの氏名になっている
      */
     public function test_attendance_detail_shows_correct_user_name()

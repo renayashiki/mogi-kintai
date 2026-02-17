@@ -14,9 +14,8 @@ class AdminStaffManagementTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * 全ての一般ユーザーの氏名とメールアドレスが正しく表示されている
-     * 1. 管理者でログインする
-     * 2. スタッフ一覧ページを開く
+     * ID:14 ユーザー情報取得機能(管理者)
+     * 管理者ユーザーが、全ての一般ユーザーの氏名とメールアドレスが正しく表示されている
      */
     public function test_admin_can_view_all_staff_info()
     {
@@ -40,8 +39,6 @@ class AdminStaffManagementTest extends TestCase
 
     /**
      * ユーザーの勤怠情報が正しく表示される
-     * 1. 管理者ユーザーでログインする
-     * 2. 選択したユーザーの勤怠一覧ページを開く
      */
     public function test_admin_can_view_selected_user_attendance_correctly()
     {
@@ -80,9 +77,6 @@ class AdminStaffManagementTest extends TestCase
 
     /**
      * 「前月」を押下した時に表示月の前月の情報が表示される
-     * 1. 管理者ユーザーにログインをする
-     * 2. 勤怠一覧ページを開く
-     * 3. 「前月」ボタンを押す
      */
     public function test_admin_can_view_previous_month_attendance_list()
     {
@@ -134,9 +128,6 @@ class AdminStaffManagementTest extends TestCase
 
     /**
      * 「翌月」を押下した時に表示月の翌月の情報が表示される
-     * 1. 管理者ユーザーにログインをする
-     * 2. 勤怠一覧ページを開く
-     * 3. 「翌月」ボタンを押す
      */
     public function test_admin_can_view_next_month_attendance_list()
     {

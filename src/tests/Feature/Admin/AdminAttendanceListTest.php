@@ -16,29 +16,43 @@ class AdminAttendanceListTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // テスト時は現在時刻を固定（2026/02/16）
         Carbon::setTestNow('2026-02-16 10:00:00');
     }
 
     /**
+     * ID:12 勤怠一覧情報 取得機能(管理者)
      * その日になされた全ユーザーの勤怠情報が正確に確認できる
      */
     public function test_admin_can_see_all_staff_attendance_accurately()
     {
         $admin = User::factory()->create(['admin_status' => 1]);
-        $user = User::factory()->create(['name' => '西怜奈']);
-
-        // 勤怠データ作成（秒を含めて保存）
-        $attendance = AttendanceRecord::factory()->create([
-            'user_id' => $user->id,
+        $user1 = User::factory()->create(['name' => '西怜奈']);
+        $user2 = User::factory()->create(['name' => '佐藤太郎']);
+        // 西さんのデータ（秒あり）
+        $attendance1 = AttendanceRecord::factory()->create([
+            'user_id' => $user1->id,
             'date' => '2026-02-16',
             'clock_in' => '09:00:15',
             'clock_out' => '18:00:45',
         ]);
+        Rest::create([
+            'attendance_record_id' => $attendance1->id,
+            'rest_in' => '12:00:00',
+            'rest_out' => '13:00:00',
+        ]);
+
+        // 佐藤さんのデータ（別の時間帯）
+        $attendance2 = AttendanceRecord::factory()->create([
+            'user_id' => $user2->id,
+            'date' => '2026-02-16',
+            'clock_in' => '10:00:00',
+            'clock_out' => '19:00:00',
+        ]);
+
 
         // 休憩1時間（正確に保存）
         Rest::create([
-            'attendance_record_id' => $attendance->id,
+            'attendance_record_id' => $attendance2->id,
             'rest_in' => '12:00:00',
             'rest_out' => '13:00:00',
         ]);
@@ -52,11 +66,21 @@ class AdminAttendanceListTest extends TestCase
         // --- UI画像に基づいた全項目の正確な値の確認 ---
         $response->assertSee('2026年2月16日の勤怠'); // 日付
         $response->assertSee('西怜奈');               // 名前
-        $response->assertSee('09:00');                // 出勤（秒切り捨て）
-        $response->assertSee('18:00');                // 退勤（秒切り捨て）
-        $response->assertSee('1:00');                 // 休憩（アクセサ形式）
-        $response->assertSee('8:00');                 // 合計（アクセサ形式）
-        $response->assertDontSee('09:00:15');         // 秒が表示されていないことの確認
+        $response->assertSee('西怜奈');
+        $response->assertSee('09:00'); // 出勤（09:00:15の秒切り捨て）
+        $response->assertSee('18:00'); // 退勤（18:00:45の秒切り捨て）
+        $response->assertSee('1:00');  // 休憩（アクセサ：1:00形式）
+        $response->assertSee('8:00');  // 合計（アクセサ：8:00形式）
+
+        // 2人目：佐藤太郎さんの検証（「全ユーザー」が表示されていることの証明）
+        $response->assertSee('佐藤太郎');
+        $response->assertSee('10:00'); // 出勤
+        $response->assertSee('19:00'); // 退勤
+        $response->assertSee('1:00');  // 休憩
+        $response->assertSee('8:00');  // 合計
+
+        // --- 共通の禁止事項確認 ---
+        $response->assertDontSee('09:00:15'); // DBの秒が漏れ出していないか確認
     }
 
 
@@ -78,7 +102,7 @@ class AdminAttendanceListTest extends TestCase
     }
 
     /**
-     * 「前日」を押下した時に前の日の勤怠情報が全ての項目で正確に表示される
+     * 「前日」を押下した時に前の日の勤怠情報が表示される
      */
     public function test_admin_can_navigate_to_previous_day_with_full_details()
     {
@@ -114,7 +138,7 @@ class AdminAttendanceListTest extends TestCase
     }
 
     /**
-     * 「翌日」を押下した時に次の日の勤怠情報が全ての項目で正確に表示される
+     * 「翌日」を押下した時に次の日の勤怠情報が表示される
      */
     public function test_admin_can_navigate_to_next_day_with_full_details()
     {

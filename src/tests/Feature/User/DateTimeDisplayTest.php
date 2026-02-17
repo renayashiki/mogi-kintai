@@ -13,7 +13,6 @@ class DateTimeDisplayTest extends TestCase
 
     /**
      * ID 4: 日時取得機能
-     * 手順:
      * 現在の日時情報がUIと同じ形式で出力されている
      */
     public function test_current_date_and_time_are_displayed_correctly()

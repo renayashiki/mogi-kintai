@@ -20,6 +20,7 @@ class AdminAttendanceDetailTest extends TestCase
     }
 
     /**
+     * ID:13 勤怠詳細情報 取得・修正機能(管理者)
      * 勤怠詳細画面に表示されるデータが選択したものになっている
      */
     public function test_admin_can_view_attendance_detail_correctly()

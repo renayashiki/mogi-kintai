@@ -14,7 +14,7 @@ class EmailVerificationTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * メール認証機能
+     * ID:16 メール認証機能
      * 会員登録後、認証メールが送信される
      */
     public function test_verification_email_sent_after_registration()

@@ -5,7 +5,7 @@ namespace Tests\Feature\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
-use App\Models\AttendanceRecord; // 直接データを作成するために追加
+use App\Models\AttendanceRecord;
 use Carbon\Carbon;
 
 class ClockOutTest extends TestCase
@@ -23,6 +23,7 @@ class ClockOutTest extends TestCase
     }
 
     /**
+     * ID:8 退勤機能
      * 退勤ボタンが正しく機能する
      */
     public function test_clock_out_button_functions_correctly()
@@ -31,7 +32,7 @@ class ClockOutTest extends TestCase
         AttendanceRecord::create([
             'user_id' => $this->user->id,
             'date' => '2026-02-16',
-            'clock_in' => '2026-02-16 09:00:00',
+            'clock_in' => '09:00:00',
         ]);
         $this->user->update(['attendance_status' => 'working']);
 
@@ -49,7 +50,8 @@ class ClockOutTest extends TestCase
             ->post(route('attendance.store'), ['type' => 'clock_out']);
 
         // 【期待挙動】処理後に画面上に表示されるステータスが「退勤済」になる
-        $response->assertSee('退勤済');
+        $this->get(route('attendance.index', ['status' => 'finished']))
+            ->assertSee('<span class="status-text">退勤済</span>', false);
     }
 
     /**
@@ -58,6 +60,7 @@ class ClockOutTest extends TestCase
     public function test_clock_out_time_is_recorded_correctly_in_list()
     {
         // 1. ステータスが勤務外のユーザーにログインする
+        $this->user->update(['attendance_status' => 'outside']);
         $this->actingAs($this->user);
         $testDate = Carbon::create(2026, 2, 16);
 

@@ -18,11 +18,11 @@ class AttendanceListTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // ユーザーの作成のみ事前に行う（データ登録は各テスト内で実施）
         $this->user = User::factory()->create();
     }
 
     /**
+     * ID:9 勤怠一覧情報 取得機能
      * 1. 自分が行った勤怠情報が全て表示されている
      */
     public function test_user_can_see_own_attendance_list()
