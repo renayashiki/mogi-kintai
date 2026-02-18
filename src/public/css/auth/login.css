@@ -21,7 +21,7 @@ body {
     transform-origin: top center;
     margin: -20px auto 0 auto;
     width: 50%;
-    max-width: 850px;
+    max-width: 780px;
     min-height: auto;
     padding: 42px 40px 60px 40px;
     background-color: rgba(255, 255, 255, 1);
@@ -93,7 +93,7 @@ body {
     border-radius: 5px;
     color: rgba(255, 255, 255, 1);
     font-size: 24px;
-    font-weight: 700;
+    font-weight: 500;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
     margin-top: 80px;
@@ -110,7 +110,7 @@ body {
 }
 
 .register-link {
-    font-size: 18px;
+    font-size: 19px;
     color: rgba(0, 115, 204, 1);
     text-decoration: none;
     font-family: 'Inter', sans-serif;
@@ -129,16 +129,15 @@ body {
 @media (min-width: 1201px) {
     .auth-content {
         transform: scale(0.8);
-        transform-origin: top center;
         margin: 40px auto 0 auto;
         position: relative;
-        top: 0;
     }
 }
 
 @media (max-width: 1200px) {
+    /* bodyセレクタで詳細度を保ちつつ上書き */
     body {
-        overflow-y: auto !important;
+        overflow-y: auto;
     }
     .auth-content {
         transform: scale(1);
@@ -167,10 +166,15 @@ body {
     }
     .content-title { font-size: 24px; }
     .form-label { font-size: 18px; }
-    .submit-btn { font-size: 22px; height: 55px; }
+    .submit-btn { font-size: 22px; }
 }
 
 @media (max-height: 750px) {
-    body { overflow-y: auto !important; }
-    .auth-content { margin-top: 10px; margin-bottom: 20px; }
+    body {
+        overflow-y: auto;
+    }
+    .auth-content {
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
 }

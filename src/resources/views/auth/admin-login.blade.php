@@ -36,7 +36,7 @@
                     <p class="error-message">{{ $message }}</p>
                 @enderror
             </div>
-            <button type="submit" class="submit-btn">ログインする</button>
+            <button type="submit" class="submit-btn">管理者ログインする</button>
         </form>
     </div>
 @endsection

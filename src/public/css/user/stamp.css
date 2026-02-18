@@ -34,7 +34,7 @@
 .stamp-date {
     font-family: 'Inter', sans-serif;
     font-weight: 400;
-    font-size: 26px;
+    font-size: 28px;
     color: rgba(0, 0, 0, 1);
     line-height: 100%;
     margin: 0 0 25px 0;
@@ -44,7 +44,7 @@
 .stamp-time {
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 62px;
+    font-size: 64px;
     color: rgba(0, 0, 0, 1);
     line-height: 100%;
     margin-bottom: 60px;
@@ -64,8 +64,8 @@
 }
 
 .stamp-button {
-    width: 144px;
-    height: 50px;
+    width: 150px;
+    height: 55px;
     border-radius: 15px;
     font-family: 'Inter', sans-serif;
     font-weight: 700;

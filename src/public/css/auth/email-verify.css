@@ -6,7 +6,6 @@
 
 .message-container {
     margin-top: 20vh;
-    margin-bottom: 5vh;
     background: transparent;
     color: rgba(0, 0, 0, 1);
     max-width: 720px;
@@ -22,7 +21,7 @@
     font-family: Inter, sans-serif;
     font-weight: 700;
     font-size: 18px;
-    line-height: 1.0;
+    line-height: 1;
     letter-spacing: 0;
     text-align: center;
     color: rgba(0, 0, 0, 1);
@@ -42,7 +41,7 @@
     text-decoration: none;
     font-family: Inter, sans-serif;
     font-weight: 700;
-    font-size: 22px;
+    font-size: 19px;
     margin-bottom: 45px;
     max-width: 90%;
 }
@@ -63,7 +62,7 @@
     cursor: pointer;
     display: inline-block;
     padding: 0;
-    line-height: 1.0;
+    line-height: 1;
     letter-spacing: 0;
 }
 

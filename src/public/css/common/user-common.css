@@ -91,7 +91,7 @@ body {
 
 @media screen and (max-width: 1250px) {
     .header-logo svg {
-        width: 180px;
+        width: 250px;
     }
 }
 
@@ -106,7 +106,7 @@ body {
         margin-left: 10px;
     }
     .header-logo svg {
-        width: 150px;
+        width: 250px;
     }
     .nav-link,
     .logout-button {

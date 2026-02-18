@@ -46,7 +46,6 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::get('/attendance/list', [User\MonthlyController::class, 'index'])->name('attendance.list');
     Route::get('/attendance/detail/{id}', [User\WorkDetailController::class, 'show'])->name('attendance.detail');
     Route::post('/attendance/detail/{id}', [User\WorkDetailController::class, 'update'])->name('attendance.update');
-    // Route::get('/stamp_correction_request/list', [User\MyRequestController::class, 'index'])->name('attendance.request.list');
 });
 
 // 申請一覧：共通パス（名前を1つに統一）

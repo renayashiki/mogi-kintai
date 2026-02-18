@@ -118,7 +118,7 @@ php artisan test
 ```
 - 特定の機能のみを実行（例：会員登録機能）
 ``` bash
-php artisan test tests/Feature/RegisterTest.php
+php artisan test tests/Feature/Auth/RegistrationTest.php
 ```
 
 
@@ -149,7 +149,7 @@ php artisan test tests/Feature/RegisterTest.php
  'email' => 'reina.n@coachtech.com',
  'password' => 'password123'
 ```
-> 一般ユーザーページの機能確認ができます。見本の2023年6月の前後3か月と現在の日付から前3ヶ月のデータをダミーデータとして入れており、その期間内で機能確認が可能です。※西 伶奈についても見本UIと完全一致のダミーデータにした場合、リレーションや仕様書と矛盾が生じるため、データ数や見え方は一致させ、日付等はリレーションや仕様書と矛盾がないよう、考慮してダミーデータを挿入しています。
+> 一般ユーザーページの機能確認ができます。見本の2023年6月の前後3か月と現在の日付から前3ヶ月のデータをダミーデータとして入れており、その期間内で機能確認が可能です。※西 伶奈については、見本UIと完全一致(休日日の相違や名前のタイプミスあり)のダミーデータにした場合、リレーションや仕様書と矛盾が生じるため、データ数や見え方は一致させ、日付等はリレーションや仕様書と矛盾がないよう、考慮してダミーデータを挿入しています。
 
 
 
@@ -157,7 +157,12 @@ php artisan test tests/Feature/RegisterTest.php
 > パスワードは共通のため、以下のユーザー別メールアドレスでログインし操作確認も可能です。ダミーデータが挿入されている期間は上記同様、見本の2023年6月の前後3か月と現在の日付から前3ヶ月です。
 
 | 名前 | メールアドレス | ログイン時の状態 |
-| :--- | :--- | :--- | :--- | 山田 太郎 | `taro.y@coachtech.com`| 増田 一世 | `issei.m@coachtech.com`|秋田 朋美 | `tomomi.a@coachtech.com`| 中西 教夫 | `norio.n@coachtech.com` |
+| :--- | :--- | :--- |
+| 山田 太郎 | `taro.y@coachtech.com` | |
+| 増田 一世 | `issei.m@coachtech.com` | |
+| 山本 敬吉 | `keikichi.y@coachtech.com` | |
+| 秋田 朋美 | `tomomi.a@coachtech.com` | |
+| 中西 教夫 | `norio.n@coachtech.com` | |
 <br>
 
 ## 使用技術(実行環境)
@@ -170,7 +175,10 @@ php artisan test tests/Feature/RegisterTest.php
 ## URL
 - 開発環境：http://localhost/
 - phpMyAdmin: http://localhost:8080/
-- メール認証サイト(MailHog):http://localhost:8025/
+- メール認証サイト(MailHog): http://localhost:8025/
+- ログイン画面(一般ユーザー): http://localhost:/admin/login
+- ログイン画面(管理者): http://localhost:/login
+- 会員登録画面: http://localhost:/register
 
 <br>
 

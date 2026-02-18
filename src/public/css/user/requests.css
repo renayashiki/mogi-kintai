@@ -105,7 +105,8 @@ letter-spacing: 0.1em;
 /* 状態カラム：中央寄せ */
 .request-table .col-status {
     width: 15%;
-    text-align: center;
+    text-align: left;
+    padding-left: 38px;
 }
 
 /* 名前・日時・理由：左寄せ */
