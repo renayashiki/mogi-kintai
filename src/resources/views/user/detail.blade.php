@@ -15,7 +15,6 @@
             <div class="title-line"></div>
             <h1 class="detail-title">勤怠詳細</h1>
         </div>
-
         <form action="{{ route('attendance.update', ['id' => $attendance->id]) }}" method="POST" novalidate>
             @csrf
             <div class="detail-table-wrapper">
@@ -31,10 +30,8 @@
                             <th class="col-label">日付</th>
                             <td class="col-value">
                                 <div class="date-display">
-                                    <span
-                                        class="year-val">{{ \Carbon\Carbon::parse($attendance->date)->format('Y年') }}</span>
-                                    <span
-                                        class="date-val">{{ \Carbon\Carbon::parse($attendance->date)->format('n月j日') }}</span>
+                                    <span class="year-val">{{ $attendance->date->format('Y年') }}</span>
+                                    <span class="date-val">{{ $attendance->date->format('n月j日') }}</span>
                                 </div>
                             </td>
                         </tr>
@@ -63,8 +60,6 @@
                                 @endif
                             </td>
                         </tr>
-
-                        {{-- 休憩回数分の表示 --}}
                         @foreach ($attendance->rests as $index => $rest)
                             <tr>
                                 <th class="col-label">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>

@@ -7,7 +7,6 @@
         </div>
         <nav class="header-nav">
             <ul class="nav-list">
-                {{-- $attendanceStatusが未定義、または'finished'（退勤済）以外の場合は通常メニューを表示 --}}
                 @if (($attendanceStatus ?? 'outside') !== 'finished')
                     <li class="nav-item">
                         <a href="{{ route('attendance.index') }}" class="nav-link">勤怠</a>
@@ -19,7 +18,6 @@
                         <a href="{{ route('attendance.request.list') }}" class="nav-link">申請</a>
                     </li>
                 @else
-                    {{-- 退勤済の場合のみ、ボタンの内容を切り替える --}}
                     <li class="nav-item">
                         <a href="{{ route('attendance.list') }}" class="nav-link">今月の出勤一覧</a>
                     </li>

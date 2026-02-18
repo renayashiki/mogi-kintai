@@ -55,7 +55,6 @@
     display: block;
 }
 
-/* 前月の矢印を反転させて左向きにする */
 .month-nav.prev .nav-icon {
     transform: scaleX(-1);
     padding-left: 5px;
@@ -76,7 +75,6 @@
     justify-content: center;
 }
 
-/* ラベル（アイコンと文字）を「クリック可能なボタン」として扱う */
 .calendar-label {
     display: flex;
     align-items: center;
@@ -87,18 +85,17 @@
     color: rgba(0, 0, 0, 1);
     cursor: pointer;
     position: relative;
-    z-index: 5; /* inputより上に持ってくる */
+    z-index: 5;
 }
 
-/* inputは「隠し要素」として裏に置いておくだけにする */
 #month-input {
     position: absolute;
     top: 0;
     left: 0;
-    width: 0;  /* 幅をなくして邪魔させない */
+    width: 0;
     height: 0;
     opacity: 0;
-    pointer-events: none; /* 直接のクリックは無視させる */
+    pointer-events: none;
 }
 
 .attendance-table-wrapper {
@@ -136,7 +133,7 @@
 
 .attendance-table thead th.col-date {
     text-align: left;
-    padding-left: 45px; /* 左端に寄りすぎないよう調整 */
+    padding-left: 45px;
 }
 
 .col-date {
@@ -154,7 +151,6 @@
 }
 
 .attendance-table .col-start, .attendance-table .col-end, .attendance-table .col-rest, .attendance-table .col-total {
-    font-family: 'Inter', sans-serif;
     letter-spacing: 0.1em;
     font-variant-numeric: normal;
 }

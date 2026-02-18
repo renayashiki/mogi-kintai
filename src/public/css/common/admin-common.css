@@ -1,7 +1,6 @@
-/* --- 管理者共通レイアウト設定 --- */
 body {
     background-color: rgba(240, 239, 242, 1);
-    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
@@ -38,21 +37,19 @@ body {
     padding: 0;
     padding-right: 15px;
     align-items: center;
-    /* ボタン同士の間隔設定 */
-    gap: 40px; /* デフォルトの間隔（申請一覧とログアウトの間など） */
+    gap: 40px;
 }
 
-/* 勤怠一覧とスタッフ一覧の間隔を少し狭く設定 (Figma left値の差分を考慮) */
-.nav-item:nth-child(1) {
-    margin-right: -4px; /* gap 43px に対して少し狭める調整 */
+.nav-item + .nav-item{
+    margin-right: -4px;
 }
 
 .nav-link,
 .logout-button {
     font-family: 'Inter', sans-serif;
-    font-weight: 500; /* Figma: Bold */
-    font-size: 18px; /* Figma 指定値 */
-    color: rgba(255, 255, 255, 1); /* Figma 指定値 */
+    font-weight: 500;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 1);
     text-decoration: none;
     background: none;
     border: none;
@@ -70,7 +67,6 @@ body {
     overflow-y: auto;
 }
 
-/* レスポンシブ：管理者用は文字が大きいため早めに調整 */
 @media screen and (max-width: 1400px) {
     .nav-link, .logout-button {
         font-size: 18px;

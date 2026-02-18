@@ -2,14 +2,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 100px; /* top位置を考慮した余白 */
     padding: 140px 0;
-    /* 親(.main)の中で中央に寄せるならこれ */
     flex-grow: 1;
     justify-content: flex-start;
 }
 
-/* ステータスバッジ */
 .status-badge {
     width: 72px;
     height: 30px;
@@ -30,7 +27,6 @@
     letter-spacing: 0.15em;
 }
 
-/* 日付 (h1) */
 .stamp-date {
     font-family: 'Inter', sans-serif;
     font-weight: 400;
@@ -40,7 +36,6 @@
     margin: 0 0 25px 0;
 }
 
-/* 時間 */
 .stamp-time {
     font-family: 'Inter', sans-serif;
     font-weight: 700;
@@ -50,7 +45,6 @@
     margin-bottom: 60px;
 }
 
-/* ボタン共通 */
 .stamp-actions {
     display: flex;
     justify-content: center;
@@ -60,7 +54,7 @@
 
 .button-group {
     display: flex;
-    gap: 50px; /* 退勤と休憩入の間隔 */
+    gap: 50px;
 }
 
 .stamp-button {
@@ -80,19 +74,16 @@
     opacity: 0.8;
 }
 
-/* 黒背景ボタン (出勤・退勤) */
 .btn-black {
     background: rgba(0, 0, 0, 1);
     color: rgba(255, 255, 255, 1);
 }
 
-/* 白背景ボタン (休憩入・休憩戻) */
 .btn-white {
     background: rgba(255, 255, 255, 1);
     color: rgba(0, 0, 0, 1);
 }
 
-/* 退勤後のメッセージ */
 .finish-message {
     font-family: 'Inter', sans-serif;
     font-weight: 700;

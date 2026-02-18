@@ -11,7 +11,6 @@
 
 @section('content')
     <div class="stamp-container">
-        {{-- ステータス表示 --}}
         <div class="status-badge">
             @if ($attendanceStatus === 'outside')
                 <span class="status-text">勤務外</span>
@@ -23,15 +22,9 @@
                 <span class="status-text">退勤済</span>
             @endif
         </div>
-
-        {{-- 日付 (ページ主見出し) --}}
         <h1 class="stamp-date" id="current-date">
             {{ now()->format('Y年n月j日') }}({{ ['日', '月', '火', '水', '木', '金', '土'][now()->dayOfWeek] }})</h1>
-
-        {{-- 現在時刻 (大きなデジタル時計) --}}
         <div class="stamp-time" id="current-time">{{ now()->format('H:i') }}</div>
-
-        {{-- 打刻アクションエリア --}}
         <div class="stamp-actions">
             @if ($attendanceStatus === 'outside' && !$hasClockIn)
                 <form action="{{ route('attendance.store') }}" method="post">
@@ -60,7 +53,6 @@
                 </form>
             @elseif ($attendanceStatus === 'finished')
                 <p class="finish-message">お疲れ様でした。</p>
-            @else
             @endif
         </div>
     </div>
@@ -70,7 +62,6 @@
             const days = ['日', '月', '火', '水', '木', '金', '土'];
             const dateEl = document.getElementById('current-date');
             const timeEl = document.getElementById('current-time');
-
             if (dateEl) {
                 dateEl.textContent = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日(${days[now.getDay()]})`;
             }
@@ -79,7 +70,6 @@
                     now.getMinutes().toString().padStart(2, '0');
             }
         }
-        // 1秒(1000ms)ごとに実行
         setInterval(updateClock, 1000);
     </script>
 @endsection

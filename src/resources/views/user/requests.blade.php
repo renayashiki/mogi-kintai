@@ -1,4 +1,4 @@
-@extends('layouts.user') {{-- 一般ユーザー用レイアウト --}}
+@extends('layouts.user')
 
 @section('title', '申請一覧')
 
@@ -11,24 +11,19 @@
 
 @section('content')
     <div class="request-container">
-        {{-- タイトルエリア --}}
         <div class="request-header">
             <div class="title-line"></div>
             <h1 class="request-title">申請一覧</h1>
         </div>
-
-        {{-- ステータス切替バー --}}
         <div class="status-tab-wrapper">
-            <div class="status-tabs">
+            <nav class="status-tabs">
                 <a href="{{ route('attendance.request.list', ['status' => 'pending']) }}"
                     class="tab-item {{ $status === 'pending' ? 'is-active' : '' }}">承認待ち</a>
                 <a href="{{ route('attendance.request.list', ['status' => 'approved']) }}"
                     class="tab-item {{ $status === 'approved' ? 'is-active' : '' }}">承認済み</a>
-            </div>
+            </nav>
             <div class="status-line"></div>
         </div>
-
-        {{-- テーブルエリア --}}
         <div class="table-wrapper">
             <table class="request-table">
                 <thead>
@@ -46,13 +41,10 @@
                         <tr>
                             <td class="col-status">{{ $correctionRequest->approval_status }}</td>
                             <td class="col-name">{{ $correctionRequest->user->name }}</td>
-                            {{-- 対象日時：2026/02/03 形式（cv01適用） --}}
                             <td class="col-target-date">{{ $correctionRequest->new_date->format('Y/m/d') }}</td>
                             <td class="col-reason">{{ Str::limit($correctionRequest->comment, 20) }}</td>
-                            {{-- 申請日時：2026/02/09 形式 --}}
                             <td class="col-app-date">{{ $correctionRequest->application_date->format('Y/m/d') }}</td>
                             <td class="col-detail">
-                                {{-- FN033要件：勤怠詳細画面へ遷移 --}}
                                 <a href="{{ route('attendance.detail', ['id' => $correctionRequest->attendance_record_id]) }}"
                                     class="detail-link">詳細</a>
                             </td>

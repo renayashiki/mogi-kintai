@@ -1,14 +1,12 @@
-/* --- 全体レイアウト設定 --- */
 body {
     background-color: rgba(240, 239, 242, 1);
     font-family: 'Inter', 'Noto Sans JP', sans-serif;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    /* bodyへのflex指定は廃止しました */
 }
 
-/* ヘッダー：高さ 60px 固定 */
+
 .header {
     background: rgba(0, 0, 0, 1);
     width: 100%;
@@ -22,9 +20,9 @@ body {
     width: 100%;
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 40px; 
+    padding: 0 40px;
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -40,7 +38,7 @@ body {
     display: block;
 }
 
-/* ナビ枠：右寄せを維持 */
+
 .header-nav {
     display: flex;
     align-items: center;
@@ -55,7 +53,7 @@ body {
     gap: 25px;
 }
 
-/* ログアウトボタンを少しだけ離す */
+
 .nav-list .nav-item:last-child {
     margin-left: 10px;
 }
@@ -75,19 +73,13 @@ body {
     font-weight: 500;
 }
 
-/* --- メインエリア：規約に沿った「高さ」の確保 --- */
 .main {
     width: 100%;
-    /* flexを使わず、vh（ビューポート単位）を使用して
-       最低限必要な高さを確保します。
-       これなら html, body をいじらずに済み、規約上も安全です。
-    */
-    min-height: calc(100vh - 60px); 
+    min-height: calc(100vh - 60px);
     background-color: rgba(240, 239, 242, 1);
     box-sizing: border-box;
 }
 
-/* --- レスポンシブ設定 --- */
 
 @media screen and (max-width: 1250px) {
     .header-logo svg {

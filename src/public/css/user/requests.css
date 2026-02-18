@@ -1,16 +1,14 @@
-/* --- レイアウト基本 --- */
 .request-container {
     padding: 50px 0;
     background-color: rgba(240, 239, 242, 1);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center; /* 全体を中央寄せ */
+    align-items: center;
     font-family: 'Inter', sans-serif;
     font-feature-settings: "cv01" 1;
 }
 
-/* タイトルエリアの復元 */
 .request-header {
     width: 700px;
     display: flex;
@@ -31,7 +29,6 @@
     margin: 0;
 }
 
-/* ステータスタブエリアの復元 */
 .status-tab-wrapper {
     width: 700px;
     margin-bottom: 30px;
@@ -52,7 +49,6 @@
     letter-spacing: 0.15em;
 }
 
-/* タブの太さ切り替え */
 .tab-item.is-active {
     font-weight: 700;
 }
@@ -64,7 +60,6 @@
     margin-bottom: 4px;
 }
 
-/* --- テーブルエリアの復元 --- */
 .table-wrapper {
     width: 700px;
     background: rgba(255, 255, 255, 1);
@@ -82,7 +77,7 @@
     height: 34px;
     vertical-align: middle;
     font-size: 13px;
-    color: rgba(115, 115, 115, 1); /* フォントカラー */
+    color: rgba(115, 115, 115, 1);
     font-weight: 600;
 }
 
@@ -90,31 +85,25 @@
 letter-spacing: 0.1em;
 }
 
-/* ヘッダーのボーダー */
 .request-table thead th {
     border-bottom: 2px solid rgba(225, 225, 225, 1);
 }
 
-/* ボディのボーダー */
 .request-table tbody td {
     border-bottom: 2px solid rgba(225, 225, 225, 1);
 }
 
-/* --- ① 各カラムの配置調整（!importantなし） --- */
-
-/* 状態カラム：中央寄せ */
 .request-table .col-status {
     width: 15%;
     text-align: left;
     padding-left: 38px;
 }
 
-/* 名前・日時・理由：左寄せ */
 .request-table .col-name,
 .request-table .col-target-date,
 .request-table .col-reason,
 .request-table .col-app-date {
-    width: 20%; /* 理由以外の幅を均等化 */
+    width: 20%;
     text-align: left;
 }
 
@@ -122,7 +111,6 @@ letter-spacing: 0.1em;
     padding-left: 35px;
 }
 
-/* 各幅の調整 */
 .col-name        {
     width: 12%;
 }
@@ -139,15 +127,13 @@ letter-spacing: 0.1em;
     width: 18%;
 }
 
-/* 理由だけ幅を広く取る */
 .request-table .col-reason {
     width: 20%;
 }
 
-/* ② 詳細ボタン：ズレを直し右余白を確保 */
 .request-table .col-detail {
     width: 15%;
-    text-align: left; /* 文字を右に寄せる */
+    text-align: left;
 }
 
 .detail-link {
@@ -156,7 +142,6 @@ letter-spacing: 0.1em;
     font-weight: 700;
 }
 
-/* レスポンシブ：中央維持 */
 @media screen and (max-width: 1540px) {
     .request-header, .status-tab-wrapper, .table-wrapper {
         width: 95%;

@@ -15,16 +15,12 @@
             <div class="title-line"></div>
             <h1 class="monthly-title">勤怠一覧</h1>
         </div>
-
-        <div class="month-selector-bar">
-            {{-- 前月 --}}
+        <nav class="month-selector-bar">
             <a href="{{ route('attendance.list', ['month' => $currentMonth->copy()->subMonth()->format('Y-m')]) }}"
                 class="month-nav prev">
                 <span class="nav-icon">@include('components.arrow-left-svg')</span>
                 <span class="nav-text">前月</span>
             </a>
-
-            {{-- ★修正箇所：ここをカレンダー選択フォームに差し替え --}}
             <div class="calendar-picker">
                 <form action="{{ route('attendance.list') }}" method="GET" id="month-form">
                     <label for="month-input" class="calendar-label">
@@ -35,15 +31,12 @@
                         onchange="this.form.submit()">
                 </form>
             </div>
-
-            {{-- 翌月 --}}
             <a href="{{ route('attendance.list', ['month' => $currentMonth->copy()->addMonth()->format('Y-m')]) }}"
                 class="month-nav next">
                 <span class="nav-text">翌月</span>
                 <span class="nav-icon">@include('components.arrow-right-svg')</span>
             </a>
-        </div>
-
+        </nav>
         <div class="attendance-table-wrapper">
             <table class="attendance-table">
                 <thead>
@@ -86,7 +79,6 @@
                                     <a href="{{ route('attendance.detail', ['id' => $attendance->id]) }}"
                                         class="detail-link">詳細</a>
                                 @else
-                                    {{-- 空白日は span にしてクリックしても何も起きないようにする --}}
                                     <span class="detail-link">詳細</span>
                                 @endif
                             </td>
@@ -100,12 +92,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             const monthInput = document.getElementById('month-input');
             const calendarLabel = document.querySelector('.calendar-label');
-
-            // アイコンや文字が含まれる「label」全体をクリックした時の処理
             calendarLabel.addEventListener('click', function(e) {
-                e.preventDefault(); // label本来の挙動を一旦止める
-
-                // 裏にあるinputのカレンダー機能を強制的に呼び出す
+                e.preventDefault();
                 if (typeof monthInput.showPicker === 'function') {
                     monthInput.showPicker();
                 } else {
