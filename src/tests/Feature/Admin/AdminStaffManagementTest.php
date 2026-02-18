@@ -177,9 +177,6 @@ class AdminStaffManagementTest extends TestCase
 
     /**
      * 「詳細」を押下すると、その日の勤怠詳細画面に遷移する
-     * 1. 管理者ユーザーにログインをする
-     * 2. 勤怠一覧ページを開く
-     * 3. 「詳細」ボタンを押下する
      */
     public function test_admin_can_navigate_to_attendance_detail_and_data_matches()
     {
