@@ -26,6 +26,17 @@ class AttendanceRecordSeeder extends Seeder
     {
         $current = $start->copy();
         while ($current <= $end) {
+
+            // 「今日」の日付はスキップする（評価者がログインした時に出勤ボタンを出すため）
+            if ($current->isToday()) {
+                $current->addDay();
+                // 日曜のスキップ処理と重複しないよう、ここで判定
+                if ($current->isSunday() && $current->dayOfWeek === 0) {
+                    $current->addDay();
+                }
+                continue;
+            }
+
             // 【重要】週1〜2日の休みを再現するロジックを維持
             if ($current->isWeekday()) {
                 // 平日は基本出勤（たまに休ませるならここを調整）
