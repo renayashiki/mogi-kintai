@@ -120,7 +120,7 @@
     width: 800px;
     background: rgba(255, 255, 255, 1);
     border-radius: 8px;
-    overflow: hidden; 
+    overflow: hidden;
     margin-bottom: 80px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
@@ -220,25 +220,46 @@
         max-width: 800px;
     }
 
-.daily-container .attendance-table-wrapper .attendance-table .col-start,
+    /* 共通設定：名前も含め、全ての列で改行を禁止する */
+    .attendance-table th,
+    .attendance-table td {
+        white-space: nowrap;
+    }
+
+    /* 名前の列を明示的に指定（クラス名が .col-name の場合） */
+    .daily-container .attendance-table-wrapper .attendance-table .col-name {
+        width: auto;
+        min-width: 120px; /* 姓名が長くても一行を維持するための最低幅 */
+        text-align: left;
+    }
+
+    .daily-container .attendance-table-wrapper .attendance-table .col-start,
     .daily-container .attendance-table-wrapper .attendance-table .col-end,
     .daily-container .attendance-table-wrapper .attendance-table .col-rest,
     .daily-container .attendance-table-wrapper .attendance-table .col-total {
-        /* white-space は縮小時のみならず、常に1行にする設定として有効化 */
         white-space: nowrap;
-        /* 1100px以下（崩れ始める目安）になったら余白をリセット */
-        @media screen and (max-width: 1100px) {
-            padding-left: 0;
-            text-align: center;
-            width: auto;
-        }
+    }
+}
+
+/* ネストせず、1100px以下の設定を独立させる（規約上も安全） */
+@media screen and (max-width: 1100px) {
+    .daily-container .attendance-table-wrapper .attendance-table .col-start,
+    .daily-container .attendance-table-wrapper .attendance-table .col-end,
+    .daily-container .attendance-table-wrapper .attendance-table .col-rest,
+    .daily-container .attendance-table-wrapper .attendance-table .col-total {
+        padding-left: 0;
+        text-align: center;
+        width: auto;
     }
 
-    /* 詳細列も同様 */
     .daily-container .attendance-table-wrapper .attendance-table tbody td.col-detail {
-        @media screen and (max-width: 1100px) {
-            padding-right: 0;
-            text-align: center;
-        }
+        padding-right: 0;
+        text-align: center;
+    }
+
+    /* 名前列も1100px以下で中央寄せにする場合 */
+    .daily-container .attendance-table-wrapper .attendance-table .col-name {
+        padding-left: 0;
+        text-align: center;
     }
 }

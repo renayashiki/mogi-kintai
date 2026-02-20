@@ -1,229 +1,240 @@
 .detail-container {
-    padding: 35px 0;
-    background-color: rgba(240, 239, 242, 1);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: 'Inter', sans-serif;
+padding: 35px 0;
+background-color: rgba(240, 239, 242, 1);
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+font-family: 'Inter', sans-serif;
 }
 
 .detail-header {
-    width: 700px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 18px;
+width: 700px;
+display: flex;
+align-items: center;
+margin-bottom: 18px;
 }
 
 .title-line {
-    width: 8px;
-    height: 30px;
-    background-color: rgba(0, 0, 0, 1);
-    margin-right: 13px;
+width: 8px;
+height: 30px;
+background-color: #000;
+margin-right: 13px;
 }
 
 .detail-title {
-    font-weight: 700;
-    font-size: 22px;
+font-weight: 700;
+font-size: 22px;
 }
 
 form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 100%;
 }
 
-
+/* 白いテーブル枠 */
 .detail-table-wrapper {
-    width: 700px;
-    background: rgba(255, 255, 255, 1);
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    margin-bottom: 10px;
+width: 700px;
+background: #fff;
+border-radius: 10px;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+overflow: hidden;
+margin-bottom: 10px; /* 下のボタンとの間隔 */
 }
 
 .detail-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
+width: 100%;
+border-collapse: collapse;
+table-layout: fixed;
 }
 
-
+/* ① thとtdの文字色・スタイルの分離と、② 上下中央揃え */
 .col-label {
-    width: 260px;
-    padding: 22px 0 22px 50px;
-    font-weight: 700;
-    font-size: 13px;
-    color: rgba(115, 115, 115, 1);
-    text-align: left;
-    vertical-align: middle;
-    border-bottom: 2px solid rgba(225, 225, 225, 1);
+width: 260px;
+padding: 22px 0 22px 50px;
+font-weight: 700;
+font-size: 13px;
+color: rgba(115, 115, 115, 1);
+text-align: left;
+vertical-align: middle; /* 上下中央 */
+border-bottom: 2px solid #e1e1e1;
 }
 
 .col-value {
-    padding: 22px 50px 22px 0;
-    text-align: left;
-    vertical-align: middle;
-    border-bottom: 2px solid rgba(225, 225, 225, 1);
-    color: rgba(0, 0, 0, 1);
-    font-feature-settings: "cv01" 1;
-    letter-spacing: 0.1em;
-    font-variant-numeric: normal;
+padding: 22px 50px 22px 0;
+text-align: left;
+vertical-align: middle; /* 上下中央 */
+border-bottom: 2px solid #e1e1e1;
+color: rgba(0, 0, 0, 1);
+font-feature-settings: "cv01" 1;
+letter-spacing: 0.1em;
+font-variant-numeric: normal;
 }
 
 .detail-table tr:last-child .col-label,
 .detail-table tr:last-child .col-value {
-    border-bottom: none;
+border-bottom: none;
 }
 
-
+/* テキスト表示（名前・日付） */
 .name-display, .date-display {
-    font-weight: 700;
-    font-size: 12px;
-    color: rgba(0, 0, 0, 1);
+font-weight: 700;
+font-size: 12px;
+color: rgba(0, 0, 0, 1);
 }
 
 .name-display{
-    margin-left: 10px;
+margin-left: 10px;
 }
+
 
 .year-val {
-    margin-right: 125px;
-    margin-left: 10px;
+margin-right: 125px;
+margin-left: 10px;
 }
 
+/* 時間入力グループ */
 .time-group {
-    display: flex;
-    align-items: flex-start;
-    gap: 40px;
+display: flex;
+align-items: flex-start;
+gap: 40px;
 }
 
 .input-field {
-    width: 76px;
-    height: 20px;
-    border: 1px solid #e1e1e1;
-    border-radius: 4px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 12px;
-    font-feature-settings: "cv01" 1;
-    letter-spacing: 0.1em;
-    font-variant-numeric: normal;
+width: 76px;
+height: 20px;
+border: 1px solid #e1e1e1;
+border-radius: 4px;
+text-align: center;
+font-family: 'Inter', sans-serif;
+font-weight: 700;
+font-size: 12px;
+font-feature-settings: "cv01" 1;
+letter-spacing: 0.1em;
+font-variant-numeric: normal;
 }
 
 .range-tilde {
-    margin: 0;
-    font-weight: 700;
-    color: #000;
+margin: 0;
+font-weight: 700;
+color: #000;
 }
 
 
+/* 承認待ちの際のテキスト表示スタイル */
 .text-display {
-    width: 76px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 14px;
-    display: inline-block;
+width: 76px; /* input-fieldと同じ幅にして位置を揃える */
+text-align: center;
+font-weight: 700;
+font-size: 14px;
+display: inline-block;
 }
 
 .text-display-comment {
-    font-weight: 700;
-    font-size: 14px;
-    display: block;
-    padding: 10px 0;
+font-weight: 700;
+font-size: 14px;
+display: block;
+padding: 10px 0;
 }
 
 
+/* ③ 備考の幅を「開始時間の頭〜終了時間のお尻」に合わせる */
 .textarea-container {
-    width: 275px;
+width: calc(110px * 2 + 60px); /* input(120px)×2 + tildeと余白分(60px) */
 }
 
-
+/* --- 備考のtdだけ、パディングを上下0にして枠をテーブルに密着させる --- */
 .detail-table tr:last-child .col-value {
-    padding-top: 0;
-    padding-bottom: 0;
+padding-top: 0;
+padding-bottom: 0;
 }
 
-
+/* --- テキストエリアの余白を削り、高さを指定 --- */
 .textarea-field {
-    width: 90%;
-    height: 48px;
-    border: 1px solid #e1e1e1;
-    border-radius: 4px;
-    padding: 2px 10px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 12px;
-    resize: none;
-    display: block;
-    margin: 10px 0;
+width: 90%;
+/* テーブルのセルの高さ（padding込みの高さ）から微調整 */
+height: 48px;
+border: 1px solid #e1e1e1;
+border-radius: 4px;
+/* padding: 10px; だと文字の上に大きな隙間ができるため、上下を削る */
+padding: 2px 10px; 
+font-family: 'Inter', sans-serif;
+font-weight: 700;
+font-size: 12px;
+resize: none;
+/* 枠線とセルの隙間をなくすための微調整 */
+display: block;
+margin: 10px 0; /* 他の行の文字位置(padding 18px)と高さを揃える */
 }
 
 .text-display-multiline{
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 12px;
+font-family: 'Inter', sans-serif;
+font-weight: 700;
+font-size: 12px;
 }
 
+/* --- もし備考ラベル(th)の文字も上に寄ってしまう場合は、th側も調整 --- */
 .detail-table tr:last-child .col-label {
-    vertical-align: middle;
+vertical-align: middle;
 }
 
+/* ⑤ 枠外のボタン配置 */
 .detail-actions {
-    width: 700px;
-    display: flex;
-    justify-content: flex-end;
+width: 700px; /* テーブルと同じ幅に合わせる */
+display: flex;
+justify-content: flex-end; /* 右寄せ */
 }
 
-
+/* --- エラーメッセージ表示エリア --- */
 .error-container {
-    width: 700px;
-    margin: 0 auto 10px auto;
+width: 700px; /* テーブル幅と同一にする */
+margin: 0 auto 10px auto; /* 中央寄せにし、下に少し余白 */
 }
 
 .error-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    padding-left: 10px;
-    text-align: left;
+list-style: none;
+padding: 0;
+margin: 0;
+padding-left: 10px;
+text-align: left; /* 左寄せ */
 }
 
 .error-item {
-    font-family: 'Inter', sans-serif;
-    color: #ff0000;
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    margin-bottom: 4px;
+font-family: 'Inter', sans-serif;
+color: #ff0000;
+font-weight: 700;
+font-size: 12px; /* pending-messageとサイズを統一 */
+letter-spacing: 0.1em;
+margin-bottom: 4px; /* エラーが複数ある際の間隔 */
 }
 
 .submit-button {
-    width: 92px;
-    height: 35px;
-    background-color: rgba(0, 0, 0, 1);
-    color: rgba(255, 255, 255, 1);
-    border: none;
-    border-radius: 4px;
-    font-weight: 700;
-    font-size: 15px;
-    cursor: pointer;
-    transition: opacity 0.2s;
-    margin-top: 10px;
+width: 92px;
+height: 35px;
+background-color: #000;
+color: #fff;
+border: none;
+border-radius: 4px;
+font-weight: 700;
+font-size: 15px;
+cursor: pointer;
+transition: opacity 0.2s;
+margin-top: 10px;
 }
 
 .submit-button:hover {
-    opacity: 0.8;
+opacity: 0.8;
 }
 
+/* 承認待ちメッセージ (Figma値) */
 .pending-message {
-    width: 100%;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0.15em;
-    color: rgba(255, 0, 0, 0.5);
-    text-align: right;
+width: 100%;
+font-family: 'Inter', sans-serif;
+font-weight: 700;
+font-size: 13px;
+letter-spacing: 0.15em;
+color: rgba(255, 0, 0, 0.5);
+text-align: right;
 }
