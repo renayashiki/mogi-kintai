@@ -1,22 +1,15 @@
-/* ==========================================
-   全体コンテナ・レイアウト
-   ========================================== */
 .daily-container {
-    padding: 60px 0 0; 
+    padding: 60px 0 0;
     background-color: rgba(240, 239, 242, 1);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
     font-family: 'Inter', sans-serif;
-    /* 数字の「1」を棒状にする設定 */
     font-feature-settings: "cv01" 1;
     font-weight: 700;
 }
 
-/* ==========================================
-   ヘッダーエリア
-   ========================================== */
 .daily-header {
     width: 820px;
     display: flex;
@@ -39,9 +32,6 @@
     margin: 0;
 }
 
-/* ==========================================
-   日付選択バー
-   ========================================== */
 .date-selector-bar {
     width: 800px;
     height: 46px;
@@ -88,7 +78,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: auto; 
+    width: auto;
     padding: 0 10px;
     z-index: 1;
 }
@@ -113,9 +103,6 @@
     z-index: 3;
 }
 
-/* ==========================================
-   テーブルエリア
-   ========================================== */
 .attendance-table-wrapper {
     width: 800px;
     background: rgba(255, 255, 255, 1);
@@ -131,7 +118,6 @@
     table-layout: fixed;
 }
 
-/* 基本セル設定：詳細度を高めて上書きを防ぐ */
 .daily-container .attendance-table th,
 .daily-container .attendance-table td {
     height: 38px;
@@ -141,21 +127,19 @@
     font-weight: 700;
     font-size: 13px;
     color: rgba(115, 115, 115, 1);
-    /* cv01を強制適用 */
     font-feature-settings: "cv01" 1;
     letter-spacing: 0.1em;
 }
 
 .attendance-table thead th {
-    border-bottom: 3px solid #e1e1e1;
+    border-bottom: 3px solid rgba(225, 225, 225, 1);
     background: rgba(255, 255, 255, 1);
 }
 
 .attendance-table tbody td {
-    border-bottom: 2px solid #e1e1e1;
+    border-bottom: 2px solid rgba(225, 225, 225, 1);
 }
 
-/* 名前列 */
 .attendance-table .col-name {
     width: 8%;
 }
@@ -168,7 +152,6 @@
     text-align: center;
 }
 
-/* 数値列：ここが一番の修正ポイント。クラスを重ねて詳細度を最大化 */
 .daily-container .attendance-table-wrapper .attendance-table .col-start,
 .daily-container .attendance-table-wrapper .attendance-table .col-end,
 .daily-container .attendance-table-wrapper .attendance-table .col-rest,
@@ -178,11 +161,9 @@
     font-family: 'Inter', sans-serif;
     letter-spacing: 0.1em;
     font-variant-numeric: normal;
-    /* 再定義：cv01を確実にオンにする */
     font-feature-settings: "cv01" 1;
 }
 
-/* 詳細列 */
 .attendance-table .col-detail {
     width: 10%;
 }
@@ -198,7 +179,6 @@
     letter-spacing: 0.1em;
 }
 
-/* リンク */
 .detail-link {
     color: rgba(0, 0, 0, 1);
     text-decoration: none;
@@ -210,26 +190,24 @@
     opacity: 0.7;
 }
 
-/* レスポンシブ */
 @media screen and (max-width: 1540px) {
     .daily-container {
         padding: 60px 50px 0;
     }
-    .date-selector-bar, .attendance-table-wrapper { 
+
+    .date-selector-bar, .attendance-table-wrapper {
         width: 100%;
         max-width: 800px;
     }
 
-    /* 共通設定：名前も含め、全ての列で改行を禁止する */
     .attendance-table th,
     .attendance-table td {
         white-space: nowrap;
     }
 
-    /* 名前の列を明示的に指定（クラス名が .col-name の場合） */
     .daily-container .attendance-table-wrapper .attendance-table .col-name {
         width: auto;
-        min-width: 120px; /* 姓名が長くても一行を維持するための最低幅 */
+        min-width: 120px;
         text-align: left;
     }
 
@@ -241,7 +219,6 @@
     }
 }
 
-/* ネストせず、1100px以下の設定を独立させる（規約上も安全） */
 @media screen and (max-width: 1100px) {
     .daily-container .attendance-table-wrapper .attendance-table .col-start,
     .daily-container .attendance-table-wrapper .attendance-table .col-end,
@@ -257,7 +234,6 @@
         text-align: center;
     }
 
-    /* 名前列も1100px以下で中央寄せにする場合 */
     .daily-container .attendance-table-wrapper .attendance-table .col-name {
         padding-left: 0;
         text-align: center;

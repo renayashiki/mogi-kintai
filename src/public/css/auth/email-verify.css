@@ -17,10 +17,21 @@
     padding: 20px;
 }
 
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
 .verification-message {
     font-family: Inter, sans-serif;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 19px;
     line-height: 1;
     letter-spacing: 0;
     text-align: center;
@@ -32,8 +43,8 @@
 .verify-link-button {
     display: inline-block;
     width: 200px;
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     background: rgba(217, 217, 217, 1);
     color: rgba(0, 0, 0, 1);
     border: 1px solid rgba(0, 0, 0, 1);

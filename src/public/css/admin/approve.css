@@ -4,7 +4,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
     font-family: 'Inter', sans-serif;
 }
 
@@ -18,7 +18,7 @@
 .title-line {
     width: 8px;
     height: 30px;
-    background-color: #000;
+    background-color: rgba(0, 0, 0, 1);
     margin-right: 13px;
 }
 
@@ -36,7 +36,7 @@ form {
 
 .detail-table-wrapper {
     width: 700px;
-    background: #fff;
+    background: rgba(255, 255, 255, 1);
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     overflow: hidden;
@@ -57,14 +57,14 @@ form {
     color: rgba(115, 115, 115, 1);
     text-align: left;
     vertical-align: middle;
-    border-bottom: 2px solid #e1e1e1;
+    border-bottom: 2px solid rgba(225, 225, 225, 1);
 }
 
 .col-value {
     padding: 17px 50px 17px 0;
     text-align: left;
     vertical-align: middle;
-    border-bottom: 2px solid #e1e1e1;
+    border-bottom: 2px solid rgba(225, 225, 225, 1);
     color: rgba(0, 0, 0, 1);
     font-feature-settings: "cv01" 1;
     letter-spacing: 0.1em;
@@ -77,20 +77,19 @@ form {
 
 
 .name-display {
-    display: inline-block; /* margin を効かせるために必要 */
-    margin-left: 16px;    /* 日付の year-val と同じ数値にする */
+    display: inline-block;
+    margin-left: 16px;
     font-size: 13px;
 }
 .textarea-container {
-    padding-left: 8px; /* ここで調整 */
+    padding-left: 8px;
 }
 
-/* pタグ自体のマージンは0にする */
 .text-display-multiline {
     font-weight: 700;
     font-size: 12px;
     margin-left: 0;
-    display: block; /* 改行を維持 */
+    display: block;
 }
 
 .name-display, .date-display {
@@ -146,11 +145,10 @@ form {
     cursor: pointer;
 }
 
-/* 承認済みボタン（Figma準拠） */
 .approved-button {
     width: 88px;
     height: 32px;
-    background-color: rgba(105, 105, 105, 1); /* 承認済み用グレー */
+    background-color: rgba(105, 105, 105, 1);
     color: rgba(255, 255, 255, 1);
     border: none;
     border-radius: 4px;
@@ -158,8 +156,8 @@ form {
     font-size: 15px;
     cursor: default;
     display: flex;
-    justify-content: center; /* 左右中央 */
-    align-items: center;     /* 上下中央 */
-    line-height: 2;          /* 行の高さをリセットして中央に */
-    padding: 0;              /* 余計な内白を消す */
+    justify-content: center;
+    align-items: center;
+    line-height: 2;
+    padding: 0;
 }

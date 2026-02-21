@@ -4,9 +4,6 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/user/detail.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -15,8 +12,6 @@
             <div class="title-line"></div>
             <h1 class="detail-title">勤怠詳細</h1>
         </div>
-
-        {{-- 管理者用の更新ルートへ。変数名は user側と共通化して rests[] を使う --}}
         <form action="{{ route('admin.attendance.update', ['id' => $attendance->id]) }}" method="POST" novalidate>
             @csrf
             <div class="detail-table-wrapper">
@@ -25,7 +20,7 @@
                         <tr>
                             <th class="col-label">名前</th>
                             <td class="col-value">
-                                <span class="name-display">{{ str_replace(' ', '　', $attendance->user->name) }}</span>
+                                <span class="name-display">{{ $attendance->user->name }}</span>
                             </td>
                         </tr>
                         <tr>
@@ -61,7 +56,6 @@
                                 @endif
                             </td>
                         </tr>
-
                         @foreach ($attendance->rests as $index => $rest)
                             <tr>
                                 <th class="col-label">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
@@ -86,7 +80,6 @@
                                 </td>
                             </tr>
                         @endforeach
-
                         @if (!$hasPendingRequest)
                             @php $nextIndex = $attendance->rests->count(); @endphp
                             <tr>
@@ -102,7 +95,6 @@
                                 </td>
                             </tr>
                         @endif
-
                         <tr>
                             <th class="col-label">備考</th>
                             <td class="col-value">
@@ -118,7 +110,6 @@
                     </tbody>
                 </table>
             </div>
-
             <div class="error-messages">
                 @if ($errors->any())
                     <div class="error-container">
@@ -130,7 +121,6 @@
                     </div>
                 @endif
             </div>
-
             <div class="detail-actions">
                 @if ($hasPendingRequest)
                     <p class="pending-message">*承認待ちのため修正はできません。</p>

@@ -4,9 +4,6 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/admin/staff-log.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -15,14 +12,12 @@
             <div class="title-line"></div>
             <h1 class="monthly-title">{{ $user->name }}さんの勤怠</h1>
         </div>
-
         <div class="month-selector-bar">
             <a href="{{ route('staff.log', ['id' => $user->id, 'month' => $currentMonth->copy()->subMonth()->format('Y-m')]) }}"
                 class="month-nav prev">
                 <span class="nav-icon">@include('components.arrow-left-svg')</span>
                 <span class="nav-text">前月</span>
             </a>
-
             <div class="calendar-picker">
                 <form action="{{ route('staff.log', ['id' => $user->id]) }}" method="GET" id="month-form">
                     <label for="month-input" class="calendar-label">
@@ -33,14 +28,12 @@
                         onchange="this.form.submit()">
                 </form>
             </div>
-
             <a href="{{ route('staff.log', ['id' => $user->id, 'month' => $currentMonth->copy()->addMonth()->format('Y-m')]) }}"
                 class="month-nav next">
                 <span class="nav-text">翌月</span>
                 <span class="nav-icon">@include('components.arrow-right-svg')</span>
             </a>
         </div>
-
         <div class="attendance-table-wrapper">
             <table class="attendance-table">
                 <thead>
@@ -70,16 +63,13 @@
                             <td class="col-end">
                                 {{ $attendance && $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}
                             <td class="col-rest">
-                                {{-- モデルのアクセサを利用 --}}
                                 {{ $attendance->total_rest_time ?? '' }}
                             </td>
                             <td class="col-total">
-                                {{-- モデルのアクセサを利用 --}}
                                 {{ $attendance->total_time ?? '' }}
                             </td>
                             <td class="col-detail">
                                 @if ($attendance)
-                                    {{-- ルート定義に合わせて id を渡す --}}
                                     <a href="{{ route('admin.attendance.detail', ['id' => $attendance->id]) }}"
                                         class="detail-link">詳細</a>
                                 @else
@@ -91,7 +81,6 @@
                 </tbody>
             </table>
         </div>
-
         <div class="csv-export-container">
             <a href="{{ route('staff.log.csv', ['id' => $user->id, 'month' => $currentMonth->format('Y-m')]) }}"
                 class="csv-button">
@@ -99,7 +88,6 @@
             </a>
         </div>
     </div>
-    {{-- JS部分は変更なしのため維持 --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const monthInput = document.getElementById('month-input');

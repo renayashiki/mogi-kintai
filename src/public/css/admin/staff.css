@@ -1,4 +1,3 @@
-/* --- レイアウト基本 --- */
 .staff-container {
     padding: 80px 0;
     background-color: rgba(240, 239, 242, 1);
@@ -29,7 +28,6 @@
     margin: 0;
 }
 
-/* --- テーブルエリア --- */
 .table-wrapper {
     width: 700px;
     background: rgba(255, 255, 255, 1);
@@ -44,7 +42,6 @@
     table-layout: fixed;
 }
 
-/* ヘッダーのスタイル */
 .staff-table thead th {
     height: 34px;
     vertical-align: middle;
@@ -55,7 +52,6 @@
     letter-spacing: 0.15em;
 }
 
-/* ボディのスタイル */
 .staff-table tbody td {
     height: 34px;
     vertical-align: middle;
@@ -67,7 +63,6 @@
     letter-spacing: 0.1em;
 }
 
-/* --- カラム幅の設定 --- */
 .col-name {
     width: 30%;
 }
@@ -81,7 +76,6 @@
     width: 25%;
 }
 
-/* --- th の位置合わせ --- */
 .staff-table thead th.col-name {
     padding-left: 130px;
     text-align: center;
@@ -89,7 +83,7 @@
 
 .staff-table thead th.col-email {
     text-align: center;
-    padding-left: 10px; /* td と同期 */
+    padding-left: 10px;
 }
 
 .staff-table thead th.col-detail {
@@ -97,7 +91,6 @@
     padding-right: 50px;
 }
 
-/* --- td の位置設定（元の理想値を維持） --- */
 .staff-table tbody td.col-name {
     padding-left: 60px;
     text-align: center;

@@ -4,15 +4,11 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/auth/login.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 @endsection
 
 @section('content')
     <div class="auth-content">
         <h1 class="content-title">ログイン</h1>
-
         <div class="login-error-container">
             @error('login_error')
                 <p class="error-message">{{ $message }}</p>

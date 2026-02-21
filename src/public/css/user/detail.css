@@ -86,13 +86,14 @@ color: rgba(0, 0, 0, 1);
 }
 
 .name-display{
-margin-left: 10px;
+margin-left: 15px;
+word-spacing: 1em;
 }
 
 
 .year-val {
-margin-right: 125px;
-margin-left: 10px;
+margin-right: 120px;
+margin-left: 15px;
 }
 
 

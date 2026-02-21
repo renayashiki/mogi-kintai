@@ -4,9 +4,6 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/auth/register.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -19,32 +16,28 @@
                 <input type="text" id="name" name="name" class="form-input" value="{{ old('name') }}" required
                     autofocus>
                 @error('name')
-                    <div class="error-message">
-                        {{ $message }}</div>
+                    <p class="error-message">{{ $message }}</p>
                 @enderror
             </div>
             <div class="form-group">
                 <label for="email" class="form-label">メールアドレス</label>
                 <input type="email" id="email" name="email" class="form-input" value="{{ old('email') }}" required>
                 @error('email')
-                    <div class="error-message">
-                        {{ $message }}</div>
+                    <p class="error-message">{{ $message }}</p>
                 @enderror
             </div>
             <div class="form-group">
                 <label for="password" class="form-label">パスワード</label>
                 <input type="password" id="password" name="password" class="form-input" required>
                 @error('password')
-                    <div class="error-message">
-                        {{ $message }}</div>
+                    <p class="error-message">{{ $message }}</p>
                 @enderror
             </div>
             <div class="form-group">
                 <label for="password_confirmation" class="form-label">パスワード確認</label>
                 <input type="password" id="password_confirmation" name="password_confirmation" class="form-input" required>
                 @error('password_confirmation')
-                    <div class="error-message">
-                        {{ $message }}</div>
+                    <p class="error-message">{{ $message }}</p>
                 @enderror
             </div>
             <button type="submit" class="submit-btn">登録する</button>

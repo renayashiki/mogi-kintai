@@ -1,4 +1,3 @@
-/* --- レイアウト基本 --- */
 .monthly-container {
     padding: 40px 0 0;
     background-color: rgba(240, 239, 242, 1);
@@ -28,7 +27,6 @@
     margin: 0;
 }
 
-/* 月選択バー */
 .month-selector-bar {
     width: 700px;
     height: 42px;
@@ -80,7 +78,6 @@
     pointer-events: none;
 }
 
-/* テーブルエリア */
 .attendance-table-wrapper {
     width: 700px;
     background: rgba(255, 255, 255, 1);
@@ -131,14 +128,13 @@
 
 th.col-date {
     text-align: left;
-    padding-left: 50px; /* ここで「日付」の文字位置だけを微調整 */
+    padding-left: 50px;
 }
-
 
 .col-detail {
     width: 16%;
-    text-align: right;    /* 詳細ボタンを右に寄せる */
-    padding-right: 30px; /* 右側に余白を設ける */
+    text-align: right;
+    padding-right: 30px;
 }
 
 .detail-link {
@@ -146,7 +142,6 @@ th.col-date {
     text-decoration: none;
 }
 
-/* CSVボタン */
 .csv-export-container {
     width: 700px;
     display: flex;
@@ -173,7 +168,6 @@ th.col-date {
     letter-spacing: 0.15em;
 }
 
-/* --- ② レスポンシブ対応 --- */
 @media screen and (max-width: 700px) {
     .monthly-header,
     .month-selector-bar,
@@ -181,7 +175,10 @@ th.col-date {
     .csv-export-container {
         width: 95%;
     }
-    
-    .col-date { padding-left: 15px; }
-    .col-detail { padding-right: 15px; }
+    .col-date {
+        padding-left: 15px;
+    }
+    .col-detail {
+        padding-right: 15px;
+    }
 }

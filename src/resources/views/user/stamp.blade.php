@@ -3,14 +3,12 @@
 @section('title', '打刻')
 
 @section('styles')
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/user/stamp.css') }}">
 @endsection
 
 @section('content')
     <div class="stamp-container">
+        <h1 class="visually-hidden">打刻画面</h1>
         <div class="status-badge">
             @if ($attendanceStatus === 'outside')
                 <span class="status-text">勤務外</span>
@@ -22,8 +20,8 @@
                 <span class="status-text">退勤済</span>
             @endif
         </div>
-        <h1 class="stamp-date" id="current-date">
-            {{ now()->format('Y年n月j日') }}({{ ['日', '月', '火', '水', '木', '金', '土'][now()->dayOfWeek] }})</h1>
+        <p class="stamp-date" id="current-date">
+            {{ now()->format('Y年n月j日') }}({{ ['日', '月', '火', '水', '木', '金', '土'][now()->dayOfWeek] }})</p>
         <div class="stamp-time" id="current-time">{{ now()->format('H:i') }}</div>
         <div class="stamp-actions">
             @if ($attendanceStatus === 'outside' && !$hasClockIn)

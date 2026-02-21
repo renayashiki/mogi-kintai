@@ -1,12 +1,9 @@
-@extends('layouts.admin') {{-- 管理者用レイアウトに変更 --}}
+@extends('layouts.admin')
 
 @section('title', '申請一覧')
 
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('css/admin/requests.css') }}"> {{-- CSSは使い回し --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/admin/requests.css') }}">
 @endsection
 
 @section('content')
@@ -15,11 +12,8 @@
             <div class="title-line"></div>
             <h1 class="request-title">申請一覧</h1>
         </div>
-
-        {{-- ステータス切替バー --}}
         <div class="status-tab-wrapper">
             <div class="status-tabs">
-                {{-- 管理者用のルート名に変更 --}}
                 <a href="{{ route('attendance.request.list', ['status' => 'pending']) }}"
                     class="tab-item {{ $status === 'pending' ? 'is-active' : '' }}">承認待ち</a>
                 <a href="{{ route('attendance.request.list', ['status' => 'approved']) }}"
@@ -27,7 +21,6 @@
             </div>
             <div class="status-line"></div>
         </div>
-
         <div class="table-wrapper">
             <table class="request-table">
                 <thead>
@@ -49,7 +42,6 @@
                             <td class="col-reason">{{ Str::limit($correctionRequest->comment, 20) }}</td>
                             <td class="col-app-date">{{ $correctionRequest->application_date->format('Y/m/d') }}</td>
                             <td class="col-detail">
-                                {{-- 管理者用の詳細画面（修正申請承認画面）へ --}}
                                 <a href="{{ route('admin.request.approve', ['attendance_correct_request_id' => $correctionRequest->id]) }}"
                                     class="detail-link">詳細</a>
                             </td>

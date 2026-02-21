@@ -3,9 +3,6 @@
 @section('title', '勤怠詳細')
 
 @section('styles')
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/user/detail.css') }}">
 @endsection
 
@@ -23,7 +20,7 @@
                         <tr>
                             <th class="col-label">名前</th>
                             <td class="col-value">
-                                <span class="name-display">{{ str_replace(' ', '　', $attendance->user->name) }}</span>
+                                <span class="name-display">{{ $attendance->user->name }}</span>
                             </td>
                         </tr>
                         <tr>

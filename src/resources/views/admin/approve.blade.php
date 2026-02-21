@@ -4,9 +4,6 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/admin/approve.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -15,7 +12,6 @@
             <div class="title-line"></div>
             <h1 class="detail-title">勤怠詳細</h1>
         </div>
-
         <form action="{{ route('admin.attendance.approve', ['attendance_correct_request_id' => $correctionRequest->id]) }}"
             method="POST">
             @csrf
@@ -42,17 +38,13 @@
                             <th class="col-label">出勤・退勤</th>
                             <td class="col-value">
                                 <div class="time-group">
-                                    {{-- [cite: 2026-02-04] 表示はシンプルに(秒切り捨て) --}}
                                     <span class="text-display">{{ $correctionRequest->new_clock_in->format('H:i') }}</span>
                                     <span class="range-tilde">〜</span>
                                     <span class="text-display">{{ $correctionRequest->new_clock_out->format('H:i') }}</span>
                                 </div>
                             </td>
                         </tr>
-
-                        {{-- 休憩リクエストのループ表示 --}}
                         @php
-                            // 表示用に全ての休憩リクエストを配列にまとめます
                             $requestedRests = [];
                             if ($correctionRequest->new_rest1_in) {
                                 $requestedRests[] = [
@@ -77,7 +69,6 @@
                                 ];
                             }
                         @endphp
-
                         @foreach ($requestedRests as $index => $rest)
                             <tr>
                                 <th class="col-label">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
@@ -92,7 +83,6 @@
                                 </td>
                             </tr>
                         @endforeach
-
                         <tr>
                             <th class="col-label">備考</th>
                             <td class="col-value col-comment">
@@ -104,12 +94,10 @@
                     </tbody>
                 </table>
             </div>
-
             <div class="detail-actions">
                 @if ($correctionRequest->approval_status === '承認待ち')
                     <button type="submit" class="submit-button">承認</button>
                 @else
-                    {{-- ステータスが「承認済み」の場合、またはそれ以外はこちらが表示される --}}
                     <button type="button" class="approved-button" disabled>承認済み</button>
                 @endif
             </div>
