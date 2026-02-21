@@ -3,10 +3,10 @@
 @section('title', '勤怠詳細')
 
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('css/user/detail.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/user/detail.css') }}">
 @endsection
 
 @section('content')
@@ -39,7 +39,6 @@
                             <th class="col-label">出勤・退勤</th>
                             <td class="col-value">
                                 @if ($hasPendingRequest)
-                                    {{-- 承認待ちはテキストのみ --}}
                                     <div class="time-group">
                                         <span class="text-display">{{ $attendance->clock_in->format('H:i') }}</span>
                                         <span class="range-tilde">〜</span>
@@ -48,7 +47,6 @@
                                     </div>
                                 @else
                                     <div class="time-group">
-                                        {{-- 通常時は入力枠 --}}
                                         <input type="text" name="clock_in"
                                             value="{{ old('clock_in', $attendance->clock_in->format('H:i')) }}"
                                             class="input-field">
@@ -84,8 +82,6 @@
                                 </td>
                             </tr>
                         @endforeach
-
-                        {{-- 仕様要件：追加で１つ分の入力フィールド --}}
                         @if (!$hasPendingRequest)
                             @php $nextIndex = $attendance->rests->count(); @endphp
                             <tr>
@@ -104,10 +100,8 @@
                         <tr>
                             <th class="col-label">備考</th>
                             <td class="col-value">
-                                {{-- 幅を休憩の開始〜終了に合わせるためのラッパー --}}
                                 <div class="textarea-container">
                                     @if ($hasPendingRequest)
-                                        {{-- 承認待ちはテキストとして表示（枠なし） --}}
                                         <p class="text-display-multiline">{{ $attendance->comment }}</p>
                                     @else
                                         <textarea name="comment" class="textarea-field">{{ old('comment', $attendance->comment) }}</textarea>
@@ -129,7 +123,6 @@
                     </div>
                 @endif
             </div>
-            {{-- ボタン・メッセージは枠(wrapper)の外へ --}}
             <div class="detail-actions">
                 @if ($hasPendingRequest)
                     <p class="pending-message">*承認待ちのため修正はできません。</p>

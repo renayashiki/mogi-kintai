@@ -27,12 +27,12 @@ class AttendanceCorrect extends Model
     protected $casts = [
         'application_date' => 'date',
         'new_date' => 'date',
-        'new_clock_in' => 'datetime:H:i',
-        'new_clock_out' => 'datetime:H:i',
-        'new_rest1_in' => 'datetime:H:i',
-        'new_rest1_out' => 'datetime:H:i',
-        'new_rest2_in' => 'datetime:H:i',
-        'new_rest2_out' => 'datetime:H:i',
+        'new_clock_in' => 'datetime',
+        'new_clock_out' => 'datetime',
+        'new_rest1_in' => 'datetime',
+        'new_rest1_out' => 'datetime',
+        'new_rest2_in' => 'datetime',
+        'new_rest2_out' => 'datetime',
     ];
 
     public function user()

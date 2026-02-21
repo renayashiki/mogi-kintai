@@ -17,8 +17,8 @@ class AttendanceCorrectRest extends Model
 
 
     protected $casts = [
-        'new_rest_in' => 'datetime:H:i',
-        'new_rest_out' => 'datetime:H:i',
+        'new_rest_in' => 'datetime',
+        'new_rest_out' => 'datetime',
     ];
 
     public function attendanceCorrect()

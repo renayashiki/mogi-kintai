@@ -35,26 +35,26 @@ class EditController extends Controller
 
             $newRests = collect();
 
+            // 共通の休憩作成クロージャ：(object)ではなく、本物の Rest モデルを生成する
+            // こうすることで getRestSeconds() の計算ロジックが正しく動く
+            $makeRest = function ($in, $out) {
+                return new \App\Models\Rest([
+                    'rest_in'  => \Carbon\Carbon::parse($in)->second(0),
+                    'rest_out' => \Carbon\Carbon::parse($out)->second(0)
+                ]);
+            };
+
             // 休憩1
             if ($pendingRequest->new_rest1_in) {
-                $newRests->push((object)[
-                    'rest_in' => $pendingRequest->new_rest1_in,
-                    'rest_out' => $pendingRequest->new_rest1_out
-                ]);
+                $newRests->push($makeRest($pendingRequest->new_rest1_in, $pendingRequest->new_rest1_out));
             }
             // 休憩2
             if ($pendingRequest->new_rest2_in) {
-                $newRests->push((object)[
-                    'rest_in' => $pendingRequest->new_rest2_in,
-                    'rest_out' => $pendingRequest->new_rest2_out
-                ]);
+                $newRests->push($makeRest($pendingRequest->new_rest2_in, $pendingRequest->new_rest2_out));
             }
             // 休憩3以降
             foreach ($pendingRequest->attendanceCorrectRests as $extra) {
-                $newRests->push((object)[
-                    'rest_in' => $extra->new_rest_in,
-                    'rest_out' => $extra->new_rest_out
-                ]);
+                $newRests->push($makeRest($extra->new_rest_in, $extra->new_rest_out));
             }
 
             $attendance->setRelation('rests', $newRests);
@@ -76,10 +76,10 @@ class EditController extends Controller
             $attendance->rests()->delete();
             if ($request->rests) {
                 foreach ($request->rests as $restData) {
-                    if (!empty($restData['in'])) {
+                    if (!empty($restData['in']) && !empty($restData['out'])) {
                         $attendance->rests()->create([
-                            'rest_in'  => \Carbon\Carbon::parse($targetDate . ' ' . $restData['in']),
-                            'rest_out' => !empty($restData['out']) ? \Carbon\Carbon::parse($targetDate . ' ' . $restData['out']) : null,
+                            'rest_in'  => Carbon::parse($targetDate . ' ' . $restData['in'])->second(0),
+                            'rest_out' => Carbon::parse($targetDate . ' ' . $restData['out'])->second(0),
                         ]);
                     }
                 }
@@ -87,8 +87,8 @@ class EditController extends Controller
 
             // 2. 勤怠本体の更新
             // まず時間をセット（計算のために一旦モデルの状態を更新するが、まだ save はしない）
-            $attendance->clock_in = \Carbon\Carbon::parse($targetDate . ' ' . $request->clock_in);
-            $attendance->clock_out = $request->clock_out ? \Carbon\Carbon::parse($targetDate . ' ' . $request->clock_out) : null;
+            $attendance->clock_in = Carbon::parse($targetDate . ' ' . $request->clock_in)->second(0);
+            $attendance->clock_out = $request->clock_out ? \Carbon\Carbon::parse($targetDate . ' ' . $request->clock_out)->second(0) : null;
             $attendance->comment = $request->comment;
 
             // 3. 精密計算
@@ -98,8 +98,8 @@ class EditController extends Controller
 
             // 4. 保存実行（formatSecondsForDb で秒付き刻印）
             $attendance->update([
-                'clock_in'  => $attendance->clock_in,
-                'clock_out' => $attendance->clock_out,
+                'clock_in'  => $attendance->clock_in->second(0),
+                'clock_out' => optional($attendance->clock_out)->second(0),
                 'comment'   => $attendance->comment,
                 'total_rest_time' => $attendance->formatSecondsForDb($totalRestSeconds),
                 'total_time'      => $attendance->formatSecondsForDb($totalWorkSeconds),

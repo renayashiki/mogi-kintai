@@ -64,7 +64,7 @@ class StampController extends Controller
                 AttendanceRecord::create([
                     'user_id' => $user->id,
                     'date' => $today,
-                    'clock_in' => $now,
+                    'clock_in' => $now->format('Y-m-d H:i:00'),
                 ]);
                 $user->update(['attendance_status' => 'working']);
                 return redirect()->route('attendance.index');
@@ -73,7 +73,7 @@ class StampController extends Controller
                 $record = AttendanceRecord::where('user_id', $user->id)->whereNull('clock_out')->latest()->first();
                 Rest::create([
                     'attendance_record_id' => $record->id,
-                    'rest_in' => $now,
+                    'rest_in' => $now->format('Y-m-d H:i:00'),
                 ]);
                 $user->update(['attendance_status' => 'resting']);
                 return redirect()->route('attendance.index');
@@ -83,7 +83,7 @@ class StampController extends Controller
                 // まだ終了していない最新の休憩を取得して更新
                 $rest = Rest::where('attendance_record_id', $record->id)->whereNull('rest_out')->first();
                 if ($rest) {
-                    $rest->update(['rest_out' => $now]);
+                    $rest->update(['rest_out' => $now->format('Y-m-d H:i:00')]);
                 }
                 $user->update(['attendance_status' => 'working']); // ステータスを出勤中に戻す
                 return redirect()->route('attendance.index');
@@ -110,9 +110,9 @@ class StampController extends Controller
                 }
 
                 // ③【ここから重要：原材料モードへの切り替え】
+                $nowFixed = $now->copy()->second(0);
                 $record->load('rests'); // 休憩をロード
-                $record->clock_out = $now; // メモリ上で退勤時刻をセット（アクセサ計算用）
-
+                $record->clock_out = $nowFixed; // メモリ上でも秒なし時刻をセット
                 // アクセサを呼ぶのではなく、計算メソッドを直接呼び、DB用フォーマットに通す
                 $restSec = $record->getRestSeconds();
                 $workSec = $record->getWorkSeconds();
@@ -122,7 +122,7 @@ class StampController extends Controller
 
                 // ④ 保存（ここを修正）
                 $record->update([
-                    'clock_out' => $now,
+                    'clock_out' => $nowFixed->format('Y-m-d H:i:00'),
                     'total_rest_time' => $totalRestDb, // 秒あり
                     'total_time' => $totalWorkDb,      // 秒あり
                 ]);

@@ -39,6 +39,7 @@ class AttendanceRecord extends Model
      * 新方針：精密計算メソッド（心臓部）
      * ------------------------------------------------------------------------- */
 
+
     /**
      * 【計算ロジック】実働合計時間を秒単位で算出する
      */
@@ -48,8 +49,9 @@ class AttendanceRecord extends Model
             return 0;
         }
 
-        $start = \Carbon\Carbon::parse($this->clock_in);
-        $end = \Carbon\Carbon::parse($this->clock_out);
+        // copy() を使って、元の clock_in/out のデータを汚さないようにする
+        $start = $this->clock_in->copy()->second(0);
+        $end = $this->clock_out->copy()->second(0);
         $diffSeconds = $end->diffInSeconds($start);
 
         $restSeconds = $this->getRestSeconds();
@@ -65,8 +67,9 @@ class AttendanceRecord extends Model
         $totalSeconds = 0;
         foreach ($this->rests as $rest) {
             if ($rest->rest_in && $rest->rest_out) {
-                $in = \Carbon\Carbon::parse($rest->rest_in);
-                $out = \Carbon\Carbon::parse($rest->rest_out);
+                // ここも copy() を使って元の rest_in/out を守る
+                $in = \Carbon\Carbon::parse($rest->rest_in)->copy()->second(0);
+                $out = \Carbon\Carbon::parse($rest->rest_out)->copy()->second(0);
                 $totalSeconds += $out->diffInSeconds($in);
             }
         }

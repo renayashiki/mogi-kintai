@@ -32,15 +32,15 @@ class WorkDetailController extends Controller
 
         // 3. 承認待ちがある場合、表示データを「申請内容」で差し替え
         if ($hasPendingRequest) {
-            $attendance->clock_in = Carbon::parse($pendingRequest->new_clock_in);
-            $attendance->clock_out = $pendingRequest->new_clock_out ? Carbon::parse($pendingRequest->new_clock_out) : null;
+            $attendance->clock_in = Carbon::parse($pendingRequest->new_clock_in)->second(0);
+            $attendance->clock_out = $pendingRequest->new_clock_out ? Carbon::parse($pendingRequest->new_clock_out)->second(0) : null;
             $attendance->comment = $pendingRequest->comment;
 
             $newRests = collect();
 
             // 共通の休憩作成クロージャ
             $makeRest = function ($in, $out) {
-                return new \App\Models\Rest(['rest_in' => $in, 'rest_out' => $out]);
+                return new \App\Models\Rest(['rest_in' => \Carbon\Carbon::parse($in)->second(0), 'rest_out' => \Carbon\Carbon::parse($out)->second(0)]);
             };
 
             if ($pendingRequest->new_rest1_in) {
@@ -70,12 +70,12 @@ class WorkDetailController extends Controller
             'attendance_record_id' => $id,
             'user_id'              => Auth::id(),
             'new_date'             => $attendance->date,
-            'new_clock_in'         => $request->clock_in,
-            'new_clock_out'        => $request->clock_out,
-            'new_rest1_in'         => $request->rests[0]['in'] ?? null,
-            'new_rest1_out'        => $request->rests[0]['out'] ?? null,
-            'new_rest2_in'         => $request->rests[1]['in'] ?? null,
-            'new_rest2_out'        => $request->rests[1]['out'] ?? null,
+            'new_clock_in'         => $request->clock_in . ':00',
+            'new_clock_out'        => $request->clock_out . ':00',
+            'new_rest1_in'   => data_get($request->rests, '0.in') ? data_get($request->rests, '0.in') . ':00' : null,
+            'new_rest1_out'  => data_get($request->rests, '0.out') ? data_get($request->rests, '0.out') . ':00' : null,
+            'new_rest2_in'   => data_get($request->rests, '1.in') ? data_get($request->rests, '1.in') . ':00' : null,
+            'new_rest2_out'  => data_get($request->rests, '1.out') ? data_get($request->rests, '1.out') . ':00' : null,
             'comment'              => $request->comment,
             'approval_status'      => '承認待ち',
             'application_date'     => now(),
@@ -83,12 +83,14 @@ class WorkDetailController extends Controller
 
         // 3回目以降の休憩
         if (isset($request->rests) && count($request->rests) > 2) {
+            // 0番目と1番目は上の create で保存済みなので、2番目以降を切り出す
             $extraRests = array_slice($request->rests, 2);
             foreach ($extraRests as $rest) {
+                // 入力がある場合のみ保存
                 if (!empty($rest['in'])) {
                     $correctRequest->attendanceCorrectRests()->create([
-                        'new_rest_in'  => $rest['in'],
-                        'new_rest_out' => $rest['out'],
+                        'new_rest_in'  => $rest['in'] . ':00',
+                        'new_rest_out' => $rest['out'] . ':00',
                     ]);
                 }
             }

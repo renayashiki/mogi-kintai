@@ -124,11 +124,11 @@
 }
 
 .attendance-table thead th {
-    border-bottom: 3px solid #e1e1e1;
+    border-bottom: 3px solid rgba(225, 225, 225, 1);
 }
 
 .attendance-table tbody td {
-    border-bottom: 2px solid #e1e1e1;
+    border-bottom: 2px solid rgba(225, 225, 225, 1);
 }
 
 .attendance-table thead th.col-date {
@@ -153,6 +153,7 @@
 .attendance-table .col-start, .attendance-table .col-end, .attendance-table .col-rest, .attendance-table .col-total {
     letter-spacing: 0.1em;
     font-variant-numeric: normal;
+    font-family: 'Inter', sans-serif;
 }
 
 .detail-link {

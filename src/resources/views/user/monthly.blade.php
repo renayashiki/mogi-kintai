@@ -3,10 +3,10 @@
 @section('title', '勤怠一覧')
 
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('css/user/monthly.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/user/monthly.css') }}">
 @endsection
 
 @section('content')
@@ -56,20 +56,20 @@
                     @for ($i = 1; $i <= $daysInMonth; $i++)
                         @php
                             $date = $currentMonth->copy()->day($i);
-                            $dateStr = $date->format('Y-m-d');
+                            $dateStr = $date->toDateString();
                             $dayName = ['日', '月', '火', '水', '木', '金', '土'][$date->dayOfWeek];
                             $attendance = $attendances->get($dateStr);
                         @endphp
                         <tr>
                             <td class="col-date">{{ $date->format('m/d') }}({{ $dayName }})</td>
                             <td class="col-start">
-                                {{ $attendance ? $attendance->clock_in->format('H:i') : '' }}
+                                {{ $attendance ? $attendance->clock_in->second(0)->format('H:i') : '' }}
                             </td>
                             <td class="col-end">
-                                {{ $attendance && $attendance->clock_out ? $attendance->clock_out->format('H:i') : '' }}
+                                {{ $attendance && $attendance->clock_out ? $attendance->clock_out->second(0)->format('H:i') : '' }}
                             </td>
                             <td class="col-rest">
-                                {{ $attendance && $attendance->clock_out ? $attendance->total_rest_time : '' }}
+                                {{ $attendance ? $attendance->total_rest_time : '' }}
                             </td>
                             <td class="col-total">
                                 {{ $attendance && $attendance->clock_out ? $attendance->total_time : '' }}

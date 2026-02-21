@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AttendanceCorrect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ApprovalController extends Controller
 {
@@ -79,8 +80,8 @@ class ApprovalController extends Controller
             // ③ 本番テーブルに保存（秒付きフォーマットで統一）
             $attendance->update([
                 'date'            => $correctionRequest->new_date,
-                'clock_in'        => $correctionRequest->new_clock_in,
-                'clock_out'       => $correctionRequest->new_clock_out,
+                'clock_in' => Carbon::parse($correctionRequest->new_clock_in)->second(0)->format('H:i:00'),
+                'clock_out' => $correctionRequest->new_clock_out ? Carbon::parse($correctionRequest->new_clock_out)->second(0)->format('H:i:00') : null,
                 'total_rest_time' => $attendance->formatSecondsForDb($restSec),
                 'total_time'      => $attendance->formatSecondsForDb($workSec),
                 'comment'         => $correctionRequest->comment,

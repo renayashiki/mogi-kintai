@@ -16,8 +16,8 @@ class Rest extends Model
     ];
 
     protected $casts = [
-        'rest_in' => 'datetime:H:i',
-        'rest_out' => 'datetime:H:i',
+        'rest_in' => 'datetime',
+        'rest_out' => 'datetime',
     ];
 
     public function attendanceRecord()
