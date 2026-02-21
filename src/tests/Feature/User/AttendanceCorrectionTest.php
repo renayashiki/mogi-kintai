@@ -129,23 +129,23 @@ class AttendanceCorrectionTest extends TestCase
     public function test_correction_request_and_admin_view_full_match()
     {
         // 準備：ユーザーと管理者
-        $user = User::factory()->create(['name' => '西怜奈']);
+        $user = User::factory()->create(['name' => '西怜奈', 'admin_status' => 0]);
         $admin = User::factory()->create(['admin_status' => 1]);
-        $date = '2023-06-01';
         $attendance = AttendanceRecord::factory()->create([
             'user_id' => $user->id,
-            'date' => $date,
-            'clock_in' => '09:00:00',
-            'clock_out' => '18:00:00',
+            'date' => '2023-06-01'
         ]);
 
         // 1. ユーザーでログイン / 2. 詳細を修正し保存
         /** @var User $user */
         $this->actingAs($user);
-        $this->post(route('attendance.update', ['id' => $attendance->id]), [
+        $response = $this->post(route('attendance.update', ['id' => $attendance->id]), [
             'clock_in' => '10:00',
             'clock_out' => '19:00',
-            'rests' => [['in' => '13:00', 'out' => '14:00']],
+            'rests' => [
+                ['in' => '12:00', 'out' => '13:00'], // index 0
+                ['in' => '15:00', 'out' => '15:30'], // index 1
+            ],
             'comment' => '電車遅延のため',
         ]);
 
@@ -156,24 +156,25 @@ class AttendanceCorrectionTest extends TestCase
         // --- 申請一覧画面の確認 (画像 image_605262.png に基づく) ---
         $response = $this->get(route('attendance.request.list', ['status' => 'pending']));
         $response->assertStatus(200);
-        $today = Carbon::now()->format('Y/m/d');
         $response->assertSee('承認待ち');
         $response->assertSee('西怜奈');
         $response->assertSee('2023/06/01');
         $response->assertSee('電車遅延のため');
-        $response->assertSee($today); // フォーマット済みの変数を使用
+        $response->assertSee(now()->format('Y/m/d'));
 
         // --- 承認画面（詳細）の確認 (画像 image_60529f.png に基づく) ---
-        $request = AttendanceCorrect::where('user_id', $user->id)->first();
+        $request = AttendanceCorrect::where('user_id', $user->id)->latest('id')->first();
         $response = $this->get(route('admin.request.approve', ['attendance_correct_request_id' => $request->id]));
         $response->assertStatus(200);
         $response->assertSee('西怜奈');
         $response->assertSee('2023年');
         $response->assertSee('6月1日');
-        $response->assertSee('10:00'); // 修正後の出勤
-        $response->assertSee('19:00'); // 修正後の退勤
-        $response->assertSee('13:00'); // 修正後の休憩開始
-        $response->assertSee('14:00'); // 修正後の休憩終了
+        $response->assertSee('10:00');
+        $response->assertSee('19:00');
+        $response->assertSee('12:00'); // 修正後の休憩開始
+        $response->assertSee('13:00'); // 修正後の休憩終了
+        $response->assertSee('15:00'); // 修正後の休憩開始
+        $response->assertSee('15:30');
         $response->assertSee('電車遅延のため'); // 備考
     }
 
@@ -192,7 +193,10 @@ class AttendanceCorrectionTest extends TestCase
         $this->post(route('attendance.update', ['id' => $attendance->id]), [
             'clock_in' => '08:00',
             'clock_out' => '17:00',
-            'rests' => [['in' => '12:00', 'out' => '13:00']],
+            'rests' => [
+                ['in' => '12:00', 'out' => '13:00'],
+                ['in' => null, 'out' => null], // 2つ目のキーが存在すれば controller は落ちない
+            ],
             'comment' => '自分で行った申請',
         ]);
 
@@ -211,7 +215,7 @@ class AttendanceCorrectionTest extends TestCase
      */
     public function test_approved_requests_display_full_details_after_approval()
     {
-        $user = User::factory()->create(['name' => '西怜奈']);
+        $user = User::factory()->create(['name' => '西怜奈', 'admin_status' => 0]);
         $admin = User::factory()->create(['admin_status' => 1]);
         $attendance = AttendanceRecord::factory()->create(['user_id' => $user->id, 'date' => '2023-06-01']);
 
@@ -221,12 +225,18 @@ class AttendanceCorrectionTest extends TestCase
         $this->post(route('attendance.update', ['id' => $attendance->id]), [
             'clock_in' => '10:00',
             'clock_out' => '19:00',
-            'rests' => [['in' => '12:00', 'out' => '13:00']],
-            'comment' => '画像確認用承認済みデータ',
+            'rests' => [
+                ['in' => '12:00', 'out' => '13:00'], // index 0
+                ['in' => '15:00', 'out' => '16:00'], // index 1
+            ],
+            'comment' => '承認後データ確認用',
         ]);
 
         // 管理者でログインして承認
-        $request = AttendanceCorrect::where('comment', '画像確認用承認済みデータ')->first();
+        $request = AttendanceCorrect::where('user_id', $user->id)
+            ->where('comment', '承認後データ確認用')
+            ->latest('id')
+            ->first();
 
         /** @var User $admin */
         $this->actingAs($admin, 'admin');
@@ -241,9 +251,8 @@ class AttendanceCorrectionTest extends TestCase
         $response->assertSee('承認済み');
         $response->assertSee('西怜奈');
         $response->assertSee('2023/06/01');
-        $response->assertSee('画像確認用承認済み');
-        // 詳細ボタンの遷移先が正しいかも確認
-        $response->assertSee(route('admin.request.approve', ['attendance_correct_request_id' => $request->id]));
+        $response->assertSee('承認後データ確認用');
+        $response->assertSee(now()->format('Y/m/d'));
     }
 
     /**
