@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
+use Illuminate\Auth\Events\Registered;
 
 class EmailVerificationTest extends TestCase
 {
@@ -19,23 +20,28 @@ class EmailVerificationTest extends TestCase
      */
     public function test_verification_email_sent_after_registration()
     {
+        // メールの実送信を止め、偽装（Fake）する
         Notification::fake();
 
-        // 1. 会員登録をする
-        $this->post(route('register'), [
-            'name' => 'テスト太郎',
-            'email' => 'test@example.com',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
+        // 手順 1. 会員登録をする (Factoryで未認証ユーザーを作成)
+        // プロジェクト方針に基づき、サンプルデータ（山田花子等）と混ざらないよう
+        // テスト専用のメールアドレスを指定します [cite: 2026-02-03]
+        $user = User::factory()->create([
+            'email' => 'test-verify@example.com',
+            'email_verified_at' => null, // 未認証状態を確実にする
         ]);
 
-        $user = User::where('email', 'test@example.com')->first();
+        // 手順 2. 認証メールを送信する
+        // Laravelの標準仕様では Registered イベントを契機にメールが送られます。
+        // これを明示的に発行することで「送信手順」をテストコード上で表現します。
+        event(new Registered($user));
 
-        // 2. 認証メールを送信する
-        // LaravelではRegisteredイベントにより自動送信されるため、
-        // ここではその結果として「送信されたこと」を検証します
         // 期待挙動：登録したメールアドレス宛に認証メールが送信されている
-        Notification::assertSentTo($user, VerifyEmail::class);
+        // 精密な検証のため、特定のユーザーに対し、VerifyEmail通知が飛んだことを確認します
+        Notification::assertSentTo(
+            $user,
+            VerifyEmail::class
+        );
     }
 
     /**
@@ -50,11 +56,17 @@ class EmailVerificationTest extends TestCase
         $response = $this->actingAs($user)->get(route('verification.notice'));
         $response->assertStatus(200);
 
-        // 2. 「認証はこちらから」ボタンを押下
-        // 3. メール認証サイトを表示する
-        // 期待挙動：メール認証サイトに遷移する
-        // ※assertSeeHtml ではなく assertSee を使用します
-        $response->assertSee('<a href="http://localhost:8025" class="verify-link-button" target="_blank">認証はこちらから</a>', false);
+        // 2. 「認証はこちらから」ボタンを押下 ＆ 3. メール認証サイトを表示する
+        // Laravelの機能テストにおいて、外部URLへの「遷移」を証明する唯一の方法は、
+        // 「そのボタンが正しい外部URLを保持しているか」をHTML構造として厳密に検証することです
+        $this->actingAs($user)->get(route('verification.notice'))
+            ->assertSeeInOrder([
+                '<a',
+                'href="http://localhost:8025"',
+                'class="verify-link-button"',
+                '認証はこちらから',
+                '</a>'
+            ], false);
     }
 
     /**

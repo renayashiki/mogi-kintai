@@ -30,6 +30,9 @@ class AttendanceStatusTest extends TestCase
         // 3. 画面上に表示されているステータスが「勤務外」となる
         $response->assertStatus(200); // 正常に開けたことを確認
         $response->assertSee('<span class="status-text">勤務外</span>', false);
+        $response->assertDontSee('出勤中');
+        $response->assertDontSee('休憩中');
+        $response->assertDontSee('退勤済');
     }
 
     /**
@@ -55,6 +58,9 @@ class AttendanceStatusTest extends TestCase
         // 3. 画面上に表示されているステータスが「出勤中」となる
         $response->assertStatus(200); // 正常に開けたことを確認
         $response->assertSee('<span class="status-text">出勤中</span>', false);
+        $response->assertDontSee('勤務外');
+        $response->assertDontSee('休憩中');
+        $response->assertDontSee('退勤済');
     }
 
     /**
@@ -85,6 +91,9 @@ class AttendanceStatusTest extends TestCase
         // 3. 画面上に表示されているステータスが「休憩中」となる
         $response->assertStatus(200); // 正常に開けたことを確認
         $response->assertSee('<span class="status-text">休憩中</span>', false);
+        $response->assertDontSee('勤務外');
+        $response->assertDontSee('出勤中');
+        $response->assertDontSee('退勤済');
     }
 
     /**
@@ -111,5 +120,8 @@ class AttendanceStatusTest extends TestCase
         // 3. 画面上に表示されているステータスが「退勤済」となる
         $response->assertStatus(200); // 正常に開けたことを確認
         $response->assertSee('<span class="status-text">退勤済</span>', false);
+        $response->assertDontSee('勤務外');
+        $response->assertDontSee('出勤中');
+        $response->assertDontSee('休憩中');
     }
 }

@@ -15,7 +15,7 @@ class AdminStaffManagementTest extends TestCase
 
     /**
      * ID:14 ユーザー情報取得機能(管理者)
-     * 管理者ユーザーが、全ての一般ユーザーの氏名とメールアドレスが正しく表示されている
+     * 管理者ユーザーが、全ての一般ユーザーの氏名とメールアドレスを確認できる
      */
     public function test_admin_can_view_all_staff_info()
     {
@@ -206,8 +206,8 @@ class AdminStaffManagementTest extends TestCase
         $listResponse->assertSee($detailUrl);
         $detailResponse = $this->get($detailUrl);
         $detailResponse->assertStatus(200);
-
-        // 期待挙動の証明：詳細画面で一覧と同じデータが表示されていること
+        $detailResponse->assertSee('勤怠詳細');
+        $detailResponse->assertSee('西 怜奈');
         $detailResponse->assertSee('2026年');
         $detailResponse->assertSee('2月10日');
         $detailResponse->assertSee('09:15');

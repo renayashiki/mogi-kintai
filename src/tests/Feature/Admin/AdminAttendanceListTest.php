@@ -98,7 +98,7 @@ class AdminAttendanceListTest extends TestCase
 
         // 期待挙動：勤怠一覧画面にその日の日付が表示されている
         $response->assertSee('2026年2月16日の勤怠'); // タイトル
-        $response->assertSee('2026/02/16');         // カレンダー部分
+        $response->assertSee('value="2026-02-16"', false);         // カレンダー部分
     }
 
     /**
@@ -130,6 +130,7 @@ class AdminAttendanceListTest extends TestCase
 
         // --- 全項目の正確性確認 ---
         $response->assertSee('2026年2月15日の勤怠');
+        $response->assertSee('value="2026-02-15"', false);
         $response->assertSee('前日スタッフ');
         $response->assertSee('08:30'); // 出勤
         $response->assertSee('17:35'); // 退勤
@@ -166,6 +167,7 @@ class AdminAttendanceListTest extends TestCase
 
         // --- 全項目の正確性確認 ---
         $response->assertSee('2026年2月17日の勤怠');
+        $response->assertSee('value="2026-02-17"', false);
         $response->assertSee('翌日スタッフ');
         $response->assertSee('10:00'); // 出勤
         $response->assertSee('19:00'); // 退勤

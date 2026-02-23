@@ -33,13 +33,13 @@ class AttendanceListTest extends TestCase
         $attendance = AttendanceRecord::create([
             'user_id' => $this->user->id,
             'date' => '2026-02-15',
-            'clock_in' => '2026-02-15 09:00:00',
-            'clock_out' => '2026-02-15 18:00:00',
+            'clock_in' => '09:00:15',
+            'clock_out' => '18:00:45',
         ]);
         Rest::create([
             'attendance_record_id' => $attendance->id,
-            'rest_in' => '2026-02-15 12:00:00',
-            'rest_out' => '2026-02-15 13:00:00',
+            'rest_in' => '12:00:15',
+            'rest_out' => '13:00:45',
         ]);
 
         // 2. ログインする（手順通り登録後にログイン）
@@ -55,6 +55,7 @@ class AttendanceListTest extends TestCase
         $response->assertSee('18:00');
         $response->assertSee('1:00');
         $response->assertSee('8:00');
+        Carbon::setTestNow();
     }
 
     /**
@@ -71,7 +72,8 @@ class AttendanceListTest extends TestCase
         $response = $this->get(route('attendance.list'));
 
         // 【期待挙動】現在の月が表示されていることを確認
-        $response->assertSee('2026/02');
+        $response->assertSee('value="2026-02"', false);
+        Carbon::setTestNow();
     }
 
     /**
@@ -112,6 +114,7 @@ class AttendanceListTest extends TestCase
         $response->assertSee('18:30');
         $response->assertSee('1:30');
         $response->assertSee('8:00');
+        Carbon::setTestNow();
     }
 
     /**
@@ -152,6 +155,7 @@ class AttendanceListTest extends TestCase
         $response->assertSee('20:00');
         $response->assertSee('2:00');
         $response->assertSee('10:00');
+        Carbon::setTestNow();
     }
 
     /**
@@ -164,13 +168,13 @@ class AttendanceListTest extends TestCase
         $attendance = AttendanceRecord::create([
             'user_id' => $this->user->id,
             'date' => $targetDate,
-            'clock_in' => $targetDate . ' 09:00:00',
-            'clock_out' => $targetDate . ' 18:00:00',
+            'clock_in' => $targetDate . ' 09:00:15',
+            'clock_out' => $targetDate . ' 18:00:35',
         ]);
         Rest::create([
             'attendance_record_id' => $attendance->id,
-            'rest_in' => $targetDate . ' 12:00:00',
-            'rest_out' => $targetDate . ' 13:00:00',
+            'rest_in' => $targetDate . ' 12:00:15',
+            'rest_out' => $targetDate . ' 13:00:35',
         ]);
 
         // 2. ログインする
@@ -195,5 +199,6 @@ class AttendanceListTest extends TestCase
         $response->assertSee('2026');
         $response->assertSee('2');
         $response->assertSee('16');
+        Carbon::setTestNow();
     }
 }

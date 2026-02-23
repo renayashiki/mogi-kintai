@@ -19,6 +19,7 @@ class AttendanceDetailTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        \Carbon\Carbon::setTestNow(\Carbon\Carbon::create(2026, 2, 16, 10, 0, 0));
 
         // 1. ユーザーを作成（氏名は「テスト 太郎」とする）
         $this->user = User::factory()->create(['name' => 'テスト太郎']);
@@ -39,6 +40,13 @@ class AttendanceDetailTest extends TestCase
         ]);
     }
 
+    protected function tearDown(): void
+    {
+        // テストが終わるたびに時刻固定をリセットする
+        \Carbon\Carbon::setTestNow();
+        parent::tearDown();
+    }
+
     /**
      * ID:10 勤怠詳細情報 取得機能
      * 1. 勤怠詳細画面の「名前」がログインユーザーの氏名になっている
@@ -52,8 +60,7 @@ class AttendanceDetailTest extends TestCase
         $response = $this->get(route('attendance.detail', ['id' => $this->attendance->id]));
 
         // 3. 名前欄を確認（ビューのロジックに合わせ、半角スペースが全角になっているか確認）
-        $expectedName = 'テスト太郎';
-        $response->assertSee($expectedName);
+        $response->assertSeeInOrder(['名前', 'テスト太郎']);
     }
 
     /**
@@ -82,8 +89,8 @@ class AttendanceDetailTest extends TestCase
 
         // 出勤・退勤欄（inputタグのvalue属性）を確認
         // 「計算は精密に、表示はシンプルに」の原則に基づき H:i 形式を確認
-        $response->assertSee('09:00');
-        $response->assertSee('18:00');
+        $response->assertSee('value="09:00"', false);
+        $response->assertSee('value="18:00"', false);
     }
 
     /**

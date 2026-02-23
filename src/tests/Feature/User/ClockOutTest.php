@@ -31,7 +31,7 @@ class ClockOutTest extends TestCase
         // 1. 勤務中のデータを登録する（ステータスが勤務中のユーザー状態を作る）
         AttendanceRecord::create([
             'user_id' => $this->user->id,
-            'date' => '2026-02-16',
+            'date' => now()->toDateString(),
             'clock_in' => '09:00:00',
         ]);
         $this->user->update(['attendance_status' => 'working']);
@@ -43,7 +43,7 @@ class ClockOutTest extends TestCase
         $response = $this->get(route('attendance.index'));
 
         // 【期待挙動】画面上に「退勤」ボタンが表示される
-        $response->assertSee('<button type="submit" class="stamp-button btn-black">退勤</button>', false);
+        $response->assertSee('<button type="submit" class="stamp-button button-primary">退勤</button>', false);
 
         // 4. 退勤の処理を行う
         $response = $this->followingRedirects()
@@ -52,6 +52,12 @@ class ClockOutTest extends TestCase
         // 【期待挙動】処理後に画面上に表示されるステータスが「退勤済」になる
         $this->get(route('attendance.index', ['status' => 'finished']))
             ->assertSee('<span class="status-text">退勤済</span>', false);
+        $this->assertEquals('finished', $this->user->fresh()->attendance_status);
+        $this->assertDatabaseHas('attendance_records', [
+            'user_id' => $this->user->id,
+            'date' => '2026-02-16',
+            'clock_out' => '10:00:00',
+        ]);
     }
 
     /**
@@ -86,5 +92,6 @@ class ClockOutTest extends TestCase
             $expectedDateDisplay,
             $expectedClockOut
         ]);
+        Carbon::setTestNow();
     }
 }

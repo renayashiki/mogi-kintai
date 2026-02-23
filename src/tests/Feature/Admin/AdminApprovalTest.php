@@ -6,7 +6,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\AttendanceRecord;
-use App\Models\Rest;
 use App\Models\AttendanceCorrect;
 use Carbon\Carbon;
 
@@ -124,6 +123,7 @@ class AdminApprovalTest extends TestCase
         $response->assertSee($appDate1->format('Y/m/d')); // 申請日時
 
         // 2人目：佐藤さんの詳細検証
+        $response->assertSee('承認済み');
         $response->assertSee('佐藤 次郎');
         $response->assertSee('2026/06/02');                // 対象日時
         $response->assertSee('修正完了分2');               // 申請理由
@@ -166,6 +166,7 @@ class AdminApprovalTest extends TestCase
         $response->assertSee('12:00');
         $response->assertSee('13:00');
         $response->assertSee('電車遅延のため');
+        $response->assertSee('承認');
     }
 
     /**
@@ -216,7 +217,7 @@ class AdminApprovalTest extends TestCase
         // followRedirects() を使うか、再度 GET リクエストを送って検証します
         $this->get(route('attendance.request.list', ['status' => 'approved']))
             ->assertStatus(200)
-            ->assertSee('承認済み')       // 状態
+            ->assertSee('承認済み')
             ->assertSee($user->name)    // 名前
             ->assertSee('2026/06/01')   // 対象日時
             ->assertSee('全画面反映テスト') // 申請理由

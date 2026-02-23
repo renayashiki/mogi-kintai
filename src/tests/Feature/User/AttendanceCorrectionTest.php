@@ -7,7 +7,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\AttendanceRecord;
 use App\Models\AttendanceCorrect;
-use Carbon\Carbon;
+
 
 class AttendanceCorrectionTest extends TestCase
 {
@@ -46,6 +46,11 @@ class AttendanceCorrectionTest extends TestCase
         $response->assertSessionHasErrors(['clock_out']);
         $this->get(route('attendance.detail', ['id' => $attendance->id]))
             ->assertSee('出勤時間もしくは退勤時間が不適切な値です');
+        $this->assertDatabaseHas('attendance_records', [
+            'id' => $attendance->id,
+            'clock_in' => '09:00:00',
+            'clock_out' => '18:00:00',
+        ]);
     }
 
     /**
@@ -72,6 +77,10 @@ class AttendanceCorrectionTest extends TestCase
         $response->assertSessionHasErrors(['rests.0.in']);
         $this->get(route('attendance.detail', ['id' => $attendance->id]))
             ->assertSee('休憩時間が不適切な値です');
+        $this->assertDatabaseMissing('rests', [
+            'attendance_record_id' => $attendance->id,
+            'rest_in' => '19:00:00',
+        ]);
     }
 
     /**
@@ -97,6 +106,10 @@ class AttendanceCorrectionTest extends TestCase
         $response->assertSessionHasErrors(['rests.0.out']);
         $this->get(route('attendance.detail', ['id' => $attendance->id]))
             ->assertSee('休憩時間もしくは退勤時間が不適切な値です');
+        $this->assertDatabaseMissing('rests', [
+            'attendance_record_id' => $attendance->id,
+            'rest_out' => '19:00:00',
+        ]);
     }
 
     /**
@@ -164,6 +177,7 @@ class AttendanceCorrectionTest extends TestCase
 
         // --- 承認画面（詳細）の確認 (画像 image_60529f.png に基づく) ---
         $request = AttendanceCorrect::where('user_id', $user->id)->latest('id')->first();
+        $this->assertEquals(0, $request->status);
         $response = $this->get(route('admin.request.approve', ['attendance_correct_request_id' => $request->id]));
         $response->assertStatus(200);
         $response->assertSee('西怜奈');
@@ -241,8 +255,6 @@ class AttendanceCorrectionTest extends TestCase
         /** @var User $admin */
         $this->actingAs($admin, 'admin');
         $this->post(route('admin.attendance.approve', ['attendance_correct_request_id' => $request->id]));
-
-        $request->update(['approval_status' => '承認済み']);
 
         // 3. ユーザーで申請一覧を開く / 4. 承認済みタブで内容が完全一致するか
         $this->actingAs($user);

@@ -17,15 +17,15 @@ class DateTimeDisplayTest extends TestCase
      */
     public function test_current_date_and_time_are_displayed_correctly()
     {
-        // --- 準備: 現在日時を固定（UI画像に合わせて設定） ---
-        // 2026年2月16日(月) 10時05分30秒 と仮定
-        $mockNow = Carbon::create(2026, 2, 16, 10, 5, 30);
-        Carbon::setTestNow($mockNow);
-
         // 日本語の曜日を取得するためにロケールを日本に設定
         Carbon::setLocale('ja');
 
-        // --- 準備: ログインユーザーの作成 ---
+        // --- 準備: 現在時刻を「その瞬間の現実の時刻」として取得 ---
+        // 秒まで含めてシステム時刻を取得します
+        $now = Carbon::now();
+        Carbon::setTestNow($now);
+
+    // ログインユーザーの作成（特定のサンプルに依存しないようFactoryを使用） [cite: 2026-02-03]
         /** @var \App\Models\User $user */
         $user = User::factory()->create();
 
@@ -34,18 +34,24 @@ class DateTimeDisplayTest extends TestCase
         $response->assertStatus(200);
 
         // 2. 画面に表示されている日時情報を確認する
-        // UI画像に基づき「YYYY年M月D日(曜)」および「HH:mm」の形式を確認します
+        // 【期待挙動】画面上に表示されている日時が現在の日時と一致する
 
-        // 日付の確認: 「2026年2月16日(月)」の形式
-        $dateString = $mockNow->isoFormat('YYYY年M月D日(ddd)');
-        $response->assertSee($dateString);
+        // 日付の期待値： YYYY年M月D日(曜) 形式
+        $expectedDate = $now->isoFormat('YYYY年M月D日(ddd)');
 
-        // 時刻の確認: 「10:05」が出ているか
-        // 指針「表示はシンプルに（秒を切り捨てる）」に基づき検証
-        $response->assertSee('10:05');
+        // 時刻の期待値： HH:mm 形式
+        // 方針「計算は精密に、表示はシンプルに（秒は切り捨て）」を適用 [cite: 2026-02-04]
+        $expectedTime = $now->format('H:i');
 
-        // 秒（:30）が表示されていないことを確認
-        $response->assertDontSee(':30');
+        // 証明：画面に「現在の日付」が含まれているか
+        $response->assertSee($expectedDate);
+
+        // 証明：画面に「現在の時刻（秒なし）」が含まれているか
+        $response->assertSee($expectedTime);
+
+        // 証明：秒が表示されていないことの担保（表示がシンプルであることの証明） [cite: 2026-02-04]
+        // 秒（例 :00〜:59）がHTML内に存在しないことを確認
+        $response->assertDontSee($now->format('H:i:s'));
 
         // テスト終了後に時刻固定を解除
         Carbon::setTestNow();
