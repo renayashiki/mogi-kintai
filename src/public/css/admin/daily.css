@@ -192,50 +192,36 @@
 
 @media screen and (max-width: 1540px) {
     .daily-container {
-        padding: 60px 50px 0;
+        padding: 60px 20px 0;
+        align-items: center;
     }
 
-    .date-selector-bar, .attendance-table-wrapper {
+    .daily-header {
+        width: 100%;
+        max-width: 820px;
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .date-selector-bar,
+    .attendance-table-wrapper {
         width: 100%;
         max-width: 800px;
+    }
+
+    .attendance-table {
+        width: 800px;
+        table-layout: fixed;
+    }
+
+    .attendance-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 8px;
     }
 
     .attendance-table th,
     .attendance-table td {
         white-space: nowrap;
-    }
-
-    .daily-container .attendance-table-wrapper .attendance-table .col-name {
-        width: auto;
-        min-width: 120px;
-        text-align: left;
-    }
-
-    .daily-container .attendance-table-wrapper .attendance-table .col-start,
-    .daily-container .attendance-table-wrapper .attendance-table .col-end,
-    .daily-container .attendance-table-wrapper .attendance-table .col-rest,
-    .daily-container .attendance-table-wrapper .attendance-table .col-total {
-        white-space: nowrap;
-    }
-}
-
-@media screen and (max-width: 1100px) {
-    .daily-container .attendance-table-wrapper .attendance-table .col-start,
-    .daily-container .attendance-table-wrapper .attendance-table .col-end,
-    .daily-container .attendance-table-wrapper .attendance-table .col-rest,
-    .daily-container .attendance-table-wrapper .attendance-table .col-total {
-        padding-left: 0;
-        text-align: center;
-        width: auto;
-    }
-
-    .daily-container .attendance-table-wrapper .attendance-table tbody td.col-detail {
-        padding-right: 0;
-        text-align: center;
-    }
-
-    .daily-container .attendance-table-wrapper .attendance-table .col-name {
-        padding-left: 0;
-        text-align: center;
     }
 }

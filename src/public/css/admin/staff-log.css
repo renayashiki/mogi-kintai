@@ -108,11 +108,9 @@
 }
 
 
-
 .attendance-table tbody td {
     border-bottom: 2px solid rgba(225, 225, 225, 1);
 }
-
 
 .col-date {
     width: 16%;
@@ -150,8 +148,8 @@ th.col-date {
 }
 
 .csv-button {
-    width: 116px;
-    height: 30px;
+    width: 120px;
+    height: 34px;
     background-color: rgba(0, 0, 0, 1);
     border-radius: 5px;
     display: flex;
@@ -164,7 +162,7 @@ th.col-date {
     color: rgba(255, 255, 255, 1);
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 15px;
     letter-spacing: 0.15em;
 }
 

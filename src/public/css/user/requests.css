@@ -93,6 +93,11 @@ letter-spacing: 0.1em;
     border-bottom: 2px solid rgba(225, 225, 225, 1);
 }
 
+.request-table thead th.col-status {
+    text-align: center;
+    padding-left: 30px;
+}
+
 .request-table .col-status {
     width: 15%;
     text-align: left;

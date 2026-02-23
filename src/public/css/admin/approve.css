@@ -51,7 +51,7 @@ form {
 
 .col-label {
     width: 260px;
-    padding: 17px 0 17px 50px;
+    padding: 22px 0 22px 50px;
     font-weight: 700;
     font-size: 13px;
     color: rgba(115, 115, 115, 1);
@@ -61,7 +61,7 @@ form {
 }
 
 .col-value {
-    padding: 17px 50px 17px 0;
+    padding: 22px 50px 22px 0;
     text-align: left;
     vertical-align: middle;
     border-bottom: 2px solid rgba(225, 225, 225, 1);
@@ -134,26 +134,28 @@ form {
 }
 
 .submit-button {
-    width: 92px;
-    height: 35px;
+    width: 100px;
+    height: 40px;
     background-color: rgba(0, 0, 0, 1);
     color: rgba(255, 255, 255, 1);
     border: none;
     border-radius: 4px;
-    font-weight: 700;
-    font-size: 15px;
+    font-weight: 500;
+    font-size: 18px;
+    letter-spacing: 0.15em;
     cursor: pointer;
 }
 
 .approved-button {
-    width: 88px;
-    height: 32px;
+    width: 107px;
+    height: 40px;
     background-color: rgba(105, 105, 105, 1);
     color: rgba(255, 255, 255, 1);
     border: none;
     border-radius: 4px;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 17px;
+    letter-spacing: 0.15em;
     cursor: default;
     display: flex;
     justify-content: center;

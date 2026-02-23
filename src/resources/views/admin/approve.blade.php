@@ -44,45 +44,55 @@
                                 </div>
                             </td>
                         </tr>
-                        @php
-                            $requestedRests = [];
-                            if ($correctionRequest->new_rest1_in) {
-                                $requestedRests[] = [
-                                    'in' => \Carbon\Carbon::parse($correctionRequest->new_rest1_in),
-                                    'out' => $correctionRequest->new_rest1_out
-                                        ? \Carbon\Carbon::parse($correctionRequest->new_rest1_out)
-                                        : null,
-                                ];
-                            }
-                            if ($correctionRequest->new_rest2_in) {
-                                $requestedRests[] = [
-                                    'in' => \Carbon\Carbon::parse($correctionRequest->new_rest2_in),
-                                    'out' => $correctionRequest->new_rest2_out
-                                        ? \Carbon\Carbon::parse($correctionRequest->new_rest2_out)
-                                        : null,
-                                ];
-                            }
-                            foreach ($correctionRequest->attendanceCorrectRests as $extra) {
-                                $requestedRests[] = [
-                                    'in' => \Carbon\Carbon::parse($extra->new_rest_in),
-                                    'out' => $extra->new_rest_out ? \Carbon\Carbon::parse($extra->new_rest_out) : null,
-                                ];
-                            }
-                        @endphp
-                        @foreach ($requestedRests as $index => $rest)
-                            <tr>
-                                <th class="col-label">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
-                                <td class="col-value">
-                                    <div class="time-group">
-                                        {{-- ここで format('H:i') が安全に呼べるようになります --}}
-                                        <span class="text-display">{{ $rest['in']->format('H:i') }}</span>
+                        {{-- 休憩1：データがなくても行は残す。中身の「〜」はデータがある時だけ表示 --}}
+                        <tr>
+                            <th class="col-label">休憩</th>
+                            <td class="col-value">
+                                <div class="time-group">
+                                    @if ($correctionRequest->new_rest1_in)
+                                        <span
+                                            class="text-display">{{ \Carbon\Carbon::parse($correctionRequest->new_rest1_in)->format('H:i') }}</span>
                                         <span class="range-tilde">〜</span>
                                         <span
-                                            class="text-display">{{ $rest['out'] ? $rest['out']->format('H:i') : '' }}</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
+                                            class="text-display">{{ $correctionRequest->new_rest1_out ? \Carbon\Carbon::parse($correctionRequest->new_rest1_out)->format('H:i') : '' }}</span>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+
+                        {{-- 休憩2：データがなくても行は残す（見本UI通り）。中身の「〜」はデータがある時だけ表示 --}}
+                        <tr>
+                            <th class="col-label">休憩2</th>
+                            <td class="col-value">
+                                <div class="time-group">
+                                    @if ($correctionRequest->new_rest2_in)
+                                        <span
+                                            class="text-display">{{ \Carbon\Carbon::parse($correctionRequest->new_rest2_in)->format('H:i') }}</span>
+                                        <span class="range-tilde">〜</span>
+                                        <span
+                                            class="text-display">{{ $correctionRequest->new_rest2_out ? \Carbon\Carbon::parse($correctionRequest->new_rest2_out)->format('H:i') : '' }}</span>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+
+                        {{-- 休憩3以降：データが存在する場合のみ、行ごと動的に追加 --}}
+                        @if ($correctionRequest->attendanceCorrectRests->isNotEmpty())
+                            @foreach ($correctionRequest->attendanceCorrectRests as $index => $extra)
+                                <tr>
+                                    <th class="col-label">休憩{{ $index + 3 }}</th>
+                                    <td class="col-value">
+                                        <div class="time-group">
+                                            <span
+                                                class="text-display">{{ \Carbon\Carbon::parse($extra->new_rest_in)->format('H:i') }}</span>
+                                            <span class="range-tilde">〜</span>
+                                            <span
+                                                class="text-display">{{ $extra->new_rest_out ? \Carbon\Carbon::parse($extra->new_rest_out)->format('H:i') : '' }}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
                         <tr>
                             <th class="col-label">備考</th>
                             <td class="col-value col-comment">
