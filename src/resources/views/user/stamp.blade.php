@@ -28,26 +28,26 @@
                 <form action="{{ route('attendance.store') }}" method="post">
                     @csrf
                     <input type="hidden" name="type" value="clock_in">
-                    <button type="submit" class="stamp-button btn-black">出勤</button>
+                    <button type="submit" class="stamp-button button-primary">出勤</button>
                 </form>
             @elseif ($attendanceStatus === 'working')
                 <div class="button-group">
                     <form action="{{ route('attendance.store') }}" method="post">
                         @csrf
                         <input type="hidden" name="type" value="clock_out">
-                        <button type="submit" class="stamp-button btn-black">退勤</button>
+                        <button type="submit" class="stamp-button button-primary">退勤</button>
                     </form>
                     <form action="{{ route('attendance.store') }}" method="post">
                         @csrf
                         <input type="hidden" name="type" value="rest_in">
-                        <button type="submit" class="stamp-button btn-white">休憩入</button>
+                        <button type="submit" class="stamp-button button-secondary">休憩入</button>
                     </form>
                 </div>
             @elseif ($attendanceStatus === 'resting')
                 <form action="{{ route('attendance.store') }}" method="post">
                     @csrf
                     <input type="hidden" name="type" value="rest_out">
-                    <button type="submit" class="stamp-button btn-white">休憩戻</button>
+                    <button type="submit" class="stamp-button button-secondary">休憩戻</button>
                 </form>
             @elseif ($attendanceStatus === 'finished')
                 <p class="finish-message">お疲れ様でした。</p>
