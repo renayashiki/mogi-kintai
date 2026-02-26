@@ -1,4 +1,4 @@
-@extends('layouts.admin') {{-- 管理者用レイアウトがあれば差し替え --}}
+@extends('layouts.admin')
 
 @section('title', '勤怠詳細（管理者）')
 

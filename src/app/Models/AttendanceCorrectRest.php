@@ -15,7 +15,6 @@ class AttendanceCorrectRest extends Model
         'new_rest_out',
     ];
 
-
     protected $casts = [
         'new_rest_in' => 'datetime',
         'new_rest_out' => 'datetime',

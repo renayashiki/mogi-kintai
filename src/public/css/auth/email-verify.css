@@ -89,12 +89,10 @@
         max-width: 95%;
         margin-top: 100px;
     }
-
     .verification-message {
         font-size: 16px;
         margin-bottom: 30px;
     }
-
     .verify-link-button {
         width: 70%;
         max-width: 230px;
@@ -103,7 +101,6 @@
         line-height: 50px;
         margin-bottom: 20px;
     }
-
     .resend-link {
         font-size: 14px;
     }

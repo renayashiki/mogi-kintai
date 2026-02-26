@@ -6,7 +6,6 @@ body {
     overflow-x: hidden;
 }
 
-
 .header {
     background: rgba(0, 0, 0, 1);
     width: 100%;
@@ -52,7 +51,6 @@ body {
     align-items: center;
     gap: 25px;
 }
-
 
 .nav-list .nav-item:last-child {
     margin-left: 10px;

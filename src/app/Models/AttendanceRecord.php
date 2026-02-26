@@ -35,39 +35,23 @@ class AttendanceRecord extends Model
         return $this->hasMany(Rest::class);
     }
 
-/* -------------------------------------------------------------------------
-     * 新方針：精密計算メソッド（心臓部）
-     * ------------------------------------------------------------------------- */
-
-
-    /**
-     * 【計算ロジック】実働合計時間を秒単位で算出する
-     */
     public function getWorkSeconds(): int
     {
         if (!$this->clock_in || !$this->clock_out) {
             return 0;
         }
-
-        // copy() を使って、元の clock_in/out のデータを汚さないようにする
         $start = $this->clock_in->copy()->second(0);
         $end = $this->clock_out->copy()->second(0);
         $diffSeconds = $end->diffInSeconds($start);
-
         $restSeconds = $this->getRestSeconds();
-
         return (int)max(0, $diffSeconds - $restSeconds);
     }
 
-    /**
-     * 【計算ロジック】休憩合計時間を秒単位で算出する
-     */
     public function getRestSeconds(): int
     {
         $totalSeconds = 0;
         foreach ($this->rests as $rest) {
             if ($rest->rest_in && $rest->rest_out) {
-                // ここも copy() を使って元の rest_in/out を守る
                 $in = \Carbon\Carbon::parse($rest->rest_in)->copy()->second(0);
                 $out = \Carbon\Carbon::parse($rest->rest_out)->copy()->second(0);
                 $totalSeconds += $out->diffInSeconds($in);
@@ -76,20 +60,13 @@ class AttendanceRecord extends Model
         return (int)$totalSeconds;
     }
 
-    /**
-     * 【重要】DB保存用のフォーマット (HH:MM:SS)
-     * 内部での更新時にこれを使用します
-     */
     public function formatSecondsForDb(int $seconds): string
     {
         $hours = floor($seconds / 3600);
         $minutes = floor(($seconds / 60) % 60);
-        return sprintf('%02d:%02d:00', $hours, $minutes); // 秒を 00 で固定
+        return sprintf('%02d:%02d:00', $hours, $minutes);
     }
 
-    /**
-     * 【整形ロジック】秒を 1:00 形式の文字列に変換する
-     */
     private function formatSecondsToShimei(int $seconds): string
     {
         $hours = floor($seconds / 3600);
@@ -97,30 +74,16 @@ class AttendanceRecord extends Model
         return sprintf('%d:%02d', $hours, $minutes);
     }
 
-    /* -------------------------------------------------------------------------
-     * アクセサ（表示用：DBのカラム値を無視して常に再計算する）
-     * ------------------------------------------------------------------------- */
-
-    /**
-     * 休憩合計時間を算出するアクセサ (total_rest_time)
-     */
     public function getTotalRestTimeAttribute()
     {
-        // DBの中身を見ず、常にリレーションから計算
         $seconds = $this->getRestSeconds();
         if ($seconds === 0) return null;
-
         return $this->formatSecondsToShimei($seconds);
     }
 
-    /**
-     * 実働合計時間（退勤 - 出勤 - 休憩合計）を算出するアクセサ (total_time)
-     */
     public function getTotalTimeAttribute()
     {
-        // DBの中身を見ず、常にリレーションから計算
         if (!$this->clock_in || !$this->clock_out) return null;
-
         $seconds = $this->getWorkSeconds();
         return $this->formatSecondsToShimei($seconds);
     }

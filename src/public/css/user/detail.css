@@ -34,7 +34,6 @@ align-items: center;
 width: 100%;
 }
 
-/* 白いテーブル枠 */
 .detail-table-wrapper {
 width: 700px;
 background: rgba(255, 255, 255, 1);
@@ -49,7 +48,6 @@ width: 100%;
 border-collapse: collapse;
 table-layout: fixed;
 }
-
 
 .col-label {
 width: 260px;
@@ -78,7 +76,6 @@ font-variant-numeric: normal;
 border-bottom: none;
 }
 
-
 .name-display, .date-display {
 font-weight: 700;
 font-size: 12px;
@@ -90,12 +87,10 @@ margin-left: 15px;
 word-spacing: 1em;
 }
 
-
 .year-val {
 margin-right: 120px;
 margin-left: 15px;
 }
-
 
 .time-group {
 display: flex;
@@ -123,7 +118,6 @@ font-weight: 700;
 color: rgba(0, 0, 0, 1);
 }
 
-
 .text-display {
 width: 76px;
 text-align: center;
@@ -139,17 +133,14 @@ display: block;
 padding: 10px 0;
 }
 
-
 .textarea-container {
 width: calc(110px * 2 + 60px);
 }
-
 
 .detail-table tr:last-child .col-value {
 padding-top: 0;
 padding-bottom: 0;
 }
-
 
 .textarea-field {
 width: 90%;
@@ -171,18 +162,15 @@ font-weight: 700;
 font-size: 12px;
 }
 
-
 .detail-table tr:last-child .col-label {
 vertical-align: middle;
 }
-
 
 .detail-actions {
 width: 700px;
 display: flex;
 justify-content: flex-end;
 }
-
 
 .error-container {
 width: 700px;

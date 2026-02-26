@@ -9,37 +9,24 @@ use Illuminate\Validation\ValidationException;
 
 class AdminLoginController extends Controller
 {
-    /**
-     * 管理者ログイン画面の表示
-     */
     public function show()
     {
         return view('auth.admin-login');
     }
 
-    /**
-     * 管理者ログイン処理
-     */
     public function store(LoginRequest $request)
     {
-        // --- 【重要】既存の管理者セッションをクリーンにする ---
         Auth::guard('admin')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         $credentials = $request->only('email', 'password');
         $credentials['admin_status'] = 1;
-
-        // 管理者用ガード 'admin' を使用して認証を試行
         if (!Auth::guard('admin')->attempt($credentials)) {
             throw ValidationException::withMessages([
                 'login_error' => 'ログイン情報が登録されていません',
             ]);
         }
-
         $request->session()->regenerate();
-
-        // ログイン成功後は管理者用の勤怠一覧画面へ
         return redirect()->route('admin.attendance.list');
     }
 }

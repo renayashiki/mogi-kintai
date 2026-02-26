@@ -13,13 +13,11 @@ class MyRequestController extends Controller
     {
         $status = $request->query('status', 'pending');
         $dbStatus = ($status === 'approved') ? '承認済み' : '承認待ち';
-
-        $requests = AttendanceCorrect::with(['user', 'attendanceRecord.rests']) // 孫リレーションまでロード
+        $requests = AttendanceCorrect::with(['user', 'attendanceRecord.rests'])
             ->where('user_id', Auth::id())
             ->where('approval_status', $dbStatus)
             ->orderBy('new_date', 'asc')
             ->get();
-
         return view('user.requests', compact('requests', 'status'));
     }
 }

@@ -40,15 +40,11 @@ class AdminAttendanceDetailTest extends TestCase
             'rest_in' => '12:00:00',
             'rest_out' => '13:00:00',
         ]);
-
-        // 1. 管理者ログイン -> 2. 詳細ページを開く
         /** @var User $admin */
         $this->actingAs($admin, 'admin');
         $response = $this->get(route('admin.attendance.detail', ['id' => $attendance->id]));
-
-        // 期待挙動：選択した情報と一致する
         $response->assertStatus(200);
-        $response->assertSee('西　怜奈'); // 全角スペース置換後の表示
+        $response->assertSee('西　怜奈');
         $response->assertSee('2026年');
         $response->assertSee('2月10日');
         $response->assertSee('09:00');
@@ -65,18 +61,13 @@ class AdminAttendanceDetailTest extends TestCase
     {
         $admin = User::factory()->create(['admin_status' => 1]);
         $attendance = AttendanceRecord::factory()->create(['date' => '2026-02-16']);
-
         /** @var User $admin */
         $this->actingAs($admin, 'admin');
-
-        // 3. 出勤(18:00) > 退勤(09:00) に設定して 4. 保存
         $response = $this->post(route('admin.attendance.update', ['id' => $attendance->id]), [
             'clock_in' => '18:00',
             'clock_out' => '09:00',
             'comment' => 'ミス',
         ]);
-
-        // 期待挙動：バリデーションメッセージ
         $response->assertSessionHasErrors(['clock_out' => '出勤時間もしくは退勤時間が不適切な値です']);
     }
 
@@ -87,11 +78,8 @@ class AdminAttendanceDetailTest extends TestCase
     {
         $admin = User::factory()->create(['admin_status' => 1]);
         $attendance = AttendanceRecord::factory()->create(['date' => '2026-02-16']);
-
         /** @var User $admin */
         $this->actingAs($admin, 'admin');
-
-        // 3. 休憩開始(19:00) > 退勤(18:00)
         $response = $this->post(route('admin.attendance.update', ['id' => $attendance->id]), [
             'clock_in' => '09:00',
             'clock_out' => '18:00',
@@ -100,8 +88,6 @@ class AdminAttendanceDetailTest extends TestCase
             ],
             'comment' => '休憩ミス',
         ]);
-
-        // 期待挙動
         $response->assertSessionHasErrors(['rests.0.in' => '休憩時間が不適切な値です']);
     }
 
@@ -112,11 +98,8 @@ class AdminAttendanceDetailTest extends TestCase
     {
         $admin = User::factory()->create(['admin_status' => 1]);
         $attendance = AttendanceRecord::factory()->create(['date' => '2026-02-16']);
-
         /** @var User $admin */
         $this->actingAs($admin, 'admin');
-
-        // 3. 休憩終了(18:30) > 退勤(18:00)
         $response = $this->post(route('admin.attendance.update', ['id' => $attendance->id]), [
             'clock_in' => '09:00',
             'clock_out' => '18:00',
@@ -125,8 +108,6 @@ class AdminAttendanceDetailTest extends TestCase
             ],
             'comment' => '休憩ミス',
         ]);
-
-        // 期待挙動：メッセージは AdminEditRequest の定義通り
         $response->assertSessionHasErrors(['rests.0.out' => '休憩時間もしくは退勤時間が不適切な値です']);
     }
 
@@ -137,18 +118,13 @@ class AdminAttendanceDetailTest extends TestCase
     {
         $admin = User::factory()->create(['admin_status' => 1]);
         $attendance = AttendanceRecord::factory()->create();
-
         /** @var User $admin */
         $this->actingAs($admin, 'admin');
-
-        // 3. 備考欄を空にする
         $response = $this->post(route('admin.attendance.update', ['id' => $attendance->id]), [
             'clock_in' => '09:00',
             'clock_out' => '18:00',
-            'comment' => '', // 未入力
+            'comment' => '',
         ]);
-
-        // 期待挙動
         $response->assertSessionHasErrors(['comment' => '備考を記入してください']);
     }
 }

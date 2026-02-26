@@ -44,7 +44,6 @@
                                 </div>
                             </td>
                         </tr>
-                        {{-- 休憩1：データがなくても行は残す。中身の「〜」はデータがある時だけ表示 --}}
                         <tr>
                             <th class="col-label">休憩</th>
                             <td class="col-value">
@@ -59,8 +58,6 @@
                                 </div>
                             </td>
                         </tr>
-
-                        {{-- 休憩2：データがなくても行は残す（見本UI通り）。中身の「〜」はデータがある時だけ表示 --}}
                         <tr>
                             <th class="col-label">休憩2</th>
                             <td class="col-value">
@@ -75,8 +72,6 @@
                                 </div>
                             </td>
                         </tr>
-
-                        {{-- 休憩3以降：データが存在する場合のみ、行ごと動的に追加 --}}
                         @if ($correctionRequest->attendanceCorrectRests->isNotEmpty())
                             @foreach ($correctionRequest->attendanceCorrectRests as $index => $extra)
                                 <tr>
