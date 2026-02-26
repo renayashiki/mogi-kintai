@@ -27,8 +27,11 @@ class AdminLoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
+        $credentials = $request->only('email', 'password');
+        $credentials['admin_status'] = 1;
+
         // 管理者用ガード 'admin' を使用して認証を試行
-        if (!Auth::guard('admin')->attempt($request->only('email', 'password'))) {
+        if (!Auth::guard('admin')->attempt($credentials)) {
             throw ValidationException::withMessages([
                 'login_error' => 'ログイン情報が登録されていません',
             ]);

@@ -74,18 +74,23 @@ class ApprovalController extends Controller
 
             // ② 最新の原材料から精密計算（モデルのメソッドを使用）
             $attendance->load('rests');
+            $attendance->clock_in = Carbon::parse($correctionRequest->new_clock_in)->second(0);
+            $attendance->clock_out = $correctionRequest->new_clock_out ? Carbon::parse($correctionRequest->new_clock_out)->second(0) : null;
             $restSec = $attendance->getRestSeconds();
             $workSec = $attendance->getWorkSeconds();
 
             // ③ 本番テーブルに保存（秒付きフォーマットで統一）
-            $attendance->update([
-                'date'            => $correctionRequest->new_date,
-                'clock_in' => Carbon::parse($correctionRequest->new_clock_in)->second(0)->format('H:i:00'),
-                'clock_out' => $correctionRequest->new_clock_out ? Carbon::parse($correctionRequest->new_clock_out)->second(0)->format('H:i:00') : null,
-                'total_rest_time' => $attendance->formatSecondsForDb($restSec),
-                'total_time'      => $attendance->formatSecondsForDb($workSec),
-                'comment'         => $correctionRequest->comment,
-            ]);
+            DB::table('attendance_records')
+                ->where('id', $attendance->id)
+                ->update([
+                    'date'            => $correctionRequest->new_date,
+                    'clock_in' => Carbon::parse($correctionRequest->new_clock_in)->second(0)->format('H:i:00'),
+                    'clock_out' => $correctionRequest->new_clock_out ? Carbon::parse($correctionRequest->new_clock_out)->second(0)->format('H:i:00') : null,
+                    'total_rest_time' => $attendance->formatSecondsForDb($restSec),
+                    'total_time'      => $attendance->formatSecondsForDb($workSec),
+                    'comment'         => $correctionRequest->comment,
+                    'updated_at'      => now(),
+                ]);
 
             // ④ ステータス更新
             $correctionRequest->update(['approval_status' => '承認済み']);
